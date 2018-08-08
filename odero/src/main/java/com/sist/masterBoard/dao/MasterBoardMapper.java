@@ -26,8 +26,8 @@ public interface MasterBoardMapper {
 	
 	
 	@SelectKey(keyProperty="no",resultType=int.class,before=true,statement="SELECT NVL(MAX(no)+1,1) as no FROM masterNotice")
-	@Insert("INSERT INTO masterNotice(no,name,subject,content,pwd,regdate,hit,group_id) VALUES("
-			+"#{no},#{name},#{subject},#{content},"
+	@Insert("INSERT INTO masterNotice(no,name,subject,content,pwd,regdate,hit,group_id) "
+			+"VALUES(#{no},#{name},#{subject},#{content},"
 			+"#{pwd},SYSDATE,0,(SELECT NVL(MAX(group_id)+1,1) FROM masterNotice))")
 	public void MasterBoardInsert(NoticeVO vo);
 	

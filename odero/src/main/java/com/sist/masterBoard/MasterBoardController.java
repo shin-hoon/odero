@@ -135,7 +135,7 @@ public class MasterBoardController {
 	}
 
 
-
+/*
 	@RequestMapping("reply_new_insert.do")
 	public String reply_new_insert(int bno,String msg,String name,Model model) {
 		ReplyVO vo=new ReplyVO();
@@ -173,7 +173,7 @@ public class MasterBoardController {
 		//req.setAttribute("bno", bno);
 		return "content.do?no="+bno;
 	}
-
+*/
 /*
 	@RequestMapping("reply_update.do")
 	public String reply_update( HttpServletResponse res)

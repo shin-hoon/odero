@@ -5,9 +5,9 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>Welcome BoardMaster</title>
-<link rel="stylesheet" href="masterBoard/masterBoard.css" type="text/css">
+	<meta charset="UTF-8">
+	<title>Welcome BoardMaster</title>
+	<link rel="stylesheet" href="masterBoard/masterBoard.css" type="text/css">
 </head>
 <body>
 	<div class="container">
@@ -29,7 +29,7 @@
 					<th class="text-center" width="10%">조회수</th>
 				</tr>
 				<c:forEach var="vo" items="${list}">
-					<tr class="aa shake">
+					<tr class="aa">
 						<td class="text-center" width="10%">
 							${count}
 							<c:set var="count" value="${count=count-1}" />

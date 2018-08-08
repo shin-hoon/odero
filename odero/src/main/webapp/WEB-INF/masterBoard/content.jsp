@@ -193,16 +193,18 @@
 			</div>
 		</div>
 	</div>
- --%>					<table class="table" width="600">
-					<tr class="aa">
-						<td colspan="4" class="text-right">
-							<a href="MasterBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm btn-success">답변</a>
-							<a href="MasterBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm btn-success">수정</a>
-							<a href="MasterBoardDelete.do?no=${vo.no}&page=${page}" class="btn btn-sm btn-primary">삭제</a>
-							<a href="MasterBoard.do" class="btn btn-sm btn-info">목록</a>
-						</td>
-					</tr>
-					</table>
+ --%>					
+ 
+	<table class="table" width="600">
+		<tr class="aa">
+			<td colspan="4" class="text-right">
+				<a href="MasterBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm btn-success">답변</a>
+				<a href="MasterBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm btn-success">수정</a>
+				<a href="MasterBoardDelete.do?no=${vo.no}&page=${page}" class="btn btn-sm btn-primary">삭제</a>
+				<a href="MasterBoard.do" class="btn btn-sm btn-info">목록</a>
+			</td>
+		</tr>
+	</table>
 	</div>
 	
 </body>
