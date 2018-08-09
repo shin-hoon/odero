@@ -92,6 +92,12 @@ public interface MasterBoardMapper {
 	
 	
 	
+	
+	
+	
+	
+	
+	
     @Select("SELECT no,name,msg,TO_CHAR(regdate,'YYYY-MM-DD HH24:MI:SS') as dbday,TO_CHAR(regdate,'YYYY-MM-DD') as dbday2,group_tab,num "
 			+"FROM (SELECT no,name,msg,regdate,group_tab,rownum as num "
 			+"FROM (SELECT no,name,msg,regdate,group_tab "
