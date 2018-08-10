@@ -41,7 +41,7 @@
 								</c:forEach>
 							</c:if>
 							<c:choose>
-								<c:when test="${vo.subject} == '삭제된 게시물 입니다.'">
+								<c:when test="${vo.subject == '삭제된 게시물 입니다.'}">
 									<span style="color:gray">${vo.subject}</span>
 								</c:when>
 								<c:otherwise>
@@ -51,8 +51,10 @@
 							<jsp:useBean id="now" class="java.util.Date" />
 							<fmt:formatDate	var="today" value="${now}" pattern="yyyy-MM-dd"/>
 							<fmt:formatDate	var="yesterday" value="${vo.regdate}" pattern="yyyy-MM-dd"/>
-							<c:if test="${today==yesterday}">
-								<b style="color:red;background-color:black">new</b>
+							<c:if test="${vo.subject != '삭제된 게시물 입니다.'}">
+								<c:if test="${today==yesterday}">
+									<b style="color:red;background-color:black">new</b>
+								</c:if>
 							</c:if>
 						</td>
 						<td class="text-center" width="15%">${vo.name}</td>

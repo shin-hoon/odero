@@ -79,8 +79,8 @@ public interface MasterBoardMapper {
 	@Delete("DELETE FROM masterNotice WHERE no=#{no}")
 	public void MasterBoardDelete(int no);
 	
-	@Update("UPDATE masterNotice SET subject=#{msg} WHERE no=#{no}")
-	public void delete_msg(String msg,int no);
+	@Update("UPDATE masterNotice SET subject='삭제된 게시물 입니다.',content='삭제된 게시물 입니다.' WHERE no=#{no}")
+	public void delete_msg(int no);
 
 	@Update("UPDATE masterNotice SET depth=depth-1 WHERE no=#{root}")
 	public void delete_depth(int root);

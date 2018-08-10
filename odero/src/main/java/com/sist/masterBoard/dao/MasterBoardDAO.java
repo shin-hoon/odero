@@ -66,7 +66,6 @@ public class MasterBoardDAO {
 
 	public boolean MasterBoardDelete_ok(int no,String pwd)  {
 		boolean bCheck=false;
-		String msg;
 		NoticeVO getVO = mapper.pwd_root_depth(no);
 		
 		
@@ -77,8 +76,7 @@ public class MasterBoardDAO {
 				mapper.MasterBoardDelete(no);
 			}
 			else {
-				 msg = "삭제된 게시물 입니다.";
-				mapper.delete_msg(msg, no);
+				mapper.delete_msg(no);
 			}
 			
 			mapper.delete_depth(getVO.getRoot());
