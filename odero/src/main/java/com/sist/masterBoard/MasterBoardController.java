@@ -46,32 +46,7 @@ public class MasterBoardController {
 
 		return "masterBoard/list";
 	}
-
-	@RequestMapping("MasterBoardInsert.do")
-	public String MasterBoardInsert(){
-		return "masterBoard/insert";
-	}
-
-	@RequestMapping("MasterBoardInsert_ok.do")
-	public String MasterBoardInsert_ok(NoticeVO vo){
-		dao.MasterBoardInsert(vo);
-		return "redirect:MasterBoard.do";
-	}
-
-	@RequestMapping("MasterBoardReply.do")
-	public String MasterBoardReply(int page,int no,Model model){
-		model.addAttribute("page",page);
-		model.addAttribute("no",no);
-		return "masterBoard/reply";
-	}
-
-	@RequestMapping("MasterBoardReply_ok.do")
-	public String MasterBoardReply_ok(NoticeVO vo,int page){
-		dao.MasterBoardReplyInsert(vo);
-		return "redirect:MasterBoard.do?page="+page;
-	}
-
-
+	
 	@RequestMapping("MasterBoardContent.do")
 	public String MasterBoardContent(int no,int page,Model model){
 		NoticeVO vo = dao.MasterBoardContent(no);
@@ -95,8 +70,30 @@ public class MasterBoardController {
 		return "masterBoard/content";
 	}
 
+	@RequestMapping("MasterBoardInsert.do")
+	public String MasterBoardInsert(){
+		return "masterBoard/insert";
+	}
 
-
+	@RequestMapping("MasterBoardInsert_ok.do")
+	public String MasterBoardInsert_ok(NoticeVO vo){
+		dao.MasterBoardInsert(vo);
+		return "redirect:MasterBoard.do";
+	}
+	
+	@RequestMapping("MasterBoardReply.do")
+	public String MasterBoardReply(int page,int no,Model model){
+		model.addAttribute("page",page);
+		model.addAttribute("no",no);
+		return "masterBoard/reply";
+	}
+	
+	@RequestMapping("MasterBoardReply_ok.do")
+	public String MasterBoardReply_ok(NoticeVO vo){
+		dao.MasterBoardReplyInsert(vo);
+		return "redirect:MasterBoard.do?page="+vo.getPage();
+	}
+	
 	@RequestMapping("MasterBoardUpdate.do")
 	public String MasterBoardUpdate(int no,int page,Model model)
 	{
@@ -107,18 +104,16 @@ public class MasterBoardController {
 		return "masterBoard/update";
 	}
 
-
 	@RequestMapping("MasterBoardUpdate_ok.do")
 	public String update_ok(NoticeVO vo,int page,Model model){
 		boolean bCheck=dao.MasterBoardUpdate_ok(vo);
 		model.addAttribute("page",page);
 		model.addAttribute("no",vo.getNo());
-		model.addAttribute("page",page);
 		model.addAttribute("bCheck",bCheck);
 
 		return "masterBoard/update_ok";
 	}
-
+	
 
 	@RequestMapping("MasterBoardDelete.do")
 	public String MasterBoardDelete(int no,Model model)	{

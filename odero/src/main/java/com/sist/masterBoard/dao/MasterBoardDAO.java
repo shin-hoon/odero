@@ -28,9 +28,11 @@ public class MasterBoardDAO {
 	}
 
 	public void MasterBoardReplyInsert(NoticeVO vo){
-		vo.setGroup_id(mapper.group_id(vo.getNo())); 
-		vo.setGroup_step(mapper.group_step(vo.getNo())); 
-		vo.setGroup_tab(mapper.group_tab(vo.getNo()));
+		NoticeVO getVO = mapper.id_step_tab(vo.getNo());
+		
+		vo.setGroup_id(getVO.getGroup_id()); 
+		vo.setGroup_step(getVO.getGroup_step()); 
+		vo.setGroup_tab(getVO.getGroup_tab());
 		vo.setPno(vo.getNo());
 
 		mapper.groupUpdate(vo);
@@ -64,14 +66,37 @@ public class MasterBoardDAO {
 
 	public boolean MasterBoardDelete_ok(int no,String pwd)  {
 		boolean bCheck=false;
-		String db_pwd=mapper.boardGetPwd(no);
-		if(db_pwd.equals(pwd))  {
+		String msg;
+		NoticeVO getVO = mapper.pwd_root_depth(no);
+		
+		
+		if(getVO.getPwd().equals(pwd))  {
 			bCheck=true;
-			mapper.MasterBoardDelete(no);
+		
+			if(getVO.getDepth() == 0) {
+				mapper.MasterBoardDelete(no);
+			}
+			else {
+				 msg = "삭제된 게시물 입니다.";
+				mapper.delete_msg(msg, no);
+			}
+			
+			mapper.delete_depth(getVO.getRoot());
+			
 		}
 		return bCheck;
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public List<ReplyVO> replyListData(Map map){
 		return mapper.replyListData(map);
 	}

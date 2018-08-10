@@ -41,7 +41,7 @@
 								</c:forEach>
 							</c:if>
 							<c:choose>
-								<c:when test="${vo.subject} == '삭제한 게시물입니다'">
+								<c:when test="${vo.subject} == '삭제된 게시물 입니다.'">
 									<span style="color:gray">${vo.subject}</span>
 								</c:when>
 								<c:otherwise>
