@@ -12,6 +12,7 @@ public class MasterBoardDAO {
 	@Autowired
 	private  MasterBoardMapper mapper;
 
+	// 일반 게시판
 	public List<NoticeVO> MasterBoardList(Map map){
 		return mapper.MasterBoardList(map);
 	}
@@ -21,12 +22,17 @@ public class MasterBoardDAO {
 	public int MasterBoardRowCount(){
 		return mapper.MasterBoardRowCount();
 	}
-
-
 	public void MasterBoardInsert(NoticeVO vo){
 		mapper.MasterBoardInsert(vo);
 	}
 
+	public NoticeVO MasterBoardContent(int no)	{
+		mapper.MasterBoardHit(no);
+		return mapper.MasterBoardContent(no);
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// 답글 추가
 	public void MasterBoardReplyInsert(NoticeVO vo){
 		NoticeVO getVO = mapper.id_step_tab(vo.getNo());
 		
@@ -40,14 +46,9 @@ public class MasterBoardDAO {
 		mapper.depthUpdate(vo.getNo());
 	}
 
-
-	public NoticeVO MasterBoardContent(int no)	{
-		mapper.MasterBoardHit(no);
-		return mapper.MasterBoardContent(no);
-	}
-
-
-
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// 게시판&답글 업데이트 
 	public NoticeVO MasterBoardUpdate(int no){
 		return mapper.MasterBoardContent(no);
 	}
@@ -64,6 +65,9 @@ public class MasterBoardDAO {
 		return bCheck;
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// 답글 삭제
 	public boolean MasterBoardDelete_ok(int no,String pwd)  {
 		boolean bCheck=false;
 		NoticeVO getVO = mapper.pwd_root_depth(no);
@@ -87,40 +91,29 @@ public class MasterBoardDAO {
 
 	
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	
-	
-	
-	
-	
-	
-	
-	public List<ReplyVO> replyListData(Map map){
-		return mapper.replyListData(map);
+	//  Content 댓글 추가
+	public List<ReplyVO> ContentReplyList(int no){
+		return mapper.ContentReplyList(no);
 	}
-
-	public void replyNewInsert(Map map){
-		mapper.replyNewInsert(map);
-	}
-
-	public ReplyVO replyGetParentInfo(int no) {
-		ReplyVO vo=new ReplyVO();
-		vo= mapper.replyGetParentInfo(no);
-		return vo;
-	}
-
-	public void replyStepIncrement(ReplyVO vo){
-		mapper.replyStepIncrement(vo);
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// 댓글 추가
+	public void contentReplyInsert(ReplyVO vo){
+		mapper.contentReplyInsert(vo);
 	}
 
 
-	public void replyRepyInsert(ReplyVO vo)	{
-		mapper.replyRepyInsert(vo);
+	public int contentReplyCount(int no) {
+		return mapper.contentReplyCount(no);
 	}
 	
-	public void replyDepthIncrement(int no)	{
-			mapper.replyDepthIncrement(no);
-	}
+	
+
+	
 	
 	
 }

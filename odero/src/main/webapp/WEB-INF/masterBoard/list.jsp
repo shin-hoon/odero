@@ -46,6 +46,9 @@
 								</c:when>
 								<c:otherwise>
 									<a href="MasterBoardContent.do?no=${vo.no}&page=${curpage}">${vo.subject}</a>
+									<c:if test="${vo.count!=0}">
+										(${vo.count})
+									</c:if>
 								</c:otherwise>
 							</c:choose>
 							<jsp:useBean id="now" class="java.util.Date" />
