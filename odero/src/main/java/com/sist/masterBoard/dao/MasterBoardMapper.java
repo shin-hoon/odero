@@ -40,11 +40,9 @@ public interface MasterBoardMapper {
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	// 댓글 추가
+	// 답글 추가
 	@Select("SELECT group_id,group_step,group_tab FROM masterNotice WHERE no=#{no}")
 	public NoticeVO id_step_tab(int no);
-	
-
 	
 	@Update("UPDATE masterNotice SET group_step=group_step+1 WHERE group_id=#{group_id} AND group_step>#{group_step}")
 	public void groupUpdate(NoticeVO vo);
@@ -65,13 +63,13 @@ public interface MasterBoardMapper {
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	// 게시판&댓글 업데이트 
+	// 게시판&답글 업데이트 
 	@Update("UPDATE masterNotice SET name=#{name},subject=#{subject},content=#{content} WHERE no=#{no}")
 	public void MasterBoardUpdate(NoticeVO vo);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	// 댓글 삭제
+	// 답글 삭제
 	
 	@Select("SELECT pwd,root,depth FROM MasterNotice WHERE no=#{no}")
 	public NoticeVO pwd_root_depth(int no);
@@ -90,52 +88,28 @@ public interface MasterBoardMapper {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-    @Select("SELECT no,name,msg,TO_CHAR(regdate,'YYYY-MM-DD HH24:MI:SS') as dbday,TO_CHAR(regdate,'YYYY-MM-DD') as dbday2,group_tab,num "
-			+"FROM (SELECT no,name,msg,regdate,group_tab,rownum as num "
-			+"FROM (SELECT no,name,msg,regdate,group_tab "
-			+"FROM masterReply WHERE bno=#{bno} ORDER BY group_id DESC,group_step ASC)) "
-			+"WHERE num BETWEEN #{start} AND #{end}")
-	public List<ReplyVO> replyListData(Map map);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// Content 댓글 추가
+	// to_date(meet_start, 'YYYY-MM-DD HH24:MI') meet_start
+	//TO_CHAR(to_date(meet_start, 'YYYY-MM-DD HH24:MI'),'YY-MM-DD')
+    @Select("SELECT no,bno,name,msg,pwd,regdate,group_tab,num "
+			+"FROM (SELECT no,bno,name,msg,pwd,regdate,group_tab,rownum as num "
+			+"FROM (SELECT no,bno,name,msg,pwd,regdate,group_tab "
+			+"FROM masterReply WHERE bno=#{bno} ORDER BY group_id DESC,group_step ASC)) ")
+	public List<ReplyVO> ContentReplyList(int bno);
     
 
+    
 	@SelectKey(keyProperty="no",resultType=int.class,before=true,statement="SELECT NVL(MAX(no)+1,1) as no FROM masterReply")
-	@Insert("INSERT INTO masterReply(no,bno,id,name,msg,group_id) "
-			+"VALUES(#{no},#{bno},#{name},#{msg},"
-			+"(SELECT NVL(MAX(group_id)+1,1) FROM masterReply))")
-	public void replyNewInsert(Map map);
-
-	@Select("SELECT group_id,group_step,group_tab "
-			+"FROM masterReply "
-			+" WHERE no=#{no} ")
-	public ReplyVO replyGetParentInfo(int no);
-
-	@Update("UPDATE masterReply SET "
-			+"group_step=group_step+1 "
-			+"WHERE group_id=#{group_id} AND group_step>#{group_step}")
-	public void replyStepIncrement(ReplyVO vo);
-	
-	
-	@SelectKey(keyProperty="no",resultType=int.class,before=true,statement="SELECT NVL(MAX(no)+1,1) as no FROM masterReply")
-	@Insert("INSERT INTO masterReply VALUES(#{no},#{bno},#{id}, "
-			+"#{name},#{msg},SYSDATE,#{group_id},"
-			+"#{group_step},#{group_tab},#{root},0)")
-	public void replyRepyInsert(ReplyVO vo);
-	
-	@Update("UPDATE masterReply SET  "
-			+"depth=depth+1 "
-			+"WHERE no=#{no}")
-	public void replyDepthIncrement(int no);
-
-	
-	
-	
+	@Insert("INSERT INTO masterReply(no,bno,name,msg,pwd,regdate,group_id) "
+			+"VALUES(#{no},#{bno},#{name},#{msg},#{pwd},SYSDATE,(SELECT NVL(MAX(group_id)+1,1) FROM masterReply))")
+	public void contentReplyInsert(ReplyVO vo);
+    
+    
+	@Select("SELECT COUNT(*) FROM masterReply WHERE bno=#{no}")
+	public int contentReplyCount(int no);
+	    
 }
 
 

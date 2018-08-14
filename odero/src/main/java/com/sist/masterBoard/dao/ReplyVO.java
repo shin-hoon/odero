@@ -4,8 +4,8 @@ import java.util.*;
 public class ReplyVO {
 	private int no;
 	private int bno;
-	private String id;
 	private String name;
+	private String pwd;
 	private String msg;
 	private Date regdate;
 	private int group_id;
@@ -13,28 +13,26 @@ public class ReplyVO {
 	private int group_tab;
 	private int root;
 	private int depth;
-	private String dbday;
-	private String dbday2;
 	private int pno;
+	private int page;
 	
-	
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public String getPwd() {
+		return pwd;
+	}
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
 	public int getPno() {
 		return pno;
 	}
 	public void setPno(int pno) {
 		this.pno = pno;
-	}
-	public String getDbday2() {
-		return dbday2;
-	}
-	public void setDbday2(String dbday2) {
-		this.dbday2 = dbday2;
-	}
-	public String getDbday() {
-		return dbday;
-	}
-	public void setDbday(String dbday) {
-		this.dbday = dbday;
 	}
 	public int getNo() {
 		return no;
@@ -47,12 +45,6 @@ public class ReplyVO {
 	}
 	public void setBno(int bno) {
 		this.bno = bno;
-	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
 	}
 	public String getName() {
 		return name;

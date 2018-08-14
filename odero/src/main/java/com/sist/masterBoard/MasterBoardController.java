@@ -18,7 +18,7 @@ public class MasterBoardController {
 	@Autowired
 	private MasterBoardDAO dao;
 
-
+	// 일반 게시판
 	@RequestMapping("MasterBoard.do")
 	public String MasterBoardList(String page, Model model){
 		if(page==null) page = "1";
@@ -33,12 +33,15 @@ public class MasterBoardController {
 		map.put("start", start);
 		map.put("end", end);
 
-		List<NoticeVO> list = dao.MasterBoardList(map);
+		
+		List<NoticeVO> list=dao.MasterBoardList(map);
+		for(NoticeVO vo:list){
+			vo.setCount(dao.contentReplyCount(vo.getNo()));
+		}
+		
 		int totalpage = dao.MasterBoardToltalPage();
 		int count = dao.MasterBoardRowCount();
 		count = count-((curpage*10)-10);
-
-
 		model.addAttribute("list",list);
 		model.addAttribute("curpage",curpage);
 		model.addAttribute("totalpage",totalpage);
@@ -47,29 +50,6 @@ public class MasterBoardController {
 		return "masterBoard/list";
 	}
 	
-	@RequestMapping("MasterBoardContent.do")
-	public String MasterBoardContent(int no,int page,Model model){
-		NoticeVO vo = dao.MasterBoardContent(no);
-
-
-		int curpage=page;
-		int rowSize=10;
-		int start=(curpage*rowSize)-(rowSize-1);
-		int end=(curpage*rowSize);
-
-		Map map=new HashMap();
-		map.put("start", start);
-		map.put("end", end);
-		map.put("bno", no);
-		List<ReplyVO> list=dao.replyListData(map);
-
-		model.addAttribute("vo",vo);
-		model.addAttribute("page",page);
-		model.addAttribute("list", list);
- 
-		return "masterBoard/content";
-	}
-
 	@RequestMapping("MasterBoardInsert.do")
 	public String MasterBoardInsert(){
 		return "masterBoard/insert";
@@ -81,6 +61,23 @@ public class MasterBoardController {
 		return "redirect:MasterBoard.do";
 	}
 	
+	@RequestMapping("MasterBoardContent.do")
+	public String MasterBoardContent(int no,int page,Model model){
+		NoticeVO vo = dao.MasterBoardContent(no);
+		List<ReplyVO> list=dao.ContentReplyList(no);
+
+		model.addAttribute("no",no);
+		model.addAttribute("page",page);
+		model.addAttribute("vo",vo);
+		model.addAttribute("list", list);
+ 
+		return "masterBoard/content";
+	}
+
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// 답글 추가 
 	@RequestMapping("MasterBoardReply.do")
 	public String MasterBoardReply(int page,int no,Model model){
 		model.addAttribute("page",page);
@@ -94,9 +91,11 @@ public class MasterBoardController {
 		return "redirect:MasterBoard.do?page="+vo.getPage();
 	}
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	//	게시판&답글 업데이트
 	@RequestMapping("MasterBoardUpdate.do")
-	public String MasterBoardUpdate(int no,int page,Model model)
-	{
+	public String MasterBoardUpdate(int no,int page,Model model){
 		NoticeVO vo=dao.MasterBoardContent(no);
 		model.addAttribute("vo", vo);
 		model.addAttribute("page",page);
@@ -114,7 +113,9 @@ public class MasterBoardController {
 		return "masterBoard/update_ok";
 	}
 	
-
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// 답글 삭제
 	@RequestMapping("MasterBoardDelete.do")
 	public String MasterBoardDelete(int no,Model model)	{
 		model.addAttribute("no", no);
@@ -130,63 +131,16 @@ public class MasterBoardController {
 	}
 
 
-/*
-	@RequestMapping("reply_new_insert.do")
-	public String reply_new_insert(int bno,String msg,String name,Model model) {
-		ReplyVO vo=new ReplyVO();
-		Map map = new HashMap();
-		map.put("bno", bno);
-		map.put("msg", msg);
-		map.put("name", name);
-
-		dao.replyNewInsert(map);
-
-		model.addAttribute("no", bno);
-		return "masterBoard/content.do?no="+bno;
+	/////////////////////////////////////////////////////////////////////////////////////////////////////	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// 댓글 추가
+	
+	@RequestMapping("contentReplyInsert.do")
+	public String contentReplyInsert(int no, int page,ReplyVO vo) {
+		dao.contentReplyInsert(vo);
+		return "redirect:MasterBoardContent.do?no="+no+"&page="+page;
 	}
-
-	@RequestMapping("reply_reply_insert.do")
-	public String reply_reply_insert(int bno,int pno,String msg,String name){
-		ReplyVO pvo=dao.replyGetParentInfo(pno);
-
-		ReplyVO vo=new ReplyVO();
-		vo.setBno(bno);
-		vo.setName(name);
-		vo.setMsg(msg);
-		vo.setGroup_id(pvo.getGroup_id());
-		vo.setGroup_step(pvo.getGroup_step());
-		vo.setGroup_tab(pvo.getGroup_tab());
-		vo.setRoot(pno);
-
-		// step증가
-		dao.replyStepIncrement(pvo);
-		// insert
-		dao.replyRepyInsert(vo);
-		// depth증가
-		dao.replyDepthIncrement(pno);
-		// 전송 
-		//req.setAttribute("bno", bno);
-		return "content.do?no="+bno;
-	}
-*/
-/*
-	@RequestMapping("reply_update.do")
-	public String reply_update( HttpServletResponse res)
-	{
-		try
-		{
-			req.setCharacterEncoding("EUC-KR");
-		}catch(Exception ex){}
-		String bno=req.getParameter("bno");
-		String no=req.getParameter("no");
-		String msg=req.getParameter("msg");
-		ReplyVO vo=new ReplyVO();
-		vo.setNo(Integer.parseInt(no));
-		vo.setMsg(msg);
-		// DB연동
-		BoardDAO.replyUpdate(vo);
-		return "content.do?no="+bno;
-	}*/
 
 }
 

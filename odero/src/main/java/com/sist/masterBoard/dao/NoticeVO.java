@@ -4,7 +4,6 @@ import java.util.*;
 	
 public class NoticeVO {
 	private int no;
-	private String M_id;
 	private String name;
 	private String subject;
 	private String content;
@@ -18,7 +17,16 @@ public class NoticeVO {
 	private int depth;
 	private int page;
 	private int pno;
+	private int count;
 	
+
+	
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}	
 	
 	public int getPage() {
 		return page;
@@ -37,12 +45,6 @@ public class NoticeVO {
 	}
 	public void setNo(int no) {
 		this.no = no;
-	}
-	public String getM_id() {
-		return M_id;
-	}
-	public void setM_id(String m_id) {
-		M_id = m_id;
 	}
 	public String getName() {
 		return name;
