@@ -90,7 +90,7 @@ public interface MasterBoardMapper {
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	// Content 댓글 추가 dksssud
+	// Content 댓글 추가
 	// to_date(meet_start, 'YYYY-MM-DD HH24:MI') meet_start
 	//TO_CHAR(to_date(meet_start, 'YYYY-MM-DD HH24:MI'),'YY-MM-DD')
     @Select("SELECT no,bno,name,msg,pwd,regdate,group_tab,num "
