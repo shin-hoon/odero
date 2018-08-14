@@ -90,6 +90,7 @@ public interface MasterBoardMapper {
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	//ㅠㅡㅠㅡㅠㅜㅠㅓ
 	// Content 댓글 추가
 	// to_date(meet_start, 'YYYY-MM-DD HH24:MI') meet_start
 	//TO_CHAR(to_date(meet_start, 'YYYY-MM-DD HH24:MI'),'YY-MM-DD')
