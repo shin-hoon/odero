@@ -107,8 +107,7 @@ public interface MasterBoardMapper {
 
 	@SelectKey(keyProperty="no",resultType=int.class,before=true,statement="SELECT NVL(MAX(no)+1,1) as no FROM masterReply")
 	@Insert("INSERT INTO masterReply(no,bno,id,name,msg,group_id) "
-			+"VALUES(#{no},#{bno},#{name},#{msg},"
-			+"(SELECT NVL(MAX(group_id)+1,1) FROM masterReply))")
+			+"VALUES(#{no},#{bno},#{name},#{msg},(SELECT NVL(MAX(group_id)+1,1) FROM masterReply))")
 	public void replyNewInsert(Map map);
 
 	@Select("SELECT group_id,group_step,group_tab "
