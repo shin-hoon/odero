@@ -90,6 +90,7 @@ public interface MasterBoardMapper {
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
+	// 오늘은 여기까지
 	// Content 댓글 추가 dksssud
 	// to_date(meet_start, 'YYYY-MM-DD HH24:MI') meet_start
 	//TO_CHAR(to_date(meet_start, 'YYYY-MM-DD HH24:MI'),'YY-MM-DD')
