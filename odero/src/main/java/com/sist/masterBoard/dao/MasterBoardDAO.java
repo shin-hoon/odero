@@ -30,6 +30,8 @@ public class MasterBoardDAO {
 		mapper.MasterBoardHit(no);
 		return mapper.MasterBoardContent(no);
 	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 추가
@@ -94,7 +96,14 @@ public class MasterBoardDAO {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	//  Content 댓글 추가
+	
+	// 댓글 카운트
+	public int contentReplyCount(int no) {
+		return mapper.contentReplyCount(no);
+	}
+	
+	
+	//  Content 댓글 리스트
 	public List<ReplyVO> ContentReplyList(int no){
 		return mapper.ContentReplyList(no);
 	}
@@ -106,12 +115,22 @@ public class MasterBoardDAO {
 		mapper.contentReplyInsert(vo);
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// 답글 추가
+		public void contentReplyNweInsert(ReplyVO vo){
+			ReplyVO getVO = mapper.contentReply_id_step_tab(vo.getNo());
+			
+			vo.setGroup_id(getVO.getGroup_id()); 
+			vo.setGroup_step(getVO.getGroup_step()); 
+			vo.setGroup_tab(getVO.getGroup_tab());
+			vo.setPno(vo.getNo());
 
-	public int contentReplyCount(int no) {
-		return mapper.contentReplyCount(no);
-	}
-	
-	
+			mapper.contentReply_groupUpdate(vo);
+			mapper.contentReplyNewInsert(vo);
+			mapper.contentReply_depthUpdate(vo.getNo());
+		}
+
 
 	
 	

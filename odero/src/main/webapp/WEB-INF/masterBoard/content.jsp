@@ -149,7 +149,7 @@
 				
 				<tr id="up${rvo.no }" style="display: none">
 					<td colspan="2">
-						<form method=post action="reply_update.do">
+						<form method=post action="contentReplyUpdate.do">
 							<input type="hidden" name=bno value="${vo.no}">
 							<input type="hidden" name=no value="${rvo.no}">
 							└<textarea rows="3" cols="80" style="float: left" name="msg">${rvo.msg }</textarea>
@@ -161,14 +161,13 @@
 			</c:forEach>
 		</table>
 
-		<table id="table_content" width=700>
+		<table id="table_content" width="600">
 			<tr>
 				<td>
 					<form method=post action="contentReplyInsert.do">
 						이름:<input type="text" name="name" value=""/>
 						비밀번호:<input type="text" name="pwd" value=""/>
 						<input type="hidden" name="bno" value="${vo.no}"/>
-						<input type="hidden" name="no" value="${no}"/>
 						<input type="hidden" name="page" value="${page}"/>
 						<textarea rows="3" cols="70" name="msg"></textarea>
 						&nbsp;

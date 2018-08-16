@@ -39,6 +39,7 @@ public interface MasterBoardMapper {
 	public NoticeVO MasterBoardContent(int no);
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 추가
 	@Select("SELECT group_id,group_step,group_tab FROM masterNotice WHERE no=#{no}")
@@ -87,10 +88,15 @@ public interface MasterBoardMapper {
 	
 	
 	
-	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	// Content 댓글 추가
+	// 리플 카운트
+	@Select("SELECT COUNT(*) FROM masterReply WHERE bno=#{no}")
+	public int contentReplyCount(int no);
+	
+	
+	// Content 댓글 리스트
 	// to_date(meet_start, 'YYYY-MM-DD HH24:MI') meet_start
 	//TO_CHAR(to_date(meet_start, 'YYYY-MM-DD HH24:MI'),'YY-MM-DD')
     @Select("SELECT no,bno,name,msg,pwd,regdate,group_tab,num "
@@ -106,9 +112,24 @@ public interface MasterBoardMapper {
 	public void contentReplyInsert(ReplyVO vo);
     
     
-	@Select("SELECT COUNT(*) FROM masterReply WHERE bno=#{no}")
-	public int contentReplyCount(int no);
-	    
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// 답글 추가
+	@Select("SELECT group_id,group_step,group_tab FROM masterReply WHERE no=#{no}")
+	public ReplyVO contentReply_id_step_tab(int no);
+	
+	@Update("UPDATE masterReply SET group_step=group_step+1 WHERE group_id=#{group_id} AND group_step>#{group_step}")
+	public void contentReply_groupUpdate(ReplyVO vo);
+	
+	@SelectKey(keyProperty="no",resultType=int.class,before=true,statement="SELECT NVL(MAX(no)+1,1) as no FROM masterReply")
+	@Insert("INSERT INTO masterReply(no,bno,name,msg,pwd,regdate,group_id,group_step,group_tab,root) "
+			+ "VALUES(#{no},#{bno},#{name},#{msg},#{pwd},SYSDATE,#{group_id},#{group_step}+1,#{group_tab}+1,#{pno}) ")
+	public void contentReplyNewInsert(ReplyVO vo);
+
+	@Update("UPDATE masterReply SET depth=depth+1 WHERE no=#{pno}")
+	public void contentReply_depthUpdate(int pno);
+
+
 }
 
 

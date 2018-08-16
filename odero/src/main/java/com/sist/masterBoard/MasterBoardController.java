@@ -65,12 +65,11 @@ public class MasterBoardController {
 	public String MasterBoardContent(int no,int page,Model model){
 		NoticeVO vo = dao.MasterBoardContent(no);
 		List<ReplyVO> list=dao.ContentReplyList(no);
-
-		model.addAttribute("no",no);
-		model.addAttribute("page",page);
+		
 		model.addAttribute("vo",vo);
 		model.addAttribute("list", list);
- 
+		model.addAttribute("page",page);
+		
 		return "masterBoard/content";
 	}
 
@@ -130,6 +129,10 @@ public class MasterBoardController {
 		return "masterBoard/delete_ok";
 	}
 
+	
+	
+	
+	
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,9 +140,15 @@ public class MasterBoardController {
 	// 댓글 추가
 	
 	@RequestMapping("contentReplyInsert.do")
-	public String contentReplyInsert(int no, int page,ReplyVO vo) {
+	public String contentReplyInsert(int page,ReplyVO vo) {
 		dao.contentReplyInsert(vo);
-		return "redirect:MasterBoardContent.do?no="+no+"&page="+page;
+		return "redirect:MasterBoardContent.do?no="+vo.getBno()+"&page="+page;
+	}
+	
+	@RequestMapping("contentReplyNewInsert.do")
+	public String contentReplyNewInsert(int page,ReplyVO vo) {
+		dao.contentReplyInsert(vo);
+		return "redirect:MasterBoardContent.do?no="+vo.getBno()+"&page="+page;
 	}
 
 }
