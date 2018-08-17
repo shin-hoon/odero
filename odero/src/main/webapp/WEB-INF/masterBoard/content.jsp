@@ -169,7 +169,7 @@
 						비밀번호:<input type="text" name="pwd" value=""/>
 						<input type="hidden" name="bno" value="${vo.no}"/>
 						<input type="hidden" name="page" value="${page}"/>
-						<textarea rows="3" cols="70" name="msg"></textarea>
+						<textarea rows="3" cols="70" name="msg" style="resize: none;"></textarea>
 						&nbsp;
 						<input type="submit" value="댓글달기" style="height: 50px"/>
 					</form>
