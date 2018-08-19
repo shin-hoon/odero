@@ -42,10 +42,10 @@ public class MasterBoardDAO {
 		vo.setGroup_step(getVO.getGroup_step()); 
 		vo.setGroup_tab(getVO.getGroup_tab());
 		vo.setPno(vo.getNo());
-
+		
 		mapper.groupUpdate(vo);
 		mapper.MasterBoardReplyInsert(vo);
-		mapper.depthUpdate(vo.getNo());
+		mapper.depthUpdate(vo.getPno());
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
