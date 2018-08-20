@@ -35,7 +35,7 @@ public interface MasterBoardMapper {
 	@Update("UPDATE masterNotice SET hit=hit+1 WHERE no=#{no}")
 	public void MasterBoardHit(int no);
 	
-	@Select("SELECT no,name,subject,content,regdate FROM masterNotice WHERE no=#{no}")
+	@Select("SELECT no,name,subject,content,regdate,hit FROM masterNotice WHERE no=#{no}")
 	public NoticeVO MasterBoardContent(int no);
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,6 +88,10 @@ public interface MasterBoardMapper {
 	
 	
 	
+	
+	
+	
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -103,7 +107,7 @@ public interface MasterBoardMapper {
 			+"FROM (SELECT no,bno,name,msg,pwd,regdate,group_tab,rownum as num "
 			+"FROM (SELECT no,bno,name,msg,pwd,regdate,group_tab "
 			+"FROM masterReply WHERE bno=#{bno} ORDER BY group_id DESC,group_step ASC)) ")
-	public List<ReplyVO> ContentReplyList(int bno);
+	public List<ReplyVO> contentReplyList(int bno);
     
     
 	@SelectKey(keyProperty="no",resultType=int.class,before=true,statement="SELECT NVL(MAX(no)+1,1) as no FROM masterReply")
@@ -130,6 +134,17 @@ public interface MasterBoardMapper {
 	public void contentReply_depthUpdate(int pno);
 
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+	// Reply 비밀번호 get
+	@Select("SELECT pwd FROM masterReply WHERE no=#{no}")
+	public String contentReplyGetPwd(int no);
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// 게시판&답글 업데이트 
+	@Update("UPDATE masterReply SET name=#{name},msg=#{msg} WHERE no=#{no}")
+	public void contentReplyUpdate(ReplyVO vo);
 }
 
 

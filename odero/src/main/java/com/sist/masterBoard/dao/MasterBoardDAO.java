@@ -104,8 +104,8 @@ public class MasterBoardDAO {
 	
 	
 	//  Content 댓글 리스트
-	public List<ReplyVO> ContentReplyList(int no){
-		return mapper.ContentReplyList(no);
+	public List<ReplyVO> contentReplyList(int no){
+		return mapper.contentReplyList(no);
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +117,7 @@ public class MasterBoardDAO {
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	// 답글 추가
+	// 댓글의 댓글 추가
 		public void contentReplyNweInsert(ReplyVO vo){
 			ReplyVO getVO = mapper.contentReply_id_step_tab(vo.getNo());
 			
@@ -128,11 +128,50 @@ public class MasterBoardDAO {
 
 			mapper.contentReply_groupUpdate(vo);
 			mapper.contentReplyNewInsert(vo);
-			mapper.contentReply_depthUpdate(vo.getNo());
+			mapper.contentReply_depthUpdate(vo.getPno());
 		}
 
 
-	
-	
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		// 게시판&답글 업데이트 
+		
+		public boolean contentReplyUpdate_ok(ReplyVO vo){
+			boolean bCheck=false;
+			String pwd=mapper.contentReplyGetPwd(vo.getNo());
+
+			if(pwd.equals(vo.getPwd())) {
+				bCheck=true;
+				mapper.contentReplyUpdate(vo);
+			}
+
+			return bCheck;
+		}
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+		// 답글 삭제
+		public boolean MasterBoardDelete_ok(int no,String pwd)  {
+			boolean bCheck=false;
+			NoticeVO getVO = mapper.pwd_root_depth(no);
+
+
+			if(getVO.getPwd().equals(pwd))  {
+				bCheck=true;
+
+				if(getVO.getDepth() == 0) {
+					mapper.MasterBoardDelete(no);
+				}
+				else {
+					mapper.delete_msg(no);
+				}
+
+				mapper.delete_depth(getVO.getRoot());
+
+			}
+			return bCheck;
+		}*/
+
 	
 }

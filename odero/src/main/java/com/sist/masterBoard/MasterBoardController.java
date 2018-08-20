@@ -64,7 +64,14 @@ public class MasterBoardController {
 	@RequestMapping("MasterBoardContent.do")
 	public String MasterBoardContent(int no,int page,Model model){
 		NoticeVO vo = dao.MasterBoardContent(no);
-		List<ReplyVO> list=dao.ContentReplyList(no);
+		List<ReplyVO> list=dao.contentReplyList(no);
+		
+		int br = 1;
+		for(ReplyVO rvo : list) {
+			String a = rvo.getMsg();
+			
+			br++;
+		}
 		
 		model.addAttribute("vo",vo);
 		model.addAttribute("list", list);
@@ -140,17 +147,61 @@ public class MasterBoardController {
 	// 댓글 추가
 	
 	@RequestMapping("contentReplyInsert.do")
-	public String contentReplyInsert(int page,ReplyVO vo) {
+	public String contentReplyInsert(ReplyVO vo) {
 		dao.contentReplyInsert(vo);
-		return "redirect:MasterBoardContent.do?no="+vo.getBno()+"&page="+page;
+		return "redirect:MasterBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();
 	}
-	
 	@RequestMapping("contentReplyNewInsert.do")
-	public String contentReplyNewInsert(int page,ReplyVO vo) {
-		dao.contentReplyInsert(vo);
-		return "redirect:MasterBoardContent.do?no="+vo.getBno()+"&page="+page;
+	public String contentReplyNewInsert(ReplyVO vo) {
+		dao.contentReplyNweInsert(vo);
+		return "redirect:MasterBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();
 	}
 
+	
+	
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//	게시판&댓글 업데이트
+	/*@RequestMapping("contentReplyUpdate.do")
+	public String contentReplyUpdate(int no,int page,Model model){
+		NoticeVO vo=dao.MasterBoardContent(no);
+		model.addAttribute("vo", vo);
+		model.addAttribute("page",page);
+
+		return "masterBoard/update";
+	}
+*/
+	@RequestMapping("contentReplyUpdate.do")
+	public String contentReplyUpdate_ok(ReplyVO vo,Model model){
+		boolean bCheck=dao.contentReplyUpdate_ok(vo);
+		model.addAttribute("page",vo.getPage());
+		model.addAttribute("no",vo.getBno());
+		model.addAttribute("bCheck",bCheck);
+
+		return "masterBoard/contentReplyUpdate_ok";
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*
+
+	// 댓글 삭제
+	@RequestMapping("MasterBoardDelete.do")
+	public String MasterBoardDelete(int no,Model model)	{
+		model.addAttribute("no", no);
+		return "masterBoard/delete";
+	}
+
+	@RequestMapping("MasterBoardDelete_ok.do")
+	public String board_delete_ok(int no,String pwd,Model model){
+		boolean bCheck=dao.MasterBoardDelete_ok(no, pwd);
+		model.addAttribute("bCheck",bCheck);
+		return "masterBoard/delete_ok";
+	}
+
+*/
+	
+	
 }
 
 
