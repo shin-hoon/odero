@@ -17,8 +17,8 @@
 			width: 750px;
 		}
 		.pre {
+			padding : 6px;
 			word-break : break-all;
-			width:550px;
 		}
 		textarea{
 			resize: none;
@@ -83,10 +83,14 @@
 	</script>
 </head>
 <body>
-	<div class="container">
+	<div class="container" style="margin-top:30px;">
 		<div class="row" style="text-align: center;">
-				<h3 >공사중</h3>
-				<table class="table" width="600" style="table-layout: fixed;">
+				<table class="table" style="width:780px;table-layout: fixed;">
+					<tr class="table-th">
+						<th class="aa text-center" width="100%" colspan="4">
+						 <P>${vo.subject}</P> 
+						</th>
+					</tr>
 					<tr class="aa">
 						<td width="20%" class="text-center table-th">번호</td>
 						<td width="30%" class="text-center">${vo.no}</td>
@@ -107,34 +111,28 @@
 					</tr>
 					<tr class="aa">
 						<td colspan="4" class="content_td">
-						<pre style="border:none;background-color:white;">${vo.content}</pre>
+						<pre style="border:none;background-color:white;word-break:break-all;">${vo.content}</pre>
+						</td>
+					</tr>
+					<tr class="aa">
+						<td colspan="4" class="text-right">
+							<a href="MasterBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">답변</a>
+							<a href="MasterBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">수정</a>
+							<a href="MasterBoardDelete.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">삭제</a>
+							<a href="MasterBoard.do" class="btn btn-sm table-th">목록</a>
 						</td>
 					</tr>
 				</table>
 		</div>
 	</div>
 	
-	
-	<div class="row">
-		<table class="table" width="600">
-			<tr class="aa">
-				<td colspan="4" class="text-right">
-					<a href="MasterBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">답변</a>
-					<a href="MasterBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">수정</a>
-					<a href="MasterBoardDelete.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">삭제</a>
-					<a href="MasterBoard.do" class="btn btn-sm table-th">목록</a>
-				</td>
-			</tr>
-		</table>
-	</div>
-
 
 
 	<div class="row" >
-		<table class="table" width="600" style="table-layout: fixed;">
+		<table class="table"  style="width:780px;border:1px ridge #ddd;">
 			<c:forEach var="rvo" items="${list}">
 				<tr>
-					<td align="left" width="450" style="word-break:break-all;">
+					<td align="left" style="width:85%;border:none;">
 						<div>
 							<c:set var="tab" value="0"/>
 							<c:if test="${rvo.group_tab > 0}">
@@ -154,17 +152,21 @@
 										</c:if>
 									</c:if>
 						 </div>
-						 <c:choose>
-						 	<c:when test="${rvo.group_tab > 0}">
-									<p class="pre" style="margin-left:${tab+5}px;">${rvo.msg}</p>
-						 	</c:when>
-						 	<c:otherwise><p class="pre">${rvo.msg}</p></c:otherwise>
-						 </c:choose>
 					</td>
-					<td class="td_a" width="150" align="right">
+					<td class="td_a" style="width:15%;border:none;" align="right">
 						<a class="reply_update" value="${rvo.no}">수정</a>│
-						<a href="reply_delete.do?no=${rvo.no}&bno=${vo.no}">삭제</a>│
+						<a href="ContentReplyDelete.do?no=${rvo.no}&bno=${vo.no}&page=${page}">삭제</a>│
            				<a class="reply_reply" value="${rvo.no}">댓글</a>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" style="border:none;">
+						<c:choose>
+							<c:when test="${rvo.group_tab > 0}">
+									<p class="pre" style="margin-left:${tab+5}px;background-color:#f5f5f5;">${rvo.msg}</p>
+						 	</c:when>
+						 	<c:otherwise><p class="pre table-th">${rvo.msg}</p></c:otherwise>
+						 </c:choose>
 					</td>
 				</tr>
 				
@@ -200,11 +202,8 @@
 					</td>
 				</tr>
 			</c:forEach>
-		</table>
-
-		<table class="table" width="600">
 			<tr>
-				<td>
+				<td colspan="2">
 					<form method=post action="contentReplyInsert.do">
 						<div>
 							이름:<input type="text" name="name" value=""/>
@@ -223,8 +222,44 @@
 	</div>
 </body>
 </html>
-
-
+<%-- 
+<div class="container" style="margin-top:30px;">
+		<div class="row" style="text-align: center;">
+				<table class="table" style="width:780px;table-layout: fixed;">
+					<tr class="table-th">
+						<th class="aa text-center" width="100%">
+						 <P>${vo.subject}</P> 
+						</th>
+					</tr>
+					<tr class="aa">
+						<td width="100%" class="text-left">
+							<span><b><i>이름:</i></b>&nbsp;${vo.name}</span>
+							<span style="margin-left:10px;"><b><i>게시물 번호:&nbsp;</i></b>${vo.no}</span>
+							<span style="margin-left:10px;"><b><i>작성일:&nbsp;</i></b>
+								<fmt:formatDate value="${vo.regdate}" pattern="yyyy-MM-dd"/>
+								
+							</span>
+							<span style="margin-left:10px;"><b><i>조회수:&nbsp;</i></b>${vo.hit}</span>
+						</td>
+					</tr>
+					<tr class="aa">
+						<td colspan="4" class="content_td">
+						<pre style="border:none;background-color:white;word-break:break-all;">${vo.content}</pre>
+						</td>
+					</tr>
+					<tr class="aa">
+						<td colspan="4" class="text-right">
+							<a href="MasterBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">답변</a>
+							<a href="MasterBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">수정</a>
+							<a href="MasterBoardDelete.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">삭제</a>
+							<a href="MasterBoard.do" class="btn btn-sm table-th">목록</a>
+						</td>
+					</tr>
+				</table>
+		</div>
+	</div>
+	
+ --%>
 
 
 

@@ -19,7 +19,11 @@ table td a {
 	color: #666666;
 	line-height: 20px;
 }
-.aa td,table  td, table  tr{
+.aa td,
+table td,
+table tr,
+.aa p,
+.aa pre{
 	font-weight: 100;
 	font-family: 'Jeju Gothic';
 	font-size: 15px;

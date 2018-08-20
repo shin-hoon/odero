@@ -162,16 +162,7 @@ public class MasterBoardController {
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	//	게시판&댓글 업데이트
-	/*@RequestMapping("contentReplyUpdate.do")
-	public String contentReplyUpdate(int no,int page,Model model){
-		NoticeVO vo=dao.MasterBoardContent(no);
-		model.addAttribute("vo", vo);
-		model.addAttribute("page",page);
-
-		return "masterBoard/update";
-	}
-*/
+	//	Content&댓글 업데이트
 	@RequestMapping("contentReplyUpdate.do")
 	public String contentReplyUpdate_ok(ReplyVO vo,Model model){
 		boolean bCheck=dao.contentReplyUpdate_ok(vo);
@@ -183,47 +174,15 @@ public class MasterBoardController {
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	/*
 
 	// 댓글 삭제
-	@RequestMapping("MasterBoardDelete.do")
-	public String MasterBoardDelete(int no,Model model)	{
-		model.addAttribute("no", no);
-		return "masterBoard/delete";
-	}
-
-	@RequestMapping("MasterBoardDelete_ok.do")
-	public String board_delete_ok(int no,String pwd,Model model){
+	@RequestMapping("ContentReplyDelete.do")
+	public String ContentReplyDelete_ok(int no,String pwd,int page,Model model){
 		boolean bCheck=dao.MasterBoardDelete_ok(no, pwd);
 		model.addAttribute("bCheck",bCheck);
+		model.addAttribute("no",no);
+		model.addAttribute("page",page);
 		return "masterBoard/delete_ok";
 	}
-
-*/
-	
-	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
