@@ -20,13 +20,12 @@
 			padding : 6px;
 			word-break : break-all;
 		}
-		textarea{
+		.textarea{
 			resize: none;
-			width:600px;
-			height : 130px;
+			width:500px;
 		}
 		input[type="text"]{
-			width:100px;
+		7	width:100px;
 			height : 20px;
 		}
 		*{
@@ -52,6 +51,8 @@
 	<script type="text/javascript">
 		$(function(){
 			var i=0;
+			var u=0;
+			
 			$('.reply_reply').click(function(){
 				var no=$(this).attr("value");
 				if(i==0){
@@ -64,8 +65,12 @@
 					$('#in'+no).hide();
 					i=0;
 				}
+				if(u==1){
+					$('.reply_update').text("수정");
+					$('#up'+no).hide();
+					u=0;
+				}
 			});
-			var u=0;
 			$('.reply_update').click(function(){
 				var no=$(this).attr("value");
 				if(u==0){
@@ -78,6 +83,11 @@
 					$('#up'+no).hide();
 					u=0;
 				}
+				if(i==1){
+					$('.reply_reply').text("댓글");
+					$('#in'+no).hide();
+					i=0;
+				}
 			});
 		});
 	</script>
@@ -86,27 +96,27 @@
 	<div class="container" style="margin-top:30px;">
 		<div class="row" style="text-align: center;">
 				<table class="table" style="width:780px;table-layout: fixed;">
-					<tr class="table-th">
+					<tr style="background: rgb(222, 235, 247);">
 						<th class="aa text-center" width="100%" colspan="4">
-						 <P>${vo.subject}</P> 
+							 <P>${vo.subject}</P> 
 						</th>
 					</tr>
 					<tr class="aa">
-						<td width="20%" class="text-center table-th">번호</td>
+						<td width="20%" class="text-center" style="background: rgb(247, 260, 272);">번호</td>
 						<td width="30%" class="text-center">${vo.no}</td>
-						<td width="20%" class="text-center table-th">작성일</td>
+						<td width="20%" class="text-center" style="background: rgb(247, 260, 272);">작성일</td>
 						<td width="30%" class="text-center">
 							<fmt:formatDate value="${vo.regdate}" pattern="yyyy-MM-dd"/>
 						</td>
 					</tr>
 					<tr class="aa">
-						<td width="20%" class="text-center table-th">이름</td>
+						<td width="20%" class="text-center" style="background: rgb(247, 260, 272);">이름</td>
 						<td width="30%" class="text-center">${vo.name}</td>
-						<td width="20%" class="text-center table-th">조회수</td>
+						<td width="20%" class="text-center" style="background: rgb(247, 260, 272);">조회수</td>
 						<td width="30%" class="text-center">${vo.hit}</td>
 					</tr>
 					<tr class="aa">
-						<td width="20%" class="text-center table-th">제목</td>
+						<td width="20%" class="text-center" style="background: rgb(247, 260, 272);">제목</td>
 						<td colspan="3" class="text-center"> <P>${vo.subject}</P> </td>
 					</tr>
 					<tr class="aa">
@@ -136,13 +146,14 @@
 						<div>
 							<c:set var="tab" value="0"/>
 							<c:if test="${rvo.group_tab > 0}">
-								<c:forEach var="i" begin="1" end="${rvo.group_tab+1}">
-									<span style="margin-left:${5*i}px"></span>
-									<c:set var="tab" value="${tab=tab+(5*i)}"/>
+								<c:forEach var="i" begin="1" end="${rvo.group_tab}">
+									<c:set var="tab" value="${(10*i)}"/>
 								</c:forEach>
-								<span>└</span>
+								<span style="margin-left:${tab}px">└</span>
 							</c:if>
-								<span>${rvo.name}(<fmt:formatDate value="${rvo.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/>)</span>&nbsp;&nbsp; 
+								<span>
+									${rvo.name}  (<fmt:formatDate value="${rvo.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/>)${tab}
+								</span>&nbsp;&nbsp; 
 								<jsp:useBean id="now" class="java.util.Date" />
 									<fmt:formatDate	var="today" value="${now}" pattern="yyyy-MM-dd"/>
 									<fmt:formatDate	var="yesterday" value="${rvo.regdate}" pattern="yyyy-MM-dd"/>
@@ -172,49 +183,74 @@
 				
 				<tr id="in${rvo.no}" style="display: none">
 					<td colspan="2">
+						<div class="pre" style="margin-left:20px">
 							<form method="post" action="contentReplyNewInsert.do">
-								이름:<input type="text" name="name" value=""/>
-								비밀번호:<input type="text" name="pwd" value=""/>
-								<input type="submit" value="댓글달기"/>
+									<div class="form-inline">
+										<div class="form-group">
+	      									<label for="id">Name:</label>
+      										<input type="text" name="name" style="height:15px;width:110px;" class="form-control" id="email" placeholder="Enter name">
+										</div>
+										<div class="form-group">
+		      								<label for="pwd">Password:</label>
+      										<input type="password" name="pwd" style="height:15px;width:110px;" class="form-control" id="pwd" placeholder="Enter password">
+											<input type="submit" value="댓글달기" class="btn btn-sm table-th"/>
+      									</div>
+      								</div>
+						
 								<input type="hidden" name="bno" value="${vo.no}"/>
 								<input type="hidden" name="no" value="${rvo.no}"/>
 								<input type="hidden" name="page" value="${page}"/>
-								<textarea name="msg"></textarea>
+								<textarea name="msg" style="height:150px;" class="form-control textarea" id="comment"></textarea>
 								&nbsp;
+						</div>
 							</form>
 					</td>
 				</tr>
 				
-				<tr id="up${rvo.no }" style="display: none">
+				<tr id="up${rvo.no }" style="display: none" class="aa">
 					<td colspan="2">
-						<span style="margin-left:10px">
-							<form method=post action="contentReplyUpdate.do">
-								이름:<input type="text" name="name" value="${rvo.name}"/>
-								비밀번호:<input type="text" name="pwd" value=""/>
-								<input type="submit" value="수정하기"/>
+						<div class="pre" style="margin-left:20px">
+							<form method="post" action="contentReplyUpdate.do">
+								<div class="form-inline">
+									<div class="form-group">
+	      								<label for="id">Name:</label>
+      									<input type="text" name="name" value="${rvo.name}" style="height:15px;width:110px;" class="form-control" id="email" placeholder="Enter name">
+									</div>
+									<div class="form-group">
+	      								<label for="pwd">Password:</label>
+      									<input type="password" name="pwd" style="height:15px;width:110px;" class="form-control" id="pwd" placeholder="Enter password">
+										<input type="submit" value="수정하기" class="btn btn-sm table-th"/>
+      								</div>
+      							</div>
 								<input type="hidden" name="bno" value="${vo.no}">
 								<input type="hidden" name="no" value="${rvo.no}">
 								<input type="hidden" name="page" value="${page}"/>
-								<textarea name="msg">${rvo.msg }</textarea>
+								<textarea name="msg" style="height:150px;" class="form-control textarea" id="comment">${rvo.msg }</textarea>
 								&nbsp;
 							</form>
-						</span>
+						</div>
 					</td>
 				</tr>
 			</c:forEach>
-			<tr>
+			<tr class="aa">
 				<td colspan="2">
 					<form method=post action="contentReplyInsert.do">
-						<div>
-							이름:<input type="text" name="name" value=""/>
-							비밀번호:<input type="text" name="pwd" value=""/>
-							<input type="submit" value="댓글달기" />
+						<div class="form-inline">
+							<div class="form-group">
+	      						<label for="id">Name:</label>
+      							<input type="text" name="name" style="height:15px;width:110px;" class="form-control" id="email" placeholder="Enter name">
+							</div>
+							<div class="form-group">
+	      						<label for="pwd">Password:</label>
+      							<input type="password" name="pwd" style="height:15px;width:110px;" class="form-control" id="pwd" placeholder="Enter password">
+								<input type="submit" value="댓글달기" class="btn btn-sm table-th"/>
+      						</div>
+      					</div>
+      					 <div class="form-group">
 							<input type="hidden" name="bno" value="${vo.no}"/>
 							<input type="hidden" name="page" value="${page}"/>
-						</div>
-						<div>
-							<textarea name="msg"></textarea>
-						</div>
+							<textarea name="msg" style="height:150px;" class="form-control textarea" id="comment"></textarea>
+							</div>
 					</form>
 				</td>
 			</tr>
@@ -222,56 +258,3 @@
 	</div>
 </body>
 </html>
-<%-- 
-<div class="container" style="margin-top:30px;">
-		<div class="row" style="text-align: center;">
-				<table class="table" style="width:780px;table-layout: fixed;">
-					<tr class="table-th">
-						<th class="aa text-center" width="100%">
-						 <P>${vo.subject}</P> 
-						</th>
-					</tr>
-					<tr class="aa">
-						<td width="100%" class="text-left">
-							<span><b><i>이름:</i></b>&nbsp;${vo.name}</span>
-							<span style="margin-left:10px;"><b><i>게시물 번호:&nbsp;</i></b>${vo.no}</span>
-							<span style="margin-left:10px;"><b><i>작성일:&nbsp;</i></b>
-								<fmt:formatDate value="${vo.regdate}" pattern="yyyy-MM-dd"/>
-								
-							</span>
-							<span style="margin-left:10px;"><b><i>조회수:&nbsp;</i></b>${vo.hit}</span>
-						</td>
-					</tr>
-					<tr class="aa">
-						<td colspan="4" class="content_td">
-						<pre style="border:none;background-color:white;word-break:break-all;">${vo.content}</pre>
-						</td>
-					</tr>
-					<tr class="aa">
-						<td colspan="4" class="text-right">
-							<a href="MasterBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">답변</a>
-							<a href="MasterBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">수정</a>
-							<a href="MasterBoardDelete.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">삭제</a>
-							<a href="MasterBoard.do" class="btn btn-sm table-th">목록</a>
-						</td>
-					</tr>
-				</table>
-		</div>
-	</div>
-	
- --%>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
