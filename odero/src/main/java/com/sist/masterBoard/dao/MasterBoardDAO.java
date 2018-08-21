@@ -150,28 +150,28 @@ public class MasterBoardDAO {
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
-/*
+
 		// 답글 삭제
-		public boolean MasterBoardDelete_ok(int no,String pwd)  {
+		public boolean contentReplyDelete_ok(ReplyVO vo)  {
 			boolean bCheck=false;
-			NoticeVO getVO = mapper.pwd_root_depth(no);
+			ReplyVO getVO = mapper.contentReply_pwd_root_depth(vo.getNo());
 
 
-			if(getVO.getPwd().equals(pwd))  {
+			if(getVO.getPwd().equals(vo.getPwd()))  {
 				bCheck=true;
 
 				if(getVO.getDepth() == 0) {
-					mapper.MasterBoardDelete(no);
+					mapper.contentReplyDelete(vo.getNo());
 				}
 				else {
-					mapper.delete_msg(no);
+					mapper.contentReply_delete_msg(vo.getNo());
 				}
 
-				mapper.delete_depth(getVO.getRoot());
+				mapper.contentReply_delete_depth(getVO.getRoot());
 
 			}
 			return bCheck;
-		}*/
+		}
 
 	
 }

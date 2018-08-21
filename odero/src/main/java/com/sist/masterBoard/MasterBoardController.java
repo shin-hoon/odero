@@ -140,11 +140,12 @@ public class MasterBoardController {
 	
 	
 	
+	
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	// 댓글 추가
+	// content 댓글 추가
 	
 	@RequestMapping("contentReplyInsert.do")
 	public String contentReplyInsert(ReplyVO vo) {
@@ -175,14 +176,14 @@ public class MasterBoardController {
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// 댓글 삭제
-	@RequestMapping("ContentReplyDelete.do")
-	public String ContentReplyDelete_ok(int no,String pwd,int page,Model model){
-		boolean bCheck=dao.MasterBoardDelete_ok(no, pwd);
+	// content 댓글 삭제
+	@RequestMapping("contentReplyDelete_ok.do")
+	public String ContentReplyDelete_ok(ReplyVO vo,Model model){
+		boolean bCheck=dao.contentReplyDelete_ok(vo);
 		model.addAttribute("bCheck",bCheck);
-		model.addAttribute("no",no);
-		model.addAttribute("page",page);
-		return "masterBoard/delete_ok";
+		model.addAttribute("no",vo.getBno());
+		model.addAttribute("page",vo.getPage());
+		return "masterBoard/contentReplyDelete_ok";
 	}
 }
 

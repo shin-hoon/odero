@@ -118,7 +118,7 @@ public interface MasterBoardMapper {
     
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// 답글 추가
+	// content 리플 추가
 	@Select("SELECT group_id,group_step,group_tab FROM masterReply WHERE no=#{no}")
 	public ReplyVO contentReply_id_step_tab(int no);
 	
@@ -136,15 +136,33 @@ public interface MasterBoardMapper {
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
 
-	// Reply 비밀번호 get
+	// content Reply 비밀번호 get
 	@Select("SELECT pwd FROM masterReply WHERE no=#{no}")
 	public String contentReplyGetPwd(int no);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// 게시판&답글 업데이트 
+	// content 게시판&답글 업데이트 
 	@Update("UPDATE masterReply SET name=#{name},msg=#{msg} WHERE no=#{no}")
 	public void contentReplyUpdate(ReplyVO vo);
+	
+	
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// content 댓글삭제
+	
+	@Select("SELECT pwd,root,depth FROM masterReply WHERE no=#{no}")
+	public ReplyVO contentReply_pwd_root_depth(int no);
+	
+	@Delete("DELETE FROM masterReply WHERE no=#{no}")
+	public void contentReplyDelete(int no);
+	
+	@Update("UPDATE masterReply SET msg='삭제된 게시물 입니다.' WHERE no=#{no}")
+	public void contentReply_delete_msg(int no);
+
+	@Update("UPDATE masterReply SET depth=depth-1 WHERE no=#{root}")
+	public void contentReply_delete_depth(int root);
 }
 
 

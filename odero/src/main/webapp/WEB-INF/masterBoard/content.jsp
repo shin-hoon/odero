@@ -52,6 +52,7 @@
 		$(function(){
 			var i=0;
 			var u=0;
+			var d=0;
 			
 			$('.reply_reply').click(function(){
 				var no=$(this).attr("value");
@@ -69,6 +70,11 @@
 					$('.reply_update').text("수정");
 					$('#up'+no).hide();
 					u=0;
+				}
+				if(d==1){
+					$('.reply_delete').text("삭제");
+					$('#del'+no).hide();
+					d=0;
 				}
 			});
 			$('.reply_update').click(function(){
@@ -88,7 +94,41 @@
 					$('#in'+no).hide();
 					i=0;
 				}
+				if(d==1){
+					$('.reply_delete').text("삭제");
+					$('#del'+no).hide();
+					d=0;
+				}
 			});
+
+			$('.reply_delete').click(function(){
+				var no=$(this).attr("value");
+				if(d==0){
+					$(this).text("취소");
+					$('#del'+no).show();
+					d=1;
+				}
+				else{
+					$(this).text("삭제");
+					$('#del'+no).hide();
+					d=0;
+				}
+				if(u==1){
+					$('.reply_update').text("수정");
+					$('#up'+no).hide();
+					u=0;
+				}
+				if(i==1){
+					$('.reply_reply').text("댓글");
+					$('#in'+no).hide();
+					i=0;
+				}
+			});
+			
+			/* $('#submit').click(function(){
+				var name = $('name').val();
+				
+			}); */
 		});
 	</script>
 </head>
@@ -165,24 +205,38 @@
 						 </div>
 					</td>
 					<td class="td_a" style="width:15%;border:none;" align="right">
-						<a class="reply_update" value="${rvo.no}">수정</a>│
-						<a href="ContentReplyDelete.do?no=${rvo.no}&bno=${vo.no}&page=${page}">삭제</a>│
-           				<a class="reply_reply" value="${rvo.no}">댓글</a>
+						<c:if test="${rvo.msg != '삭제된 게시물 입니다.'}">
+							<a class="reply_update" value="${rvo.no}">수정</a>│
+							<a class="reply_delete" value="${rvo.no}">삭제</a>│
+           					<a class="reply_reply" value="${rvo.no}">댓글</a>
+						</c:if>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2" style="border:none;">
 						<c:choose>
 							<c:when test="${rvo.group_tab > 0}">
+								<c:if test="${rvo.msg != '삭제된 게시물 입니다.'}">
 									<p class="pre" style="margin-left:${tab+5}px;background-color:#f5f5f5;">${rvo.msg}</p>
+								</c:if>
+								<c:if test="${rvo.msg == '삭제된 게시물 입니다.'}">
+									<p class="pre" style="margin-left:${tab+5}px;background-color:#f5f5f5;color:red;">${rvo.msg}</p>
+								</c:if>
 						 	</c:when>
-						 	<c:otherwise><p class="pre table-th">${rvo.msg}</p></c:otherwise>
+						 	<c:otherwise>
+						 		<c:if test="${rvo.msg != '삭제된 게시물 입니다.'}">
+									<p class="pre table-th">${rvo.msg}</p>
+								</c:if>
+								<c:if test="${rvo.msg == '삭제된 게시물 입니다.'}">
+									<p class="pre table-th" style="color:red;">${rvo.msg}</p>
+								</c:if>
+							</c:otherwise>
 						 </c:choose>
 					</td>
 				</tr>
 				
 				<tr id="in${rvo.no}" style="display: none">
-					<td colspan="2">
+					<td colspan="2" style="border-bottom:1px solid #ddd;">
 						<div class="pre" style="margin-left:20px">
 							<form method="post" action="contentReplyNewInsert.do">
 									<div class="form-inline">
@@ -208,7 +262,7 @@
 				</tr>
 				
 				<tr id="up${rvo.no }" style="display: none" class="aa">
-					<td colspan="2">
+					<td colspan="2" style="border-bottom:1px solid #ddd;">
 						<div class="pre" style="margin-left:20px">
 							<form method="post" action="contentReplyUpdate.do">
 								<div class="form-inline">
@@ -231,26 +285,48 @@
 						</div>
 					</td>
 				</tr>
+				
+				<tr id="del${rvo.no}" class="aa" align="center" style="display:none;">
+					<td colspan="2" style="border-bottom:1px solid #ddd;">
+						<div class="pre" style="width:300px;text-align: center;">
+							<form method="post" action="contentReplyDelete_ok.do">
+								<div>	<label for="pwd">댓글삭제</label>		</div>
+								<div class="form-inline" style="border-top:ridge;border-bottom:ridge; padding:10px;">
+									<div class="form-group">
+	      								<label for="pwd">Password:</label>
+      									<input type="password" name="pwd" style="height:15px;width:110px;" class="form-control" id="pwd" placeholder="Enter password">
+      								</div>
+      							</div>
+      							<div>
+									<input type="submit" value="삭제하기" class="btn btn-sm table-th" style="margin-top:5px;"/>
+								</div>
+								<input type="hidden" name="bno" value="${vo.no}">
+								<input type="hidden" name="no" value="${rvo.no}">
+								<input type="hidden" name="page" value="${page}"/>
+							</form>
+						</div>
+					</td>
+				</tr>
 			</c:forEach>
+			
+			
 			<tr class="aa">
 				<td colspan="2">
 					<form method=post action="contentReplyInsert.do">
 						<div class="form-inline">
 							<div class="form-group">
 	      						<label for="id">Name:</label>
-      							<input type="text" name="name" style="height:15px;width:110px;" class="form-control" id="email" placeholder="Enter name">
+      							<input type="text" name="name" style="height:15px;width:110px;" class="form-control" id="name" placeholder="Enter name">
 							</div>
 							<div class="form-group">
 	      						<label for="pwd">Password:</label>
       							<input type="password" name="pwd" style="height:15px;width:110px;" class="form-control" id="pwd" placeholder="Enter password">
-								<input type="submit" value="댓글달기" class="btn btn-sm table-th"/>
+								<input type="button" id="submit" value="댓글달기" class="btn btn-sm table-th"/>
       						</div>
       					</div>
-      					 <div class="form-group">
 							<input type="hidden" name="bno" value="${vo.no}"/>
 							<input type="hidden" name="page" value="${page}"/>
 							<textarea name="msg" style="height:150px;" class="form-control textarea" id="comment"></textarea>
-							</div>
 					</form>
 				</td>
 			</tr>
