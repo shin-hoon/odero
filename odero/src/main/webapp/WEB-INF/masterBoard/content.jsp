@@ -77,6 +77,8 @@
 					d=0;
 				}
 			});
+			
+			
 			$('.reply_update').click(function(){
 				var no=$(this).attr("value");
 				if(u==0){
@@ -101,6 +103,7 @@
 				}
 			});
 
+			
 			$('.reply_delete').click(function(){
 				var no=$(this).attr("value");
 				if(d==0){
@@ -125,10 +128,75 @@
 				}
 			});
 			
-			/* $('#submit').click(function(){
-				var name = $('name').val();
+			
+			$('#btnSubmit').click(function(){
+				var name = $('#submit-name').val();
+				var pwd = $('#submit-pwd').val();
+				var content = $('#submit-content').val();
 				
-			}); */
+				if(name.trim() == ""){
+					alert("이름을 입력하세요");
+					$('#submit-name').focus();
+					return false;
+				}
+				if(pwd.trim() == ""){
+					alert("비밀번호를 입력하세요");
+					$('#submit-pwd').focus();
+					return false;
+				}
+				if(content.trim() == ""){
+					alert("내용을 작성하세요");
+					$('#submit-content').focus();
+					return false;
+				}
+				$('#submit').submit();
+			}); 
+			
+			
+			$('.btn').click(function(){
+				var no = $(this).attr("data-no");
+				var who = $(this).attr("data-who");
+				var dp = $(this).attr("data-pwd");
+				var dn = $(this).attr("data-name");
+				var dc = $(this).attr("data-content");
+				var pwd,name,content;
+				alert( dp + dn+ dc);
+				
+				if(who == "d-del"){
+					pwd = $("#"+dp+no).val();
+					if(pwd.trim() == ""){
+						alert("비밀번호를 입력하세요");
+						$("#"+dp+no).focus();
+						return false;
+					}
+				}
+				 else if(who == "u-up" ||  who == "i-in"){
+					pwd = $("#"+dp+no).val();
+					name = $("#"+dn+no).val();
+					content = $("#"+dc+no).val();
+				
+				
+					if(pwd.trim() == ""){
+						alert("비밀번호를 입력하세요");
+						$("#"+dp+no).focus();
+						return false;
+					}
+					else if(name.trim() == ""){
+						alert("이름을 입력하세요");
+						$("#"+dn+no).focus();
+						return false;
+					}
+					else if(content.trim() == ""){
+						alert("내용을 작성하세요");
+						$("#"+dc+no).focus();
+						return false;
+					} 
+				}
+				else return;
+				
+				alert('히릿'+'#'+who+no);
+				$('#'+who+no).submit();  
+			});
 		});
 	</script>
 </head>
@@ -192,7 +260,7 @@
 								<span style="margin-left:${tab}px">└</span>
 							</c:if>
 								<span>
-									${rvo.name}  (<fmt:formatDate value="${rvo.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/>)${tab}
+									${rvo.name}  (<fmt:formatDate value="${rvo.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/>)
 								</span>&nbsp;&nbsp; 
 								<jsp:useBean id="now" class="java.util.Date" />
 									<fmt:formatDate	var="today" value="${now}" pattern="yyyy-MM-dd"/>
@@ -238,23 +306,25 @@
 				<tr id="in${rvo.no}" style="display: none">
 					<td colspan="2" style="border-bottom:1px solid #ddd;">
 						<div class="pre" style="margin-left:20px">
-							<form method="post" action="contentReplyNewInsert.do">
+							<form id="i-in${rvo.no}" method="post" action="contentReplyNewInsert.do">
 									<div class="form-inline">
 										<div class="form-group">
 	      									<label for="id">Name:</label>
-      										<input type="text" name="name" style="height:15px;width:110px;" class="form-control" id="email" placeholder="Enter name">
+      										<input type="text" name="name" style="height:15px;width:110px;" class="form-control" id="i-name${rvo.no}" placeholder="Enter name">
 										</div>
 										<div class="form-group">
 		      								<label for="pwd">Password:</label>
-      										<input type="password" name="pwd" style="height:15px;width:110px;" class="form-control" id="pwd" placeholder="Enter password">
-											<input type="submit" value="댓글달기" class="btn btn-sm table-th"/>
+      										<input type="password" name="pwd" style="height:15px;width:110px;" class="form-control" id="i-pwd${rvo.no}" placeholder="Enter password">
+											<input type="button" 
+												data-no="${rvo.no}" data-who="i-in" data-pwd="i-pwd" data-name="i-name" data-content="i-content" 
+												value="댓글달기" class="btn btn-sm table-th"/>
       									</div>
       								</div>
 						
 								<input type="hidden" name="bno" value="${vo.no}"/>
 								<input type="hidden" name="no" value="${rvo.no}"/>
 								<input type="hidden" name="page" value="${page}"/>
-								<textarea name="msg" style="height:150px;" class="form-control textarea" id="comment"></textarea>
+								<textarea name="msg" style="height:150px;" class="form-control textarea" id="i-content${rvo.no}"></textarea>
 								&nbsp;
 						</div>
 							</form>
@@ -264,22 +334,24 @@
 				<tr id="up${rvo.no }" style="display: none" class="aa">
 					<td colspan="2" style="border-bottom:1px solid #ddd;">
 						<div class="pre" style="margin-left:20px">
-							<form method="post" action="contentReplyUpdate.do">
+							<form id="u-up${rvo.no}" method="post" action="contentReplyUpdate.do">
 								<div class="form-inline">
 									<div class="form-group">
 	      								<label for="id">Name:</label>
-      									<input type="text" name="name" value="${rvo.name}" style="height:15px;width:110px;" class="form-control" id="email" placeholder="Enter name">
+      									<input type="text" name="name" value="${rvo.name}" style="height:15px;width:110px;" class="form-control" id="u-name${rvo.no}" placeholder="Enter name">
 									</div>
 									<div class="form-group">
 	      								<label for="pwd">Password:</label>
-      									<input type="password" name="pwd" style="height:15px;width:110px;" class="form-control" id="pwd" placeholder="Enter password">
-										<input type="submit" value="수정하기" class="btn btn-sm table-th"/>
+      									<input type="password" name="pwd" style="height:15px;width:110px;" class="form-control" id="u-pwd${rvo.no}" placeholder="Enter password">
+										<input type="button" 
+											data-no="${rvo.no}" data-who="u-up" data-pwd="u-pwd" data-name="u-name" data-content="u-content"
+											value="수정하기" class="btn btn-sm table-th"/>
       								</div>
       							</div>
 								<input type="hidden" name="bno" value="${vo.no}">
 								<input type="hidden" name="no" value="${rvo.no}">
 								<input type="hidden" name="page" value="${page}"/>
-								<textarea name="msg" style="height:150px;" class="form-control textarea" id="comment">${rvo.msg }</textarea>
+								<textarea name="msg" style="height:150px;" class="form-control textarea" id="u-content${rvo.no}">${rvo.msg }</textarea>
 								&nbsp;
 							</form>
 						</div>
@@ -289,16 +361,16 @@
 				<tr id="del${rvo.no}" class="aa" align="center" style="display:none;">
 					<td colspan="2" style="border-bottom:1px solid #ddd;">
 						<div class="pre" style="width:300px;text-align: center;">
-							<form method="post" action="contentReplyDelete_ok.do">
+							<form id="d-del${rvo.no}" method="post" action="contentReplyDelete_ok.do">
 								<div>	<label for="pwd">댓글삭제</label>		</div>
 								<div class="form-inline" style="border-top:ridge;border-bottom:ridge; padding:10px;">
 									<div class="form-group">
 	      								<label for="pwd">Password:</label>
-      									<input type="password" name="pwd" style="height:15px;width:110px;" class="form-control" id="pwd" placeholder="Enter password">
+      									<input type="password" name="pwd" style="height:15px;width:110px;" class="form-control" id="d-pwd${rvo.no}" placeholder="Enter password">
       								</div>
       							</div>
       							<div>
-									<input type="submit" value="삭제하기" class="btn btn-sm table-th" style="margin-top:5px;"/>
+									<input type="button" data-no="${rvo.no}" data-who="d-del" data-pwd="d-pwd" value="삭제하기" class="btn btn-sm table-th" style="margin-top:5px;"/>
 								</div>
 								<input type="hidden" name="bno" value="${vo.no}">
 								<input type="hidden" name="no" value="${rvo.no}">
@@ -312,21 +384,21 @@
 			
 			<tr class="aa">
 				<td colspan="2">
-					<form method=post action="contentReplyInsert.do">
+					<form id="submit" method=post action="contentReplyInsert.do">
 						<div class="form-inline">
 							<div class="form-group">
 	      						<label for="id">Name:</label>
-      							<input type="text" name="name" style="height:15px;width:110px;" class="form-control" id="name" placeholder="Enter name">
+      							<input type="text" name="name" style="height:15px;width:110px;" class="form-control" id="submit-name" placeholder="Enter name">
 							</div>
 							<div class="form-group">
 	      						<label for="pwd">Password:</label>
-      							<input type="password" name="pwd" style="height:15px;width:110px;" class="form-control" id="pwd" placeholder="Enter password">
-								<input type="button" id="submit" value="댓글달기" class="btn btn-sm table-th"/>
+      							<input type="password" name="pwd" style="height:15px;width:110px;" class="form-control" id="submit-pwd" placeholder="Enter password">
+								<input type="button" id="btnSubmit" value="댓글달기" class="btn btn-sm table-th"/>
       						</div>
       					</div>
 							<input type="hidden" name="bno" value="${vo.no}"/>
 							<input type="hidden" name="page" value="${page}"/>
-							<textarea name="msg" style="height:150px;" class="form-control textarea" id="comment"></textarea>
+							<textarea name="msg" style="height:150px;" class="form-control textarea" id="submit-content"></textarea>
 					</form>
 				</td>
 			</tr>
