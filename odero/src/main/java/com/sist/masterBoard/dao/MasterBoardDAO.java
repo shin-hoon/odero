@@ -2,6 +2,7 @@ package com.sist.masterBoard.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sist.masterBoard.dao.*;
 
@@ -35,6 +36,7 @@ public class MasterBoardDAO {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 추가
+	@Transactional
 	public void MasterBoardReplyInsert(NoticeVO vo){
 		NoticeVO getVO = mapper.id_step_tab(vo.getNo());
 		
@@ -54,7 +56,8 @@ public class MasterBoardDAO {
 	public NoticeVO MasterBoardUpdate(int no){
 		return mapper.MasterBoardContent(no);
 	}
-
+	
+	@Transactional
 	public boolean MasterBoardUpdate_ok(NoticeVO vo){
 		boolean bCheck=false;
 		String pwd=mapper.boardGetPwd(vo.getNo());
@@ -70,6 +73,7 @@ public class MasterBoardDAO {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 삭제
+	@Transactional
 	public boolean MasterBoardDelete_ok(int no,String pwd)  {
 		boolean bCheck=false;
 		NoticeVO getVO = mapper.pwd_root_depth(no);
@@ -79,10 +83,12 @@ public class MasterBoardDAO {
 			bCheck=true;
 		
 			if(getVO.getDepth() == 0) {
+				mapper.MasterBoardDeleteReply(no);
 				mapper.MasterBoardDelete(no);
 			}
 			else {
 				mapper.delete_msg(no);
+				mapper.MasterBoardDeleteReply(no);
 			}
 			
 			mapper.delete_depth(getVO.getRoot());
@@ -118,18 +124,19 @@ public class MasterBoardDAO {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 댓글의 댓글 추가
-		public void contentReplyNweInsert(ReplyVO vo){
-			ReplyVO getVO = mapper.contentReply_id_step_tab(vo.getNo());
-			
-			vo.setGroup_id(getVO.getGroup_id()); 
-			vo.setGroup_step(getVO.getGroup_step()); 
-			vo.setGroup_tab(getVO.getGroup_tab());
-			vo.setPno(vo.getNo());
+	@Transactional
+	public void contentReplyNweInsert(ReplyVO vo){
+		ReplyVO getVO = mapper.contentReply_id_step_tab(vo.getNo());
 
-			mapper.contentReply_groupUpdate(vo);
-			mapper.contentReplyNewInsert(vo);
-			mapper.contentReply_depthUpdate(vo.getPno());
-		}
+		vo.setGroup_id(getVO.getGroup_id()); 
+		vo.setGroup_step(getVO.getGroup_step()); 
+		vo.setGroup_tab(getVO.getGroup_tab());
+		vo.setPno(vo.getNo());
+
+		mapper.contentReply_groupUpdate(vo);
+		mapper.contentReplyNewInsert(vo);
+		mapper.contentReply_depthUpdate(vo.getPno());
+	}
 
 
 
@@ -152,6 +159,7 @@ public class MasterBoardDAO {
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		// 답글 삭제
+		@Transactional
 		public boolean contentReplyDelete_ok(ReplyVO vo)  {
 			boolean bCheck=false;
 			ReplyVO getVO = mapper.contentReply_pwd_root_depth(vo.getNo());

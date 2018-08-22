@@ -35,9 +35,18 @@ public class MasterBoardController {
 
 		
 		List<NoticeVO> list=dao.MasterBoardList(map);
+		
 		for(NoticeVO vo:list){
 			vo.setCount(dao.contentReplyCount(vo.getNo()));
+			
+			int length = vo.getSubject().length();
+			
+			if(length >=20)
+				vo.setSubject(vo.getSubject().substring(0,20)+"···");
+			
 		}
+		
+		
 		
 		int totalpage = dao.MasterBoardToltalPage();
 		int count = dao.MasterBoardRowCount();

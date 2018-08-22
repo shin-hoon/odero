@@ -20,7 +20,7 @@
 					</td>
 				</tr>
 			</table>
-			<table class="table table-hover" width="700">
+			<table class="table table-hover" width="700" style="table-layout: fixed;">
 				<tr class="table-th">
 					<th class="text-center" width="10%">번호</th>
 					<th class="text-center" width="45%">제목</th>
@@ -35,10 +35,12 @@
 							<c:set var="count" value="${count=count-1}" />
 						</td>
 						<td class="text-left" width="45%">
+							<c:set var="tab" value="0"/>
 							<c:if test="${vo.group_tab > 0}">
-								<c:forEach var="i" begin="1" end="${vo.group_tab+1}">
-									<span style="margin-left:${5*i}px"></span>
+								<c:forEach var="i" begin="1" end="${vo.group_tab}">
+									<c:set var="tab" value="${(10*i)}"/>
 								</c:forEach>
+								<span style="margin-left:${tab}px">└</span>
 							</c:if>
 							<c:choose>
 								<c:when test="${vo.subject == '삭제된 게시물 입니다.'}">
@@ -56,7 +58,7 @@
 							<fmt:formatDate	var="yesterday" value="${vo.regdate}" pattern="yyyy-MM-dd"/>
 							<c:if test="${vo.subject != '삭제된 게시물 입니다.'}">
 								<c:if test="${today==yesterday}">
-									<b style="color:red;background-color:black">new</b>
+									<b style="color:red;">new</b>
 								</c:if>
 							</c:if>
 						</td>

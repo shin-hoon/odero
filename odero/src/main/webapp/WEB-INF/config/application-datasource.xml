@@ -27,10 +27,17 @@
        p:maxIdle="10"
        p:maxWait="-1"
     />
+    
+    <bean id="txManager1" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+    	  p:dataSource-ref="ds"
+    />
+
+    
 	<!-- SqlSessionFactory -->	<!-- DB연결 getConnection, disConnection -->
 	<bean id="ssf" class="org.mybatis.spring.SqlSessionFactoryBean"
 		p:dataSource-ref="ds"
 	/>
+	
 	<!-- MapperFactoryBean --> <!-- 쿼리문 전송 ssf.openSession()-->
 	<bean id="mapper" class="org.mybatis.spring.mapper.MapperFactoryBean"
 		p:sqlSessionFactory-ref="ssf"

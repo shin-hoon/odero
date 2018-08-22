@@ -77,6 +77,8 @@ public interface MasterBoardMapper {
 	
 	@Delete("DELETE FROM masterNotice WHERE no=#{no}")
 	public void MasterBoardDelete(int no);
+	@Delete("DELETE FROM masterReply WHERE bno=#{no}")
+	public void MasterBoardDeleteReply(int no);
 	
 	@Update("UPDATE masterNotice SET subject='삭제된 게시물 입니다.',content='삭제된 게시물 입니다.' WHERE no=#{no}")
 	public void delete_msg(int no);
