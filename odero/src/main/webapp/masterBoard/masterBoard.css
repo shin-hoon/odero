@@ -41,6 +41,46 @@ body, textarea {
 	scrollbar-darkshadow-color: #ffffff;
 }
 
+body {
+	margin: 0px auto;
+}
+
+.row {
+	margin: 0 auto;
+	width: 750px;
+}
+
+.textarea {
+	resize: none;
+	width: 500px;
+}
+
+* {
+	line-height: 20px;
+	font-size: 15px;
+	font-weight: 100;
+	font-family: 'Jeju Gothic';
+}
+
+.td_a {
+	font-size: 12px;
+}
+
+.td_a a {
+	text-decoration: none;
+	cursor: pointer;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .75);
+	font-size: 12px;
+}
+
+.content_td {
+	border: solid 1px #e7ebf5;
+	border-left: none;
+	border-right: none;
+	border-bottom: none;
+	word-break: break-all;
+}
+
 /* shake */
 /* 
 .shake {
@@ -224,14 +264,6 @@ body, textarea {
  */
 
 /* end shake */
-
-
-
-
-
-
-
-
 
 /* 
 

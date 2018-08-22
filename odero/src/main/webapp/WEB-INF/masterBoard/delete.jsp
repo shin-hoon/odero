@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -9,29 +9,38 @@
 		.row {
 			margin: 0 auto;
 			width: 300px;
+			text-align: center;
 		}
 	</style>
 	<link rel="stylesheet" href="masterBoard/masterBoard.css" type="text/css">
 </head>
 <body>
-	<div class="container">
+	<div class="container" style="margin-top:30px;">
 		<div class="row">
-			<center>
-				<h3>삭제하기</h3>
-			</center>
 			<form method="post" action="MasterBoardDelete_ok.do">
-			<table class="table table-hover aa" width="300">
-				<tr>
-					<td width="30%" class="text-right">비밀번호</td>
-					<td width="70%" class="text-left">
-						<input type="password" name="pwd" size="13" />
-						<input type="hidden" name="no" value="${no}"/>
-					</td>
-				</tr>
-				<tr>
-					<td class="text-center" colspan="2">
-						<input type="submit" value="삭제"/>
-						<input type="button" onclick="javascript:history.back();" value="뒤로가기"/>
+			<table class="table aa" width="300">
+				<tr class="aa" align="center">
+					<td style="border-bottom:1px solid #ddd;">
+						<div  style="width:300px;text-align: center;">
+						<div>	
+							<label for="pwd">삭제하기</label>		
+						</div>
+							<div class="form-inline" style="border-top:ridge;border-bottom:ridge; padding:10px;">
+								<div class="form-group">
+	      							<label for="pwd">Password:</label>
+      								<input type="password" name="pwd" style="height:15px;width:150px;" 
+      									class="form-control" id="pwd" placeholder="비밀번호를 입력하세요."
+      								/>
+      							</div>
+      						</div>
+      						<div style="margin-top:5px;">
+      							<input type="hidden" name="no" value="${no}"/>
+								<input type="submit" value="삭제하기" class="btn btn-sm table-th" />
+								<input type="button" class="btn btn-sm table-th" 
+									onclick="javascript:history.back();" value="뒤로가기"
+								/>
+							</div>
+							</div>
 					</td>
 				</tr>
 			</table>

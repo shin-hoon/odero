@@ -1,3 +1,163 @@
+
+$(function(){
+	var i=0;
+	var u=0;
+	var d=0;
+	
+	$('.reply_reply').click(function(){
+		var no=$(this).attr("value");
+		if(i==0){
+			$(this).text("취소");
+			$('#in'+no).show();
+			i=1;
+		}
+		else{
+			$(this).text("댓글");
+			$('#in'+no).hide();
+			i=0;
+		}
+		if(u==1){
+			$('.reply_update').text("수정");
+			$('#up'+no).hide();
+			u=0;
+		}
+		if(d==1){
+			$('.reply_delete').text("삭제");
+			$('#del'+no).hide();
+			d=0;
+		}
+	});
+	
+	
+	$('.reply_update').click(function(){
+		var no=$(this).attr("value");
+		if(u==0){
+			$(this).text("취소");
+			$('#up'+no).show();
+			u=1;
+		}
+		else{
+			$(this).text("수정");
+			$('#up'+no).hide();
+			u=0;
+		}
+		if(i==1){
+			$('.reply_reply').text("댓글");
+			$('#in'+no).hide();
+			i=0;
+		}
+		if(d==1){
+			$('.reply_delete').text("삭제");
+			$('#del'+no).hide();
+			d=0;
+		}
+	});
+
+	
+	$('.reply_delete').click(function(){
+		var no=$(this).attr("value");
+		if(d==0){
+			$(this).text("취소");
+			$('#del'+no).show();
+			d=1;
+		}
+		else{
+			$(this).text("삭제");
+			$('#del'+no).hide();
+			d=0;
+		}
+		if(u==1){
+			$('.reply_update').text("수정");
+			$('#up'+no).hide();
+			u=0;
+		}
+		if(i==1){
+			$('.reply_reply').text("댓글");
+			$('#in'+no).hide();
+			i=0;
+		}
+	});
+	
+	
+	$('#btnSubmit').click(function(){
+		var name = $('#submit-name').val();
+		var pwd = $('#submit-pwd').val();
+		var content = $('#submit-content').val();
+		
+		if(name.trim() == ""){
+			alert("이름을 입력하세요");
+			$('#submit-name').focus();
+			return false;
+		}
+		if(pwd.trim() == ""){
+			alert("비밀번호를 입력하세요");
+			$('#submit-pwd').focus();
+			return false;
+		}
+		if(content.trim() == ""){
+			alert("내용을 작성하세요");
+			$('#submit-content').focus();
+			return false;
+		}
+		$('#submit').submit();
+	}); 
+	
+	
+	
+	$('.replySubmit').click(function(){
+		var no = $(this).attr("data-no");
+		var who = $(this).attr("data-who");
+		var dp = $(this).attr("data-pwd");
+		var dn = $(this).attr("data-name");
+		var dc = $(this).attr("data-content");
+		var pwd,name,content;
+		
+		if(who == "d-del"){
+			pwd = $("#"+dp+no).val();
+			if(pwd.trim() == ""){
+				alert("비밀번호를 입력하세요");
+				$("#"+dp+no).focus();
+				return false;
+			}
+		}
+		else if(who == "u-up" ||  who == "i-in"){
+			pwd = $("#"+dp+no).val();
+			name = $("#"+dn+no).val();
+			content = $("#"+dc+no).val();
+		
+		
+			if(name.trim() == ""){
+				alert("이름을 입력하세요");
+				$("#"+dn+no).focus();
+				return false;
+			}
+			else if(pwd.trim() == ""){
+				alert("비밀번호를 입력하세요");
+				$("#"+dp+no).focus();
+				return false;
+			}
+			else if(content.trim() == ""){
+				alert("내용을 작성하세요");
+				$("#"+dc+no).focus();
+				return false;
+			} 
+		}
+		
+		$('#'+who+no).submit();  
+	});
+});
+
+
+
+
+
+
+
+
+
+
+
+
 /**
  * 
  */
@@ -45,9 +205,36 @@ function submitContents(elClickedObj) {
 	oEditors.getById["ir1"].exec("UPDATE_CONTENTS_FIELD", []); // 에디터의 내용이 textarea에 적용됩니다.
 
 	// 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("ir1").value를 이용해서 처리하면 됩니다.
-
+	
+		var name = $('#name').val();
+		var subject = $('#subject').val();
+		var ir1 = $('#ir1').val();
+		var pwd = $('#pwd').val();
+		
+		if(subject.trim() == ""){
+			alert("제목을 입력하세요");
+			$('#subject').focus();
+			return false;
+		}
+		if(name.trim() == ""){
+			alert("이름을 입력하세요");
+			$('#name').focus();
+			return false;
+		}
+		if(ir1.trim() == "<p><br></p>"){
+			alert("내용을 작성하세요");
+			$('#ir1').focus();
+			return false;
+		}
+		if(pwd.trim() == ""){
+			alert("비밀번호를 입력하세요");
+			$('#pwd').focus();
+			return false;
+		}
+		
 	try {
-		elClickedObj.form.submit();
+		/*elClickedObj.form.submit();*/
+		$('#formSubmit').submit();
 	} catch (e) {
 	}
 }
@@ -57,3 +244,6 @@ function setDefaultFont() {
 	var nFontSize = 24;
 	oEditors.getById["ir1"].setDefaultFont(sDefaultFont, nFontSize);
 }
+
+
+

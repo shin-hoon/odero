@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -9,51 +9,60 @@
 	<link rel="stylesheet" href="masterBoard/masterBoard.css" type="text/css">
 	<style>
 		.row{
-			width:1200px
+			width:1200px;
+			text-align: center;
 		}
 	</style>
 </head>
 <body>
 	<div class="container">
 		<div class="row">
-			<center>
 				<h3>수정하기</h3>
-			</center>
-			<form method="post" action="MasterBoardUpdate_ok.do">
+			<form id="formSubmit" method="post" action="MasterBoardUpdate_ok.do">
 				<table class="table aa">
-					<tr >
-						<td width=15% class="text-right">이름</td>
-						<td width=85%>
-							<input type="text" name="name" size="15" value="${vo.name }"> 
-							<input type="hidden" name="no" value="${vo.no }">
-							<input type="hidden" name="page" value="${page}">
-						</td>
-					</tr>
-					<tr>
-						<td width=15% class="text-right">제목</td>
-						<td width=85%><input type=text name=subject size=50
-							value="${vo.subject }"></td>
-					</tr>
-					<tr>
-						<td width=15% class="text-right">내용</td>
-						<td width=85%>
-							<textarea name=content id="ir1" rows="10" cols="100" style="width: 966px; height: 412px; display: none;">
-								${vo.content}
-							</textarea>
-						</td>
-					</tr>
-					<tr>
-						<td width=15% class="text-right">비밀번호</td>
-						<td width=85%><input type=password name=pwd size=10>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="2" class="text-center">
-						<input type="button" onclick="submitContents(this);" value="수정" class="btn btn-info" />
-						<input type=button	value=취소 class="btn btn-success" onclick="javascript:history.back()">
+				<tr>
+					<td width=15% class="text-right">제목</td>
+					<td width=85%>
+						<input type="text" name="subject" style="height:15px;width:370px;" 
+      						class="form-control" id="subject" placeholder="제목을 입력하세요." value="${vo.subject}"
+      					/>
 					</td>
-					</tr>
-				</table>
+				</tr>
+				<tr>
+					<td width=15% class="text-right">이름</td>
+					<td width=85%>
+						<input type="text" name="name" style="height:15px;width:370px;" 
+      						class="form-control" id="name" placeholder="이름을 입력하세요." value="${vo.name}"
+      					/>
+					</td>
+				</tr>
+				<tr>
+					<td width=15% class="text-right">내용</td>
+					<td width=85%>
+						<textarea name="content" id="ir1" rows="10" cols="100"
+							style="width: 966px; height: 412px; display: none;"
+							class="form-control">
+							${vo.content}
+						</textarea>
+					</td>
+				</tr>
+				<tr>
+					<td width=15% class="text-right">비밀번호</td>
+					<td width="85%" align="left">
+						<input type="password" name="pwd" style="height:15px;width:160px;" 
+      						class="form-control" id="pwd" placeholder="비밀번호를 입력하세요."
+      					/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="text-center">
+						<input type="hidden" name="page" value="${page}" />
+						<input type="hidden" name="no" value="${vo.no}" />
+						<input type="button" onclick="submitContents(this);" value="글쓰기" class="btn btn-sm table-th" />
+						<input type="button" value="취소 " class="btn btn-sm table-th" onclick="javascript:history.back()">
+					</td>
+				</tr>
+			</table>
 			</form>
 		</div>
 	</div>

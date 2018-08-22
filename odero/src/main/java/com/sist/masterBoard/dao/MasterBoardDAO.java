@@ -99,6 +99,10 @@ public class MasterBoardDAO {
 
 	
 	
+	
+	
+	
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -140,46 +144,44 @@ public class MasterBoardDAO {
 
 
 
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		// 게시판&답글 업데이트 
+	// 게시판&답글 업데이트 
 		
-		public boolean contentReplyUpdate_ok(ReplyVO vo){
-			boolean bCheck=false;
-			String pwd=mapper.contentReplyGetPwd(vo.getNo());
+	public boolean contentReplyUpdate_ok(ReplyVO vo){
+		boolean bCheck=false;
+		String pwd=mapper.contentReplyGetPwd(vo.getNo());
 
-			if(pwd.equals(vo.getPwd())) {
-				bCheck=true;
-				mapper.contentReplyUpdate(vo);
-			}
-
-			return bCheck;
+		if(pwd.equals(vo.getPwd())) {
+			bCheck=true;
+			mapper.contentReplyUpdate(vo);
 		}
 
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		return bCheck;
+	}
 
-		// 답글 삭제
-		@Transactional
-		public boolean contentReplyDelete_ok(ReplyVO vo)  {
-			boolean bCheck=false;
-			ReplyVO getVO = mapper.contentReply_pwd_root_depth(vo.getNo());
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// 답글 삭제
+	@Transactional
+	public boolean contentReplyDelete_ok(ReplyVO vo)  {
+		boolean bCheck=false;
+		ReplyVO getVO = mapper.contentReply_pwd_root_depth(vo.getNo());
 
 
-			if(getVO.getPwd().equals(vo.getPwd()))  {
-				bCheck=true;
+		if(getVO.getPwd().equals(vo.getPwd()))  {
+			bCheck=true;
 
-				if(getVO.getDepth() == 0) {
-					mapper.contentReplyDelete(vo.getNo());
-				}
-				else {
-					mapper.contentReply_delete_msg(vo.getNo());
-				}
-
-				mapper.contentReply_delete_depth(getVO.getRoot());
-
+			if(getVO.getDepth() == 0) {
+				mapper.contentReplyDelete(vo.getNo());
 			}
-			return bCheck;
+			else {
+				mapper.contentReply_delete_msg(vo.getNo());
+			}
+			
+			mapper.contentReply_delete_depth(getVO.getRoot());
 		}
-
+			return bCheck;
+	}
 	
 }

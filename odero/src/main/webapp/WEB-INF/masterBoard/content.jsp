@@ -9,13 +9,6 @@
 	<title>Insert title here</title>
 	<link rel="stylesheet" href="masterBoard/masterBoard.css" type="text/css">
 	<style type="text/css">
-		body{
-			margin: 0px auto;
-		}
-		.row {
-			margin: 0 auto;
-			width: 750px;
-		}
 		.pre {
 			padding : 6px;
 			/* word-break : break-all; */   /*  p 태그용  */
@@ -28,186 +21,12 @@
 				 white-space:nowrap;    줄바꿈 무시
 			*/
 		}
-		.textarea{
-			resize: none;
-			width:500px;
-		}
-		*{
-			line-height: 20px;
-			font-size: 15px;
-			font-weight: 100;
-			font-family: 'Jeju Gothic';
-		}
-		.td_a{
-			font-size: 12px;
-		}
-		.td_a a{
-			text-decoration: none;
-			cursor: pointer;
-			text-shadow: 0 1px 0 rgba(255, 255, 255, .75);
-			font-size: 12px;
-		}
-		.content_td{
-			border:solid 1px #e7ebf5;
-			border-left:none;
-			border-right:none; 
-			border-bottom : none;
-			word-break: break-all;
-		}
 	</style>
-	<script type="text/javascript">
-		$(function(){
-			var i=0;
-			var u=0;
-			var d=0;
-			
-			$('.reply_reply').click(function(){
-				var no=$(this).attr("value");
-				if(i==0){
-					$(this).text("취소");
-					$('#in'+no).show();
-					i=1;
-				}
-				else{
-					$(this).text("댓글");
-					$('#in'+no).hide();
-					i=0;
-				}
-				if(u==1){
-					$('.reply_update').text("수정");
-					$('#up'+no).hide();
-					u=0;
-				}
-				if(d==1){
-					$('.reply_delete').text("삭제");
-					$('#del'+no).hide();
-					d=0;
-				}
-			});
-			
-			
-			$('.reply_update').click(function(){
-				var no=$(this).attr("value");
-				if(u==0){
-					$(this).text("취소");
-					$('#up'+no).show();
-					u=1;
-				}
-				else{
-					$(this).text("수정");
-					$('#up'+no).hide();
-					u=0;
-				}
-				if(i==1){
-					$('.reply_reply').text("댓글");
-					$('#in'+no).hide();
-					i=0;
-				}
-				if(d==1){
-					$('.reply_delete').text("삭제");
-					$('#del'+no).hide();
-					d=0;
-				}
-			});
-
-			
-			$('.reply_delete').click(function(){
-				var no=$(this).attr("value");
-				if(d==0){
-					$(this).text("취소");
-					$('#del'+no).show();
-					d=1;
-				}
-				else{
-					$(this).text("삭제");
-					$('#del'+no).hide();
-					d=0;
-				}
-				if(u==1){
-					$('.reply_update').text("수정");
-					$('#up'+no).hide();
-					u=0;
-				}
-				if(i==1){
-					$('.reply_reply').text("댓글");
-					$('#in'+no).hide();
-					i=0;
-				}
-			});
-			
-			
-			$('#btnSubmit').click(function(){
-				var name = $('#submit-name').val();
-				var pwd = $('#submit-pwd').val();
-				var content = $('#submit-content').val();
-				
-				if(name.trim() == ""){
-					alert("이름을 입력하세요");
-					$('#submit-name').focus();
-					return false;
-				}
-				if(pwd.trim() == ""){
-					alert("비밀번호를 입력하세요");
-					$('#submit-pwd').focus();
-					return false;
-				}
-				if(content.trim() == ""){
-					alert("내용을 작성하세요");
-					$('#submit-content').focus();
-					return false;
-				}
-				$('#submit').submit();
-			}); 
-			
-			
-			
-			$('.replySubmit').click(function(){
-				var no = $(this).attr("data-no");
-				var who = $(this).attr("data-who");
-				var dp = $(this).attr("data-pwd");
-				var dn = $(this).attr("data-name");
-				var dc = $(this).attr("data-content");
-				var pwd,name,content;
-				
-				if(who == "d-del"){
-					pwd = $("#"+dp+no).val();
-					if(pwd.trim() == ""){
-						alert("비밀번호를 입력하세요");
-						$("#"+dp+no).focus();
-						return false;
-					}
-				}
-				else if(who == "u-up" ||  who == "i-in"){
-					pwd = $("#"+dp+no).val();
-					name = $("#"+dn+no).val();
-					content = $("#"+dc+no).val();
-				
-				
-					if(name.trim() == ""){
-						alert("이름을 입력하세요");
-						$("#"+dn+no).focus();
-						return false;
-					}
-					else if(pwd.trim() == ""){
-						alert("비밀번호를 입력하세요");
-						$("#"+dp+no).focus();
-						return false;
-					}
-					else if(content.trim() == ""){
-						alert("내용을 작성하세요");
-						$("#"+dc+no).focus();
-						return false;
-					} 
-				}
-				
-				$('#'+who+no).submit();  
-			});
-		});
-	</script>
+	<script type="text/javascript" src="masterBoard/masterBoard.js" charset="utf-8"></script>
 </head>
 <body>
 	<div class="container" style="margin-top:30px;">
-		<div class="row" style="text-align: center;">
+		<div class="row">
 				<table class="table" style="width:780px;table-layout: fixed;">
 					<tr style="background: rgb(222, 235, 247);">
 						<th class="aa text-center" width="100%" colspan="4">
@@ -234,7 +53,7 @@
 					</tr>
 					<tr class="aa">
 						<td colspan="4" class="content_td">
-						<pre style="border:none;background-color:white;word-break:break-all;">${vo.content}</pre>
+							<pre style="border:none;background-color:white;word-break:break-all;">${vo.content}</pre>
 						</td>
 					</tr>
 					<tr class="aa">
