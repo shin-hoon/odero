@@ -108,7 +108,7 @@ public interface MasterBoardMapper {
     @Select("SELECT no,bno,name,msg,pwd,regdate,group_tab,num "
 			+"FROM (SELECT no,bno,name,msg,pwd,regdate,group_tab,rownum as num "
 			+"FROM (SELECT no,bno,name,msg,pwd,regdate,group_tab "
-			+"FROM masterReply WHERE bno=#{bno} ORDER BY group_id DESC,group_step ASC)) ")
+			+"FROM masterReply WHERE bno=#{bno} ORDER BY group_id ASC,group_step ASC)) ")
 	public List<ReplyVO> contentReplyList(int bno);
     
     

@@ -3,8 +3,9 @@ package com.sist.masterBoard.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.sist.masterBoard.dao.*;
 
 import java.util.*;
 
@@ -148,7 +149,7 @@ public class MasterBoardDAO {
 
 	// 게시판&답글 업데이트 
 		
-	public boolean contentReplyUpdate_ok(ReplyVO vo){
+/*	public boolean contentReplyUpdate_ok(ReplyVO vo){
 		boolean bCheck=false;
 		String pwd=mapper.contentReplyGetPwd(vo.getNo());
 
@@ -158,7 +159,8 @@ public class MasterBoardDAO {
 		}
 
 		return bCheck;
-	}
+	}*/
+	
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -184,4 +186,7 @@ public class MasterBoardDAO {
 			return bCheck;
 	}
 	
+	
 }
+
+

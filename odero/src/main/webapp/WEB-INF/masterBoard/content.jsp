@@ -70,6 +70,7 @@
 	
 
 
+<div class="replylist">
 	<div class="row" >
 		<table class="table"  style="width:780px;border:1px ridge #ddd;table-layout: fixed;">
 			<c:forEach var="rvo" items="${list}">
@@ -163,7 +164,7 @@
 				<tr id="up${rvo.no }" style="display: none" class="aa">
 					<td colspan="2" style="border-bottom:1px solid #ddd;">
 						<div style="margin-left:20px;">
-							<form id="u-up${rvo.no}" method="post" action="contentReplyUpdate.do">
+							<form id="u-up${rvo.no}" method="post"> <!--action="contentReplyUpdate.do"  -->
 								<div class="form-inline">
 									<div class="form-group">
 	      								<label for="id">Name:</label>
@@ -176,7 +177,7 @@
       									<input type="password" name="pwd" style="height:15px;width:110px;" 
       										class="form-control" id="u-pwd${rvo.no}" placeholder="Enter password"
       									/>
-										<input type="submit" data-no="${rvo.no}" data-who="u-up" 
+										<input type="button" data-no="${rvo.no}" data-who="u-up" 
 											data-pwd="u-pwd" data-name="u-name" data-content="u-content"
 											value="수정하기" class="btn btn-sm table-th replySubmit"
 										/>
@@ -249,6 +250,7 @@
 				</td>
 			</tr>
 		</table>
+		</div>
 	</div>
 </body>
 </html>

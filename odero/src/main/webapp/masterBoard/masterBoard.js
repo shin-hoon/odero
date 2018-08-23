@@ -110,22 +110,19 @@ $(function(){
 		var dp = $(this).attr("data-pwd");
 		var dn = $(this).attr("data-name");
 		var dc = $(this).attr("data-content");
-		var pwd,name,content;
+		var pwd = $("#"+dp+no).val();
+		var name = $("#"+dn+no).val();
+		var content = $("#"+dc+no).val();
 		
 		if(who == "d-del"){
-			pwd = $("#"+dp+no).val();
 			if(pwd.trim() == ""){
 				alert("비밀번호를 입력하세요");
 				$("#"+dp+no).focus();
 				return false;
 			}
 		}
-		else if(who == "u-up" ||  who == "i-in"){
-			pwd = $("#"+dp+no).val();
-			name = $("#"+dn+no).val();
-			content = $("#"+dc+no).val();
-		
-		
+		else if(who == "u-up"){
+			
 			if(name.trim() == ""){
 				alert("이름을 입력하세요");
 				$("#"+dn+no).focus();
@@ -140,12 +137,50 @@ $(function(){
 				alert("내용을 작성하세요");
 				$("#"+dc+no).focus();
 				return false;
-			} 
+			}
+			
+			$.ajax({
+				type:'post',
+				url:'contentReplyUpdate.do',
+				data:$('#'+who+no).serialize(),
+				success:function(data){
+					if(data.trim() =="실패"){
+						alert("비밀번호가 틀립니다.");
+						$("#"+dp+no).focus();
+					}
+					else{
+						$('#'+who+no).html(data);
+						$('#submit-pwd').val('asdasd');
+					}
+				}
+			});  // end ajax
+						
+		}
+		else if(who == "i-in"){
+			
+			if(name.trim() == ""){
+				alert("이름을 입력하세요");
+				$("#"+dn+no).focus();
+				return false;
+			}
+			else if(pwd.trim() == ""){
+				alert("비밀번호를 입력하세요");
+				$("#"+dp+no).focus();
+				return false;
+			}
+			else if(content.trim() == ""){
+				alert("내용을 작성하세요");
+				$("#"+dc+no).focus();
+				return false;
+			}
+			
+			
 		}
 		
-		$('#'+who+no).submit();  
-	});
-});
+		/*$('#'+who+no).submit();*/
+		
+	}); // end click
+}); // end $(function)
 
 
 

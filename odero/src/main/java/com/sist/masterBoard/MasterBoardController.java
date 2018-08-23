@@ -43,7 +43,6 @@ public class MasterBoardController {
 			
 			if(length >=20)
 				vo.setSubject(vo.getSubject().substring(0,20)+"···");
-			
 		}
 		
 		
@@ -75,13 +74,6 @@ public class MasterBoardController {
 		NoticeVO vo = dao.MasterBoardContent(no);
 		List<ReplyVO> list=dao.contentReplyList(no);
 		
-		int br = 1;
-		for(ReplyVO rvo : list) {
-			String a = rvo.getMsg();
-			
-			br++;
-		}
-		
 		model.addAttribute("vo",vo);
 		model.addAttribute("list", list);
 		model.addAttribute("page",page);
@@ -105,6 +97,7 @@ public class MasterBoardController {
 		dao.MasterBoardReplyInsert(vo);
 		return "redirect:MasterBoard.do?page="+vo.getPage();
 	}
+	
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
@@ -173,15 +166,16 @@ public class MasterBoardController {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//	Content&댓글 업데이트
-	@RequestMapping("contentReplyUpdate.do")
+	/*@RequestMapping("contentReplyUpdate.do")
 	public String contentReplyUpdate_ok(ReplyVO vo,Model model){
 		boolean bCheck=dao.contentReplyUpdate_ok(vo);
 		model.addAttribute("page",vo.getPage());
 		model.addAttribute("no",vo.getBno());
 		model.addAttribute("bCheck",bCheck);
-
+		
 		return "masterBoard/contentReplyUpdate_ok";
-	}
+	}*/
+	
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
