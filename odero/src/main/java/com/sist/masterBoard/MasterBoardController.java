@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sist.masterBoard.dao.MasterBoardDAO;
 import com.sist.masterBoard.dao.NoticeVO;
 import com.sist.masterBoard.dao.ReplyVO;
+
 
 @Controller
 public class MasterBoardController {
@@ -166,27 +168,32 @@ public class MasterBoardController {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//	Content&댓글 업데이트
-	/*@RequestMapping("contentReplyUpdate.do")
+	@ResponseBody
+	@RequestMapping("contentReplyUpdate.do")
 	public String contentReplyUpdate_ok(ReplyVO vo,Model model){
-		boolean bCheck=dao.contentReplyUpdate_ok(vo);
+		String data = dao.contentReplyUpdate(vo);
+		/*boolean bCheck=dao.contentReplyUpdate_ok(vo);
 		model.addAttribute("page",vo.getPage());
 		model.addAttribute("no",vo.getBno());
 		model.addAttribute("bCheck",bCheck);
 		
-		return "masterBoard/contentReplyUpdate_ok";
-	}*/
+		return "masterBoard/contentReplyUpdate_ok";*/
+		return data;
+	}
 	
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// content 댓글 삭제
+	@ResponseBody
 	@RequestMapping("contentReplyDelete_ok.do")
 	public String ContentReplyDelete_ok(ReplyVO vo,Model model){
-		boolean bCheck=dao.contentReplyDelete_ok(vo);
-		model.addAttribute("bCheck",bCheck);
+		String data = dao.contentReplyDelete_ok(vo);
+		/*model.addAttribute("bCheck",bCheck);
 		model.addAttribute("no",vo.getBno());
 		model.addAttribute("page",vo.getPage());
-		return "masterBoard/contentReplyDelete_ok";
+		return "masterBoard/contentReplyDelete_ok";*/
+		return data;
 	}
 }
 

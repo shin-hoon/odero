@@ -165,7 +165,7 @@ public class MasterBoardDAO {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// 답글 삭제
-	@Transactional
+	/*@Transactional
 	public boolean contentReplyDelete_ok(ReplyVO vo)  {
 		boolean bCheck=false;
 		ReplyVO getVO = mapper.contentReply_pwd_root_depth(vo.getNo());
@@ -185,8 +185,48 @@ public class MasterBoardDAO {
 		}
 			return bCheck;
 	}
+	*/
+	
+	public String contentReplyUpdate(ReplyVO vo){
+		String data;
+		
+		String pwd=mapper.contentReplyGetPwd(vo.getNo());
+
+		if(pwd.equals(vo.getPwd())) {
+			mapper.contentReplyUpdate(vo);
+			data = "<script>alert(\"수정완료\");location.reload();</script>";
+					
+		}
+		else {
+			data = "실패";
+		}
+		return data;
+	}
 	
 	
+	@Transactional
+	public String contentReplyDelete_ok(ReplyVO vo)  {
+		String data;
+		
+		ReplyVO getVO = mapper.contentReply_pwd_root_depth(vo.getNo());
+
+
+		if(getVO.getPwd().equals(vo.getPwd()))  {
+			data = "<script>alert(\"삭제되었습니다.\");location.reload();</script>";
+
+			if(getVO.getDepth() == 0) {
+				mapper.contentReplyDelete(vo.getNo());
+			}
+			else {
+				mapper.contentReply_delete_msg(vo.getNo());
+			}
+			
+			mapper.contentReply_delete_depth(getVO.getRoot());
+		}
+		else data = "실패";
+		
+		return data;
+	}
 }
 
 

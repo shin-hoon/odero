@@ -144,7 +144,7 @@
       										<input type="password" name="pwd" style="height:15px;width:110px;" 
       											class="form-control" id="i-pwd${rvo.no}" placeholder="Enter password"
       										/>
-											<input type="submit" data-no="${rvo.no}" data-who="i-in" data-pwd="i-pwd" 
+											<input type="button" data-no="${rvo.no}" data-who="i-in" data-pwd="i-pwd" 
 												data-name="i-name" data-content="i-content" 
 												value="댓글달기" class="btn btn-sm table-th replySubmit"
 											/>
@@ -154,8 +154,7 @@
 								<input type="hidden" name="no" value="${rvo.no}"/>
 								<input type="hidden" name="page" value="${page}"/>
 								<textarea name="msg" style="height:150px;"
-									class="form-control textarea" id="i-content${rvo.no}">
-								</textarea>&nbsp;
+									class="form-control textarea" id="i-content${rvo.no}"></textarea>
 							</div>
 						</form>
 					</td>
@@ -164,7 +163,7 @@
 				<tr id="up${rvo.no }" style="display: none" class="aa">
 					<td colspan="2" style="border-bottom:1px solid #ddd;">
 						<div style="margin-left:20px;">
-							<form id="u-up${rvo.no}" method="post"> <!--action="contentReplyUpdate.do"  -->
+							<form id="u-up${rvo.no}" method="post" action="contentReplyUpdate.do"> <!--action="contentReplyUpdate.do"  -->
 								<div class="form-inline">
 									<div class="form-group">
 	      								<label for="id">Name:</label>
@@ -183,10 +182,8 @@
 										/>
       								</div>
       							</div>
-								<textarea name="msg" style="height:150px;" class="form-control textarea" id="u-content${rvo.no}">
-									${rvo.msg }
-								</textarea>
-								&nbsp;
+								<textarea name="msg" style="height:150px;" 
+									class="form-control textarea" id="u-content${rvo.no}">${rvo.msg}</textarea>
 								<input type="hidden" name="bno" value="${vo.no}">
 								<input type="hidden" name="no" value="${rvo.no}">
 								<input type="hidden" name="page" value="${page}"/>
@@ -211,7 +208,7 @@
       								</div>
       							</div>
       							<div>
-									<input type="submit" data-no="${rvo.no}" data-who="d-del" data-pwd="d-pwd" 
+									<input type="button" data-no="${rvo.no}" data-who="d-del" data-pwd="d-pwd" 
 										value="삭제하기" class="btn btn-sm table-th replySubmit" style="margin-top:5px;"
 									/>
 								</div>
@@ -240,7 +237,7 @@
       							<input type="password" name="pwd" style="height:15px;width:110px;" 
       								class="form-control" id="submit-pwd" placeholder="Enter password"
       							/>
-								<input type="submit" id="btnSubmit" value="댓글달기" class="btn btn-sm table-th"/>
+								<input type="button" id="btnSubmit" value="댓글달기" class="btn btn-sm table-th"/>
       						</div>
       					</div>
 							<textarea name="msg" style="height:150px;" class="form-control textarea" id="submit-content"></textarea>

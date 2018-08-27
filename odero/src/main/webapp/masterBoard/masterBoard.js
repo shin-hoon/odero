@@ -99,8 +99,16 @@ $(function(){
 			$('#submit-content').focus();
 			return false;
 		}
-		$('#submit').submit();
-	}); 
+
+		$.ajax({
+			type:'post',
+			url:'contentReplyInsert.do',
+			data:$('#submit').serialize(),
+			success:function(data){
+					$('#submit').html("<script>location.reload();</script>");
+			}
+		});  // end ajax
+	}); // end #btnsubmit
 	
 	
 	
@@ -120,7 +128,23 @@ $(function(){
 				$("#"+dp+no).focus();
 				return false;
 			}
-		}
+			
+			$.ajax({
+				type:'post',
+				url:'contentReplyDelete_ok.do',
+				data:$('#'+who+no).serialize(),
+				success:function(data){
+					if(data.trim() =="실패"){
+						alert("비밀번호가 틀립니다.");
+						$("#"+dp+no).focus();
+					}
+					else{
+						$('#'+who+no).html(data);
+					}
+				}
+			});  // end    ajax
+			
+		} // end    if
 		else if(who == "u-up"){
 			
 			if(name.trim() == ""){
@@ -150,12 +174,10 @@ $(function(){
 					}
 					else{
 						$('#'+who+no).html(data);
-						$('#submit-pwd').val('asdasd');
 					}
 				}
-			});  // end ajax
-						
-		}
+			});  // end    ajax
+		} // end    else if
 		else if(who == "i-in"){
 			
 			if(name.trim() == ""){
@@ -174,6 +196,14 @@ $(function(){
 				return false;
 			}
 			
+			$.ajax({
+				type:'post',
+				url:'contentReplyNewInsert.do',
+				data:$('#'+who+no).serialize(),
+				success:function(data){
+						$('#'+who+no).html("<script>location.reload();</script>");
+				}
+			});  // end    ajax
 			
 		}
 		
