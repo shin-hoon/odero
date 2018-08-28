@@ -5,26 +5,31 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.mapping.StatementType;
 
 public interface MasterBoardMapper {
 	
 	// 일반적인 게시판
-	@Select("SELECT no,subject,name,regdate,hit,group_tab,num "
+	/*@Select("SELECT no,subject,name,regdate,hit,group_tab,num "
 			+"FROM (SELECT no,subject,name,regdate,hit,group_tab,rownum as num "
 			+"FROM (SELECT no,subject,name,regdate,hit,group_tab "
 			+"FROM masterNotice ORDER BY group_id DESC,group_step ASC)) "
-			+"WHERE num BETWEEN #{start} AND #{end}")
-	public List<NoticeVO> MasterBoardList(Map map);
+			+"WHERE num BETWEEN #{start} AND #{end}")*/
+	/*@SelectKey(statementType="CALLABLE" , resultType="")*/
+	@Select ("{CALL masterBoardList(#{start ,jdbcType=INTEGER,mode=IN}, #{end,jdbcType=INTEGER,mode=IN},#{key, jdbcType=CURSOR, mode=OUT, javaType=java.sql.ResultSet, resultType=NoticeVO} )} ") 
+	@Options (statementType = StatementType.CALLABLE) 
+	public List<NoticeVO> MasterBoardList(NoticeVO vo);
 	
 	@Select("SELECT CEIL(COUNT(*)/10) FROM masterNotice")
 	public int MasterBoardToltalPage();
 	
 	@Select("SELECT COUNT(*) FROM masterNotice")
 	public int MasterBoardRowCount();
-	
+
 	
 	@SelectKey(keyProperty="no",resultType=int.class,before=true,statement="SELECT NVL(MAX(no)+1,1) as no FROM masterNotice")
 	@Insert("INSERT INTO masterNotice(no,name,subject,content,pwd,regdate,hit,group_id) "

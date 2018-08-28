@@ -1,5 +1,6 @@
 package com.sist.masterBoard;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,13 +31,15 @@ public class MasterBoardController {
 		int start = (rowSize*curpage)-(rowSize-1);
 		int end = rowSize*curpage;
 
-		Map map = new HashMap();
+		/*Map map = new HashMap();
 
 		map.put("start", start);
 		map.put("end", end);
-
+		map.put("key", "");
+*/
+		NoticeVO setVO = new NoticeVO();
 		
-		List<NoticeVO> list=dao.MasterBoardList(map);
+		List<NoticeVO> list=dao.MasterBoardList(setVO);
 		
 		for(NoticeVO vo:list){
 			vo.setCount(dao.contentReplyCount(vo.getNo()));
@@ -44,7 +47,7 @@ public class MasterBoardController {
 			int length = vo.getSubject().length();
 			
 			if(length >=20)
-				vo.setSubject(vo.getSubject().substring(0,20)+"···");
+				vo.setSubject(vo.getSubject().substring(0,15)+"···");
 		}
 		
 		
