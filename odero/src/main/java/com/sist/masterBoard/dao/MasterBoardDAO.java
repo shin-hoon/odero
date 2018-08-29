@@ -15,8 +15,8 @@ public class MasterBoardDAO {
 	private  MasterBoardMapper mapper;
 
 	// 일반 게시판
-	public List<NoticeVO> MasterBoardList(NoticeVO vo){
-		return mapper.MasterBoardList(vo);
+	public List<NoticeVO> MasterBoardList(Map map){
+		return mapper.MasterBoardList(map);
 	}
 	public int MasterBoardToltalPage(){
 		return mapper.MasterBoardToltalPage();

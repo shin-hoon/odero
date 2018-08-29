@@ -31,15 +31,13 @@ public class MasterBoardController {
 		int start = (rowSize*curpage)-(rowSize-1);
 		int end = rowSize*curpage;
 
-		/*Map map = new HashMap();
+		Map map = new HashMap();
 
 		map.put("start", start);
 		map.put("end", end);
-		map.put("key", "");
-*/
-		NoticeVO setVO = new NoticeVO();
+
 		
-		List<NoticeVO> list=dao.MasterBoardList(setVO);
+		List<NoticeVO> list=dao.MasterBoardList(map);
 		
 		for(NoticeVO vo:list){
 			vo.setCount(dao.contentReplyCount(vo.getNo()));
