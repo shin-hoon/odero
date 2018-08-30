@@ -1,12 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTR-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="masterBoard/masterBoard.css" type="text/css">
-<script type="text/javascript" src="masterBoard/js/service/HuskyEZCreator.js" charset="utf-8"></script>
+<link rel="stylesheet" href="freeBoard/freeBoard.css" type="text/css">
+<script type="text/javascript" src="freeBoard/js/service/HuskyEZCreator.js" charset="utf-8"></script>
 <style>
 .row{
 	width:1200px;
@@ -17,8 +17,8 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<h3>새글</h3>
-			<form id="formSubmit" method="post" action="MasterBoardInsert_ok.do">
+			<h3>답변글</h3>
+			<form id="formSubmit" method="post" action="freeBoardReply_ok.do">
 			<table class="table aa">
 				<tr>
 					<td width=15% class="text-right">제목</td>
@@ -55,6 +55,8 @@
 				</tr>
 				<tr>
 					<td colspan="2" class="text-center">
+						<input type="hidden" name="page" value="${page}" />
+						<input type="hidden" name="no" value="${no}" />
 						<input type="button" onclick="submitContents(this);" value="글쓰기" class="btn btn-sm table-th" />
 						<input type="button" value="취소 " class="btn btn-sm table-th" onclick="javascript:history.back()">
 					</td>
@@ -63,7 +65,7 @@
 			</form>
 		</div>
 	</div>
-<script type="text/javascript" src="masterBoard/masterBoard.js" charset="utf-8"></script>
+<script type="text/javascript" src="freeBoard/freeBoard.js" charset="utf-8"></script>
 
 
 </body>

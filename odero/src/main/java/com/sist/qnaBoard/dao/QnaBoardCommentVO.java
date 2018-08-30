@@ -1,9 +1,11 @@
-package com.sist.masterBoard.dao;
-import java.util.*;
+package com.sist.qnaBoard.dao;
 
-public class ReplyVO {
+import java.util.Date;
+
+public class QnaBoardCommentVO {
 	private int no;
 	private int bno;
+	private String M_id;
 	private String name;
 	private String pwd;
 	private String msg;
@@ -16,24 +18,6 @@ public class ReplyVO {
 	private int pno;
 	private int page;
 	
-	public int getPage() {
-		return page;
-	}
-	public void setPage(int page) {
-		this.page = page;
-	}
-	public String getPwd() {
-		return pwd;
-	}
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
-	public int getPno() {
-		return pno;
-	}
-	public void setPno(int pno) {
-		this.pno = pno;
-	}
 	public int getNo() {
 		return no;
 	}
@@ -46,11 +30,23 @@ public class ReplyVO {
 	public void setBno(int bno) {
 		this.bno = bno;
 	}
+	public String getM_id() {
+		return M_id;
+	}
+	public void setM_id(String m_id) {
+		M_id = m_id;
+	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getPwd() {
+		return pwd;
+	}
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
 	}
 	public String getMsg() {
 		return msg;
@@ -94,5 +90,18 @@ public class ReplyVO {
 	public void setDepth(int depth) {
 		this.depth = depth;
 	}
-
+	public int getPno() {
+		return pno;
+	}
+	public void setPno(int pno) {
+		this.pno = pno;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	
+	
 }

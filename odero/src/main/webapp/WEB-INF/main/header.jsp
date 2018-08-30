@@ -24,7 +24,8 @@
 			<ul class="nav navbar-nav mynav">
 				<li class="nav_main"><strong><a href="course_search.do">데이트코스</a></strong></li>
 				<li class="nav_main"><strong><a href="p_list.do">맛집/놀거리</a></strong></li>
-				<li class="nav_main"><strong><a href="MasterBoard.do">자유게시판</a></strong></li>
+				<li class="nav_main"><strong><a href="freeBoard.do">자유게시판</a></strong></li>
+				<li class="nav_main"><strong><a href="qnaBoard.do">문의게시판</a></strong></li>
 				<li class="nav_main"><strong><a href="review_list.do">추천게시판</a></strong></li>
 			</ul>
 			<ul class="navbar-right nav navbar-nav mynav" id="nav-right">

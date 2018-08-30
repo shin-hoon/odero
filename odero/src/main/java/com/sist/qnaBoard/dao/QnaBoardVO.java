@@ -1,9 +1,10 @@
-package com.sist.masterBoard.dao;
-import java.util.*;
+package com.sist.qnaBoard.dao;
 
-	
-public class NoticeVO {
+import java.util.Date;
+
+public class QnaBoardVO {
 	private int no;
+	private String M_id;
 	private String name;
 	private String subject;
 	private String content;
@@ -18,41 +19,14 @@ public class NoticeVO {
 	private int page;
 	private int pno;
 	private int count;
-	private int start;
-	private int end;
 	
-
 	
-	public int getStart() {
-		return start;
-	}
-	public void setStart(int start) {
-		this.start = start;
-	}
-	public int getEnd() {
-		return end;
-	}
-	public void setEnd(int end) {
-		this.end = end;
-	}
-	public int getCount() {
-		return count;
-	}
-	public void setCount(int count) {
-		this.count = count;
-	}	
 	
-	public int getPage() {
-		return page;
+	public String getM_id() {
+		return M_id;
 	}
-	public int getPno() {
-		return pno;
-	}
-	public void setPno(int pno) {
-		this.pno = pno;
-	}
-	public void setPage(int page) {
-		this.page = page;
+	public void setM_id(String m_id) {
+		M_id = m_id;
 	}
 	public int getNo() {
 		return no;
@@ -125,6 +99,24 @@ public class NoticeVO {
 	}
 	public void setDepth(int depth) {
 		this.depth = depth;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public int getPno() {
+		return pno;
+	}
+	public void setPno(int pno) {
+		this.pno = pno;
+	}
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
 	}
 	
 	

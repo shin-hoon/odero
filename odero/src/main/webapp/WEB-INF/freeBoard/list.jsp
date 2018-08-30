@@ -7,16 +7,16 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Welcome BoardMaster</title>
-	<link rel="stylesheet" href="masterBoard/masterBoard.css" type="text/css">
+	<link rel="stylesheet" href="freeBoard/freeBoard.css" type="text/css">
 </head>
 <body>
 	<div class="container">
 		<div class="row">
-			<span class="text-center"><h3>공사중 <img alt="히릿" src="masterBoard/img/board/Settings.png"/></h3></span>
+			<span class="text-center"><h3>공사중 <img alt="히릿" src="freeBoard/img/board/Settings.png"/></h3></span>
 			<table class="table" width="700">
 				<tr>
 					<td class="text-right">
-						<a href="MasterBoardInsert.do?page=${curpage}" class="btn btn-sm btn-primary">새글</a>
+						<a href="freeBoardInsert.do?page=${curpage}" class="btn btn-sm btn-primary">새글</a>
 					</td>
 				</tr>
 			</table>
@@ -47,7 +47,7 @@
 									<span style="color:gray">${vo.subject}</span>
 								</c:when>
 								<c:otherwise>
-									<a href="MasterBoardContent.do?no=${vo.no}&page=${curpage}">${vo.subject}</a>
+									<a href="freeBoardContent.do?no=${vo.no}&page=${curpage}">${vo.subject}</a>
 									<c:if test="${vo.count!=0}">
 										[${vo.count}]
 									</c:if>
@@ -62,7 +62,7 @@
 								</c:if>
 							</c:if>
 						</td>
-						<td class="text-center" width="15%">${vo.name}</td>
+						<td class="text-center" width="15%" style="text-overflow : ellipsis;overflow : hidden;white-space:nowrap;">${vo.name}</td>
 						<td class="text-center" width="20%">
 							<fmt:formatDate	value="${vo.regdate}" pattern="yyyy-MM-dd"/>
 						</td>
@@ -75,8 +75,8 @@
 	
 	<div class="container text-center">
 		<ul class="pagination">
-       		<li><a href="MasterBoard.do?page=${curpage<11?curpage:curpage-10}">◀◀</a></li>
-       		<li><a href="MasterBoard.do?page=${curpage<2?curpage:curpage-1}">◀</a></li>
+       		<li><a href="freeBoard.do?page=${curpage<11?curpage:curpage-10}">◀◀</a></li>
+       		<li><a href="freeBoard.do?page=${curpage<2?curpage:curpage-1}">◀</a></li>
        				
        		<fmt:parseNumber var="num1" value="${curpage/10}" integerOnly="true"/>
        		<c:set var="num1" value="${num1<=0?1:num1*10}"/>  
@@ -85,18 +85,18 @@
        				<c:when test="${i > totalpage }"></c:when>
        				<c:when test="${i==curpage}">
 	    				<li class="active">
-	    					<a href="MasterBoard.do?page=${i}">	${i} </a>
+	    					<a href="freeBoard.do?page=${i}">	${i} </a>
 	    				</li>
        				</c:when>
        				<c:when test="${i <= totalpage}">
        					<li>
-       						<a href="MasterBoard.do?page=${i}"> ${i} </a>
+       						<a href="freeBoard.do?page=${i}"> ${i} </a>
        					</li>
        				</c:when>
        			</c:choose>
        		</c:forEach>
-       		<li><a href="MasterBoard.do?page=${curpage<totalpage?curpage+1:curpage}">▶</a></li>
-            <li><a href="MasterBoard.do?page=${curpage<=totalpage-10?curpage+10:curpage}">▶▶</a></li>
+       		<li><a href="freeBoard.do?page=${curpage<totalpage?curpage+1:curpage}">▶</a></li>
+            <li><a href="freeBoard.do?page=${curpage<=totalpage-10?curpage+10:curpage}">▶▶</a></li>
 		</ul>
 	</div>
 	<div class="container" style="height:300px;"></div>

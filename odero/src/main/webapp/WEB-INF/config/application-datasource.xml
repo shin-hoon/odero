@@ -35,8 +35,12 @@
     
 	<!-- SqlSessionFactory -->	<!-- DB연결 getConnection, disConnection -->
 	<bean id="ssf" class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:configLocation="/WEB-INF/config/config.xml" 
 		p:dataSource-ref="ds"
 	/>
+	<bean id="sqlSessionn" class="org.mybatis.spring.SqlSessionTemplate" >
+		<constructor-arg ref="ssf"></constructor-arg>
+	</bean>
 	
 	<!-- MapperFactoryBean --> <!-- 쿼리문 전송 ssf.openSession()-->
 	<bean id="mapper" class="org.mybatis.spring.mapper.MapperFactoryBean"
@@ -53,7 +57,7 @@
 	/>
 	<bean id="masterBoardMapper" class="org.mybatis.spring.mapper.MapperFactoryBean"
 		p:sqlSessionFactory-ref="ssf"
-		p:mapperInterface="com.sist.masterBoard.dao.MasterBoardMapper"
+		p:mapperInterface="com.sist.freeBoard.dao.FreeBoardMapper"
 	/>
 	<bean id="mypageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean"
 		p:sqlSessionFactory-ref="ssf"

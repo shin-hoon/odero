@@ -102,7 +102,7 @@ $(function(){
 
 		$.ajax({
 			type:'post',
-			url:'contentReplyInsert.do',
+			url:'contentCommentInsert.do',
 			data:$('#submit').serialize(),
 			success:function(data){
 					$('#submit').html("<script>location.reload();</script>");
@@ -131,7 +131,7 @@ $(function(){
 			
 			$.ajax({
 				type:'post',
-				url:'contentReplyDelete_ok.do',
+				url:'contentCommentDelete_ok.do',
 				data:$('#'+who+no).serialize(),
 				success:function(data){
 					if(data.trim() =="실패"){
@@ -165,7 +165,7 @@ $(function(){
 			
 			$.ajax({
 				type:'post',
-				url:'contentReplyUpdate.do',
+				url:'contentCommentUpdate.do',
 				data:$('#'+who+no).serialize(),
 				success:function(data){
 					if(data.trim() =="실패"){
@@ -198,7 +198,7 @@ $(function(){
 			
 			$.ajax({
 				type:'post',
-				url:'contentReplyNewInsert.do',
+				url:'contentCommentNewInsert.do',
 				data:$('#'+who+no).serialize(),
 				success:function(data){
 						$('#'+who+no).html("<script>location.reload();</script>");
@@ -237,7 +237,7 @@ var sLang = "ko_KR"; // 언어 (ko_KR/ en_US/ ja_JP/ zh_CN/ zh_TW), default = ko
 nhn.husky.EZCreator.createInIFrame({
 	oAppRef : oEditors,
 	elPlaceHolder : "ir1",
-	sSkinURI : "masterBoard/SmartEditor2Skin.jsp",
+	sSkinURI : "freeBoard/SmartEditor2Skin.jsp",
 	htParams : {
 		bUseToolbar : true, // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
 		bUseVerticalResizer : true, // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)

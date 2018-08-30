@@ -1,4 +1,4 @@
-package com.sist.masterBoard;
+package com.sist.freeBoard;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,19 +11,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sist.masterBoard.dao.MasterBoardDAO;
-import com.sist.masterBoard.dao.NoticeVO;
-import com.sist.masterBoard.dao.ReplyVO;
+import com.sist.freeBoard.dao.FreeBoardDAO;
+import com.sist.freeBoard.dao.FreeBoardVO;
+import com.sist.freeBoard.dao.FreeBoardCommentVO;
 
 
 @Controller
-public class MasterBoardController {
+public class FreeBoardController {
 	@Autowired
-	private MasterBoardDAO dao;
+	private FreeBoardDAO dao;
 
 	// 일반 게시판
-	@RequestMapping("MasterBoard.do")
-	public String MasterBoardList(String page, Model model){
+	@RequestMapping("freeBoard.do")
+	public String freeBoardList(String page, Model model){
 		if(page==null) page = "1";
 
 		int curpage = Integer.parseInt(page);
@@ -37,10 +37,10 @@ public class MasterBoardController {
 		map.put("end", end);
 
 		
-		List<NoticeVO> list=dao.MasterBoardList(map);
+		List<FreeBoardVO> list=dao.freeBoardList(map);
 		
-		for(NoticeVO vo:list){
-			vo.setCount(dao.contentReplyCount(vo.getNo()));
+		for(FreeBoardVO vo:list){
+			vo.setCount(dao.contentCommentCount(vo.getNo()));
 			
 			int length = vo.getSubject().length();
 			
@@ -50,95 +50,95 @@ public class MasterBoardController {
 		
 		
 		
-		int totalpage = dao.MasterBoardToltalPage();
-		int count = dao.MasterBoardRowCount();
+		int totalpage = dao.freeBoardToltalPage();
+		int count = dao.freeBoardRowCount();
 		count = count-((curpage*10)-10);
 		model.addAttribute("list",list);
 		model.addAttribute("curpage",curpage);
 		model.addAttribute("totalpage",totalpage);
 		model.addAttribute("count",count);
 
-		return "masterBoard/list";
+		return "freeBoard/list";
 	}
 	
-	@RequestMapping("MasterBoardInsert.do")
-	public String MasterBoardInsert(){
-		return "masterBoard/insert";
+	@RequestMapping("freeBoardInsert.do")
+	public String freeBoardInsert(){
+		return "freeBoard/insert";
 	}
 
-	@RequestMapping("MasterBoardInsert_ok.do")
-	public String MasterBoardInsert_ok(NoticeVO vo){
-		dao.MasterBoardInsert(vo);
-		return "redirect:MasterBoard.do";
+	@RequestMapping("freeBoardInsert_ok.do")
+	public String freeBoardInsert_ok(FreeBoardVO vo){
+		dao.freeBoardInsert(vo);
+		return "redirect:freeBoard.do";
 	}
 	
-	@RequestMapping("MasterBoardContent.do")
-	public String MasterBoardContent(int no,int page,Model model){
-		NoticeVO vo = dao.MasterBoardContent(no);
-		List<ReplyVO> list=dao.contentReplyList(no);
+	@RequestMapping("freeBoardContent.do")
+	public String freeBoardContent(int no,int page,Model model){
+		FreeBoardVO vo = dao.freeBoardContent(no);
+		List<FreeBoardCommentVO> list=dao.contentCommentList(no);
 		
 		model.addAttribute("vo",vo);
 		model.addAttribute("list", list);
 		model.addAttribute("page",page);
 		
-		return "masterBoard/content";
+		return "freeBoard/content";
 	}
 
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 추가 
-	@RequestMapping("MasterBoardReply.do")
-	public String MasterBoardReply(int page,int no,Model model){
+	@RequestMapping("freeBoardReply.do")
+	public String freeBoardReply(int page,int no,Model model){
 		model.addAttribute("page",page);
 		model.addAttribute("no",no);
-		return "masterBoard/reply";
+		return "freeBoard/reply";
 	}
 	
-	@RequestMapping("MasterBoardReply_ok.do")
-	public String MasterBoardReply_ok(NoticeVO vo){
-		dao.MasterBoardReplyInsert(vo);
-		return "redirect:MasterBoard.do?page="+vo.getPage();
+	@RequestMapping("freeBoardReply_ok.do")
+	public String freeBoardReply_ok(FreeBoardVO vo){
+		dao.freeBoardReplyInsert(vo);
+		return "redirect:freeBoard.do?page="+vo.getPage();
 	}
 	
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//	게시판&답글 업데이트
-	@RequestMapping("MasterBoardUpdate.do")
-	public String MasterBoardUpdate(int no,int page,Model model){
-		NoticeVO vo=dao.MasterBoardContent(no);
+	@RequestMapping("freeBoardUpdate.do")
+	public String freeBoardUpdate(int no,int page,Model model){
+		FreeBoardVO vo=dao.freeBoardContent(no);
 		model.addAttribute("vo", vo);
 		model.addAttribute("page",page);
 
-		return "masterBoard/update";
+		return "freeBoard/update";
 	}
 
-	@RequestMapping("MasterBoardUpdate_ok.do")
-	public String update_ok(NoticeVO vo,int page,Model model){
-		boolean bCheck=dao.MasterBoardUpdate_ok(vo);
+	@RequestMapping("freeBoardUpdate_ok.do")
+	public String update_ok(FreeBoardVO vo,int page,Model model){
+		boolean bCheck=dao.freeBoardUpdate_ok(vo);
 		model.addAttribute("page",page);
 		model.addAttribute("no",vo.getNo());
 		model.addAttribute("bCheck",bCheck);
 
-		return "masterBoard/update_ok";
+		return "freeBoard/update_ok";
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 삭제
-	@RequestMapping("MasterBoardDelete.do")
-	public String MasterBoardDelete(int no,Model model)	{
+	@RequestMapping("freeBoardDelete.do")
+	public String freeBoardDelete(int no,Model model)	{
 		model.addAttribute("no", no);
-		return "masterBoard/delete";
+		return "freeBoard/delete";
 	}
 
 
-	@RequestMapping("MasterBoardDelete_ok.do")
+	@RequestMapping("freeBoardDelete_ok.do")
 	public String board_delete_ok(int no,String pwd,Model model){
-		boolean bCheck=dao.MasterBoardDelete_ok(no, pwd);
+		boolean bCheck=dao.freeBoardDelete_ok(no, pwd);
 		model.addAttribute("bCheck",bCheck);
-		return "masterBoard/delete_ok";
+		return "freeBoard/delete_ok";
 	}
 
 	
@@ -152,15 +152,15 @@ public class MasterBoardController {
 	
 	// content 댓글 추가
 	
-	@RequestMapping("contentReplyInsert.do")
-	public String contentReplyInsert(ReplyVO vo) {
-		dao.contentReplyInsert(vo);
-		return "redirect:MasterBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();
+	@RequestMapping("contentCommentInsert.do")
+	public String contentCommentInsert(FreeBoardCommentVO vo) {
+		dao.contentCommentInsert(vo);
+		return "redirect:freeBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();
 	}
-	@RequestMapping("contentReplyNewInsert.do")
-	public String contentReplyNewInsert(ReplyVO vo) {
-		dao.contentReplyNweInsert(vo);
-		return "redirect:MasterBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();
+	@RequestMapping("contentCommentNewInsert.do")
+	public String contentCommentNewInsert(FreeBoardCommentVO vo) {
+		dao.contentCommentNweInsert(vo);
+		return "redirect:freeBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();
 	}
 
 	
@@ -170,15 +170,15 @@ public class MasterBoardController {
 
 	//	Content&댓글 업데이트
 	@ResponseBody
-	@RequestMapping("contentReplyUpdate.do")
-	public String contentReplyUpdate_ok(ReplyVO vo,Model model){
-		String data = dao.contentReplyUpdate(vo);
+	@RequestMapping("contentCommentUpdate.do")
+	public String contentCommentUpdate_ok(FreeBoardCommentVO vo,Model model){
+		String data = dao.contentCommentUpdate(vo);
 		/*boolean bCheck=dao.contentReplyUpdate_ok(vo);
 		model.addAttribute("page",vo.getPage());
 		model.addAttribute("no",vo.getBno());
 		model.addAttribute("bCheck",bCheck);
 		
-		return "masterBoard/contentReplyUpdate_ok";*/
+		return "freeBoard/contentReplyUpdate_ok";*/
 		return data;
 	}
 	
@@ -187,13 +187,13 @@ public class MasterBoardController {
 
 	// content 댓글 삭제
 	@ResponseBody
-	@RequestMapping("contentReplyDelete_ok.do")
-	public String ContentReplyDelete_ok(ReplyVO vo,Model model){
-		String data = dao.contentReplyDelete_ok(vo);
+	@RequestMapping("contentCommentDelete_ok.do")
+	public String ContentCommentDelete_ok(FreeBoardCommentVO vo,Model model){
+		String data = dao.contentCommentDelete_ok(vo);
 		/*model.addAttribute("bCheck",bCheck);
 		model.addAttribute("no",vo.getBno());
 		model.addAttribute("page",vo.getPage());
-		return "masterBoard/contentReplyDelete_ok";*/
+		return "freeBoard/contentReplyDelete_ok";*/
 		return data;
 	}
 }

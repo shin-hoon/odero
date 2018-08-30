@@ -7,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
-	<link rel="stylesheet" href="masterBoard/masterBoard.css" type="text/css">
+	<link rel="stylesheet" href="freeBoard/freeBoard.css" type="text/css">
 	<style type="text/css">
 		.pre {
 			padding : 6px;
@@ -22,7 +22,7 @@
 			*/
 		}
 	</style>
-	<script type="text/javascript" src="masterBoard/masterBoard.js" charset="utf-8"></script>
+	<script type="text/javascript" src="freeBoard/freeBoard.js" charset="utf-8"></script>
 </head>
 <body>
 	<div class="container" style="margin-top:30px;">
@@ -58,10 +58,10 @@
 					</tr>
 					<tr class="aa">
 						<td colspan="4" class="text-right">
-							<a href="MasterBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">답변</a>
-							<a href="MasterBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">수정</a>
-							<a href="MasterBoardDelete.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">삭제</a>
-							<a href="MasterBoard.do" class="btn btn-sm table-th">목록</a>
+							<a href="freeBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">답변</a>
+							<a href="freeBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">수정</a>
+							<a href="freeBoardDelete.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">삭제</a>
+							<a href="freeBoard.do" class="btn btn-sm table-th">목록</a>
 						</td>
 					</tr>
 				</table>
@@ -130,7 +130,7 @@
 				
 				<tr id="in${rvo.no}" style="display: none">
 					<td colspan="2" style="border-bottom:1px solid #ddd;">
-						<form id="i-in${rvo.no}" method="post" action="contentReplyNewInsert.do">
+						<form id="i-in${rvo.no}" method="post" action="contentCommentNewInsert.do">
 							<div style="margin-left:20px">
 									<div class="form-inline">
 										<div class="form-group">
@@ -163,7 +163,7 @@
 				<tr id="up${rvo.no }" style="display: none" class="aa">
 					<td colspan="2" style="border-bottom:1px solid #ddd;">
 						<div style="margin-left:20px;">
-							<form id="u-up${rvo.no}" method="post" action="contentReplyUpdate.do"> <!--action="contentReplyUpdate.do"  -->
+							<form id="u-up${rvo.no}" method="post" action="contentCommentUpdate.do"> <!--action="contentCommentUpdate.do"  -->
 								<div class="form-inline">
 									<div class="form-group">
 	      								<label for="id">Name:</label>
@@ -195,7 +195,7 @@
 				<tr id="del${rvo.no}" class="aa" align="center" style="display:none;">
 					<td colspan="2" style="border-bottom:1px solid #ddd;">
 						<div  style="width:300px;text-align: center;">
-							<form id="d-del${rvo.no}" method="post" action="contentReplyDelete_ok.do">
+							<form id="d-del${rvo.no}" method="post" action="contentCommentDelete_ok.do">
 								<div>	
 									<label for="pwd">댓글삭제</label>		
 								</div>
@@ -224,7 +224,7 @@
 			
 			<tr class="aa">
 				<td colspan="2">
-					<form id="submit" method=post action="contentReplyInsert.do">
+					<form id="submit" method=post action="contentCommentInsert.do">
 						<div class="form-inline">
 							<div class="form-group">
 	      						<label for="id">Name:</label>

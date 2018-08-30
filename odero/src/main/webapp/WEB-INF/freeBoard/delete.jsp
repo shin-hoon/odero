@@ -12,12 +12,12 @@
 			text-align: center;
 		}
 	</style>
-	<link rel="stylesheet" href="masterBoard/masterBoard.css" type="text/css">
+	<link rel="stylesheet" href="freeBoard/freeBoard.css" type="text/css">
 </head>
 <body>
 	<div class="container" style="margin-top:30px;">
 		<div class="row">
-			<form method="post" action="MasterBoardDelete_ok.do">
+			<form method="post" action="freeBoardDelete_ok.do">
 			<table class="table aa" width="300">
 				<tr class="aa" align="center">
 					<td style="border-bottom:1px solid #ddd;">

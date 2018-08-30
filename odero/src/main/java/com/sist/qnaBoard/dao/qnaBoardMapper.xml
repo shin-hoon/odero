@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.qnaBoard.dao.qnaBoardMapper.xml">
+	<select id="qnaBoardList" parameterType="java.util.Map" resultType="QnaBoardVO">
+		SELECT no,M_id,subject,name,regdate,hit,group_tab,num 
+			FROM (SELECT no,M_id,subject,name,regdate,hit,group_tab,rownum as num 
+			FROM (SELECT no,M_id,subject,name,regdate,hit,group_tab 
+			FROM freeBoard ORDER BY group_id DESC,group_step ASC)) 
+			WHERE num BETWEEN #{start} AND #{end}")
+	</select>
+</mapper>

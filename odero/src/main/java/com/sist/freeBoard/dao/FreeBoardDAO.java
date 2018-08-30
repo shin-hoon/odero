@@ -1,4 +1,4 @@
-package com.sist.masterBoard.dao;
+package com.sist.freeBoard.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -10,27 +10,27 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 
 @Repository
-public class MasterBoardDAO {
+public class FreeBoardDAO {
 	@Autowired
-	private  MasterBoardMapper mapper;
+	private  FreeBoardMapper mapper;
 
 	// 일반 게시판
-	public List<NoticeVO> MasterBoardList(Map map){
-		return mapper.MasterBoardList(map);
+	public List<FreeBoardVO> freeBoardList(Map map){
+		return mapper.freeBoardList(map);
 	}
-	public int MasterBoardToltalPage(){
-		return mapper.MasterBoardToltalPage();
+	public int freeBoardToltalPage(){
+		return mapper.freeBoardToltalPage();
 	}
-	public int MasterBoardRowCount(){
-		return mapper.MasterBoardRowCount();
+	public int freeBoardRowCount(){
+		return mapper.freeBoardRowCount();
 	}
-	public void MasterBoardInsert(NoticeVO vo){
-		mapper.MasterBoardInsert(vo);
+	public void freeBoardInsert(FreeBoardVO vo){
+		mapper.freeBoardInsert(vo);
 	}
 
-	public NoticeVO MasterBoardContent(int no)	{
-		mapper.MasterBoardHit(no);
-		return mapper.MasterBoardContent(no);
+	public FreeBoardVO freeBoardContent(int no)	{
+		mapper.freeBoardHit(no);
+		return mapper.freeBoardContent(no);
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,8 +38,8 @@ public class MasterBoardDAO {
 	
 	// 답글 추가
 	@Transactional
-	public void MasterBoardReplyInsert(NoticeVO vo){
-		NoticeVO getVO = mapper.id_step_tab(vo.getNo());
+	public void freeBoardReplyInsert(FreeBoardVO vo){
+		FreeBoardVO getVO = mapper.id_step_tab(vo.getNo());
 		
 		vo.setGroup_id(getVO.getGroup_id()); 
 		vo.setGroup_step(getVO.getGroup_step()); 
@@ -47,25 +47,25 @@ public class MasterBoardDAO {
 		vo.setPno(vo.getNo());
 		
 		mapper.groupUpdate(vo);
-		mapper.MasterBoardReplyInsert(vo);
+		mapper.freeBoardReplyInsert(vo);
 		mapper.depthUpdate(vo.getPno());
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 게시판&답글 업데이트 
-	public NoticeVO MasterBoardUpdate(int no){
-		return mapper.MasterBoardContent(no);
+	public FreeBoardVO freeBoardUpdate(int no){
+		return mapper.freeBoardContent(no);
 	}
 	
 	@Transactional
-	public boolean MasterBoardUpdate_ok(NoticeVO vo){
+	public boolean freeBoardUpdate_ok(FreeBoardVO vo){
 		boolean bCheck=false;
 		String pwd=mapper.boardGetPwd(vo.getNo());
 
 		if(pwd.equals(vo.getPwd())) {
 			bCheck=true;
-			mapper.MasterBoardUpdate(vo);
+			mapper.freeBoardUpdate(vo);
 		}
 
 		return bCheck;
@@ -75,21 +75,21 @@ public class MasterBoardDAO {
 	
 	// 답글 삭제
 	@Transactional
-	public boolean MasterBoardDelete_ok(int no,String pwd)  {
+	public boolean freeBoardDelete_ok(int no,String pwd)  {
 		boolean bCheck=false;
-		NoticeVO getVO = mapper.pwd_root_depth(no);
+		FreeBoardVO getVO = mapper.pwd_root_depth(no);
 		
 		
 		if(getVO.getPwd().equals(pwd))  {
 			bCheck=true;
 		
 			if(getVO.getDepth() == 0) {
-				mapper.MasterBoardDeleteReply(no);
-				mapper.MasterBoardDelete(no);
+				mapper.freeBoardDeleteComment(no);
+				mapper.freeBoardDelete(no);
 			}
 			else {
 				mapper.delete_msg(no);
-				mapper.MasterBoardDeleteReply(no);
+				mapper.freeBoardDeleteComment(no);
 			}
 			
 			mapper.delete_depth(getVO.getRoot());
@@ -109,38 +109,38 @@ public class MasterBoardDAO {
 	
 	
 	// 댓글 카운트
-	public int contentReplyCount(int no) {
-		return mapper.contentReplyCount(no);
+	public int contentCommentCount(int no) {
+		return mapper.contentCommentCount(no);
 	}
 	
 	
 	//  Content 댓글 리스트
-	public List<ReplyVO> contentReplyList(int no){
-		return mapper.contentReplyList(no);
+	public List<FreeBoardCommentVO> contentCommentList(int no){
+		return mapper.contentCommentList(no);
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 댓글 추가
-	public void contentReplyInsert(ReplyVO vo){
-		mapper.contentReplyInsert(vo);
+	public void contentCommentInsert(FreeBoardCommentVO vo){
+		mapper.contentCommentInsert(vo);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 댓글의 댓글 추가
 	@Transactional
-	public void contentReplyNweInsert(ReplyVO vo){
-		ReplyVO getVO = mapper.contentReply_id_step_tab(vo.getNo());
+	public void contentCommentNweInsert(FreeBoardCommentVO vo){
+		FreeBoardCommentVO getVO = mapper.contentComment_id_step_tab(vo.getNo());
 
 		vo.setGroup_id(getVO.getGroup_id()); 
 		vo.setGroup_step(getVO.getGroup_step()); 
 		vo.setGroup_tab(getVO.getGroup_tab());
 		vo.setPno(vo.getNo());
 
-		mapper.contentReply_groupUpdate(vo);
-		mapper.contentReplyNewInsert(vo);
-		mapper.contentReply_depthUpdate(vo.getPno());
+		mapper.contentComment_groupUpdate(vo);
+		mapper.contentCommentNewInsert(vo);
+		mapper.contentComment_depthUpdate(vo.getPno());
 	}
 
 
@@ -187,13 +187,13 @@ public class MasterBoardDAO {
 	}
 	*/
 	
-	public String contentReplyUpdate(ReplyVO vo){
+	public String contentCommentUpdate(FreeBoardCommentVO vo){
 		String data;
 		
-		String pwd=mapper.contentReplyGetPwd(vo.getNo());
+		String pwd=mapper.contentCommentGetPwd(vo.getNo());
 
 		if(pwd.equals(vo.getPwd())) {
-			mapper.contentReplyUpdate(vo);
+			mapper.contentCommentUpdate(vo);
 			data = "<script>alert(\"수정완료\");location.reload();</script>";
 					
 		}
@@ -205,23 +205,23 @@ public class MasterBoardDAO {
 	
 	
 	@Transactional
-	public String contentReplyDelete_ok(ReplyVO vo)  {
+	public String contentCommentDelete_ok(FreeBoardCommentVO vo)  {
 		String data;
 		
-		ReplyVO getVO = mapper.contentReply_pwd_root_depth(vo.getNo());
+		FreeBoardCommentVO getVO = mapper.contentComment_pwd_root_depth(vo.getNo());
 
 
 		if(getVO.getPwd().equals(vo.getPwd()))  {
 			data = "<script>alert(\"삭제되었습니다.\");location.reload();</script>";
 
 			if(getVO.getDepth() == 0) {
-				mapper.contentReplyDelete(vo.getNo());
+				mapper.contentCommentDelete(vo.getNo());
 			}
 			else {
-				mapper.contentReply_delete_msg(vo.getNo());
+				mapper.contentComment_delete_msg(vo.getNo());
 			}
 			
-			mapper.contentReply_delete_depth(getVO.getRoot());
+			mapper.contentComment_delete_depth(getVO.getRoot());
 		}
 		else data = "실패";
 		
