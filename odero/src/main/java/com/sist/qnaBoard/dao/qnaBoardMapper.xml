@@ -5,10 +5,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.sist.qnaBoard.dao.qnaBoardMapper.xml">
 	<select id="qnaBoardList" parameterType="java.util.Map" resultType="QnaBoardVO">
 		SELECT no,M_id,subject,name,regdate,hit,group_tab,num 
-			FROM (SELECT no,M_id,subject,name,regdate,hit,group_tab,rownum as num 
-			FROM (SELECT no,M_id,subject,name,regdate,hit,group_tab 
-			FROM qnaBoard ORDER BY group_id DESC,group_step ASC)) 
-			WHERE num BETWEEN #{start} AND #{end}
+		FROM (SELECT no,M_id,subject,name,regdate,hit,group_tab,rownum as num 
+		FROM (SELECT no,M_id,subject,name,regdate,hit,group_tab
+		FROM qnaBoard ORDER BY group_id DESC,group_step ASC)) 
+		WHERE num BETWEEN #{start} AND #{end}
 	</select>
 	
 	<select id="qnaBoardToltalPage" resultType="int">
@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO qnaBoard(no,name,subject,content,pwd,regdate,hit,group_id) 
 		VALUES(#{no},#{name},#{subject},#{content},
 		#{pwd},SYSDATE,0,(SELECT NVL(MAX(group_id)+1,1) 
-		FROM qnaBoard
+		FROM qnaBoard))
 	</insert>
 	
 	<update id="qnaBoardHit" parameterType="int">
@@ -45,11 +45,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  -->	
  
 	<!-- // 답글 추가 -->
-	<select id="id_step_tab" resultType="QnaBoardVO" parameterType="int">
+	<select id="qna_id_step_tab" resultType="QnaBoardVO" parameterType="int">
 		SELECT group_id,group_step,group_tab FROM qnaBoard WHERE no=#{no}
 	</select>
 
-	<select id="groupUpdate" parameterType="QnaBoardVO">
+	<select id="qna_groupUpdate" parameterType="QnaBoardVO">
 		UPDATE qnaBoard SET group_step=group_step+1 
 		WHERE group_id=#{group_id} AND group_step>#{group_step}
 	</select>	
@@ -59,12 +59,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			SELECT NVL(MAX(no)+1,1) as no FROM qnaBoard
 		</selectKey>
 		INSERT INTO qnaBoard(no,name,subject,content,pwd,regdate,hit,
-			group_id,group_step,group_tab,root) 
-			VALUES(#{no},#{name},#{subject},#{content},#{pwd},SYSDATE,0,
-			#{group_id},#{group_step}+1,#{group_tab}+1,#{pno})
+		group_id,group_step,group_tab,root) 
+		VALUES(#{no},#{name},#{subject},#{content},#{pwd},SYSDATE,0,
+		#{group_id},#{group_step}+1,#{group_tab}+1,#{pno})
 	</insert>	
 
-	<update id="depthUpdate" parameterType="int">
+	<update id="qna_depthUpdate" parameterType="int">
 		UPDATE qnaBoard SET depth=depth+1 WHERE no=#{pno}
 	</update>
 	
@@ -72,7 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
  -->	
 	<!-- // 비밀번호 get -->
-	<select id="boardGetPwd" resultType="String" parameterType="int">
+	<select id="qna_boardGetPwd" resultType="String" parameterType="int">
 		SELECT pwd FROM qnaBoard WHERE no=#{no}
 	</select>
 <!-- 
@@ -87,7 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  -->	
 	<!-- // 답글 삭제 -->
 
-	<select id="pwd_root_depth" resultType="QnaBoardVO" parameterType="int">
+	<select id="qna_pwd_root_depth" resultType="QnaBoardVO" parameterType="int">
 		SELECT pwd,root,depth FROM qnaBoard WHERE no=#{no}
 	</select>	
 	
@@ -99,11 +99,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		DELETE FROM qnaBoardComment WHERE bno=#{no}
 	</delete>
 
-	<update id="delete_msg" parameterType="int">
+	<update id="qna_delete_msg" parameterType="int">
 		UPDATE qnaBoard SET subject='삭제된 게시물 입니다.',content='삭제된 게시물 입니다.' WHERE no=#{no}
 	</update>	
 
-	<update id="delete_depth" parameterType="int">
+	<update id="qna_delete_depth" parameterType="int">
 		UPDATE qnaBoard SET depth=depth-1 WHERE no=#{root}
 	</update>
 
@@ -115,51 +115,51 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 -->
 	<!-- 리플 카운트 -->
-	<select id="contentCommentCount" parameterType="int" resultType="int">
+	<select id="qnaContentCommentCount" parameterType="int" resultType="int">
 		SELECT COUNT(*) FROM qnaBoardComment WHERE bno=#{no}
 	</select> 
 	
 	
 	<!-- // Content 댓글 리스트 -->
-	<select id="contentCommentList" resultType="QnaBoardCommentVO" parameterType="int">
+	<select id="qnaContentCommentList" resultType="QnaBoardCommentVO" parameterType="int">
 		SELECT no,bno,name,msg,pwd,regdate,group_tab,num 
-			FROM (SELECT no,bno,name,msg,pwd,regdate,group_tab,rownum as num 
-			FROM (SELECT no,bno,name,msg,pwd,regdate,group_tab 
-			FROM qnaBoardComment WHERE bno=#{bno} ORDER BY group_id ASC,group_step ASC)) 
+		FROM (SELECT no,bno,name,msg,pwd,regdate,group_tab,rownum as num 
+		FROM (SELECT no,bno,name,msg,pwd,regdate,group_tab 
+		FROM qnaBoardComment WHERE bno=#{bno} ORDER BY group_id ASC,group_step ASC)) 
 	</select>
     
-	<insert id="contentCommentInsert" parameterType="QnaBoardCommentVO">
+	<insert id="qnaContentCommentInsert" parameterType="QnaBoardCommentVO">
 		 <selectKey keyProperty="no" resultType="int" order="BEFORE">
 		 	SELECT NVL(MAX(no)+1,1) as no FROM qnaBoardComment
 		 </selectKey>
 		 INSERT INTO qnaBoardComment(no,bno,name,msg,pwd,regdate,group_id) 
-			VALUES(#{no},#{bno},#{name},#{msg},#{pwd},SYSDATE,
-			(SELECT NVL(MAX(group_id)+1,1) FROM qnaBoardComment))
+		 VALUES(#{no},#{bno},#{name},#{msg},#{pwd},SYSDATE,
+		 (SELECT NVL(MAX(group_id)+1,1) FROM qnaBoardComment))
 	</insert>    
     
  <!--    
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
  -->
 	<!-- // content 리플 추가 -->
-	<select id="contentComment_id_step_tab" resultType="QnaBoardCommentVO" parameterType="int">
+	<select id="qnaContentComment_id_step_tab" resultType="QnaBoardCommentVO" parameterType="int">
 		SELECT group_id,group_step,group_tab FROM qnaBoardComment WHERE no=#{no}
 	</select>
 	
-	<update id="contentComment_groupUpdate" parameterType="QnaBoardCommentVO">
+	<update id="qnaContentComment_groupUpdate" parameterType="QnaBoardCommentVO">
 		UPDATE qnaBoardComment SET group_step=group_step+1 
 		WHERE group_id=#{group_id} AND group_step>#{group_step}
 	</update>
 	
-	<insert id="contentCommentNewInsert" parameterType="QnaBoardCommentVO">
+	<insert id="qnaContentCommentNewInsert" parameterType="QnaBoardCommentVO">
 		<selectKey keyProperty="no" resultType="int" order="BEFORE">
 			SELECT NVL(MAX(no)+1,1) as no FROM qnaBoardComment
 		</selectKey>
 		INSERT INTO qnaBoardComment(no,bno,name,msg,pwd,regdate,group_id,group_step,group_tab,root) 
-			VALUES(#{no},#{bno},#{name},#{msg},#{pwd},SYSDATE,
-			#{group_id},#{group_step}+1,#{group_tab}+1,#{pno}) 
+		VALUES(#{no},#{bno},#{name},#{msg},#{pwd},SYSDATE,
+		#{group_id},#{group_step}+1,#{group_tab}+1,#{pno}) 
 	</insert>
 
-	<update id="contentComment_depthUpdate" parameterType="int">
+	<update id="qnaContentComment_depthUpdate" parameterType="int">
 		UPDATE qnaBoardComment SET depth=depth+1 WHERE no=#{pno}
 	</update>
 
@@ -167,14 +167,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
  -->
 	<!-- // content Reply 비밀번호 get -->
-	<select id="contentCommentGetPwd" resultType="String" parameterType="int">
+	<select id="qnaContentCommentGetPwd" resultType="String" parameterType="int">
 		SELECT pwd FROM qnaBoardComment WHERE no=#{no}
 	</select>
 <!-- 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
  -->
 	<!-- // content 게시판&답글 업데이트  -->
-	<update id="contentCommentUpdate"  parameterType="QnaBoardCommentVO">
+	<update id="qnaContentCommentUpdate"  parameterType="QnaBoardCommentVO">
 		UPDATE qnaBoardComment SET name=#{name},msg=#{msg} WHERE no=#{no}
 	</update>
 	
@@ -183,19 +183,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
  -->	
 	<!-- // content 댓글삭제 -->
-	<select id="contentComment_pwd_root_depth" resultType="QnaBoardCommentVO" parameterType="int">
+	<select id="qnaContentComment_pwd_root_depth" resultType="QnaBoardCommentVO" parameterType="int">
 		SELECT pwd,root,depth FROM qnaBoardComment WHERE no=#{no}
 	</select>
 	
-	<delete id="contentCommentDelete" parameterType="int">
+	<delete id="qnaContentCommentDelete" parameterType="int">
 		DELETE FROM qnaBoardComment WHERE no=#{no}
 	</delete>
 	
-	<update id="contentComment_delete_msg" parameterType="int">
+	<update id="qnaContentComment_delete_msg" parameterType="int">
 		UPDATE qnaBoardComment SET msg='삭제된 게시물 입니다.' WHERE no=#{no}
 	</update>
 
-	<update id="contentComment_delete_depth" parameterType="int">
+	<update id="qnaContentComment_delete_depth" parameterType="int">
 		UPDATE qnaBoardComment SET depth=depth-1 WHERE no=#{root}
 	</update>
 	

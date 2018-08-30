@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sist.qnaBoard.dao.QnaBoardCommentVO;
-import com.sist.qnaBoard.dao.QnaBoardVO;
 import com.sist.qnaBoard.dao.QnaBoardDAO;
 import com.sist.qnaBoard.dao.QnaBoardVO;
 
@@ -38,7 +37,7 @@ public class QnaBoardController {
 		List<QnaBoardVO> list=dao.qnaBoardList(map);
 		
 		for(QnaBoardVO vo:list){
-			vo.setCount(dao.contentCommentCount(vo.getNo()));
+			vo.setCount(dao.qnaContentCommentCount(vo.getNo()));
 			
 			int length = vo.getSubject().length();
 			
@@ -75,7 +74,7 @@ public class QnaBoardController {
 	@RequestMapping("qnaBoardContent.do")
 	public String qnaBoardContent(int no,int page,Model model){
 		QnaBoardVO vo = dao.qnaBoardContent(no);
-		List<QnaBoardCommentVO> list=dao.contentCommentList(no);
+		List<QnaBoardCommentVO> list=dao.qnaContentCommentList(no);
 		
 		model.addAttribute("vo",vo);
 		model.addAttribute("list", list);
@@ -153,13 +152,13 @@ public class QnaBoardController {
 	// content 댓글 추가
 	
 	@RequestMapping("qnaContentCommentInsert.do")
-	public String contentCommentInsert(QnaBoardCommentVO vo) {
-		dao.contentCommentInsert(vo);
+	public String qnaContentCommentInsert(QnaBoardCommentVO vo) {
+		dao.qnaContentCommentInsert(vo);
 		return "redirect:qnaBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();
 	}
 	@RequestMapping("qnaContentCommentNewInsert.do")
-	public String contentCommentNewInsert(QnaBoardCommentVO vo) {
-		dao.contentCommentNweInsert(vo);
+	public String qnaContentCommentNewInsert(QnaBoardCommentVO vo) {
+		dao.qnaContentCommentNweInsert(vo);
 		return "redirect:qnaBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();
 	}
 
@@ -171,8 +170,8 @@ public class QnaBoardController {
 	//	Content&댓글 업데이트
 	@ResponseBody
 	@RequestMapping("qnaContentCommentUpdate.do")
-	public String contentCommentUpdate_ok(QnaBoardCommentVO vo,Model model){
-		String data = dao.contentCommentUpdate(vo);
+	public String qnaContentCommentUpdate_ok(QnaBoardCommentVO vo,Model model){
+		String data = dao.qnaContentCommentUpdate(vo);
 		return data;
 	}
 	
@@ -182,8 +181,8 @@ public class QnaBoardController {
 	// content 댓글 삭제
 	@ResponseBody
 	@RequestMapping("qnaContentCommentDelete_ok.do")
-	public String ContentCommentDelete_ok(QnaBoardCommentVO vo,Model model){
-		String data = dao.contentCommentDelete_ok(vo);
+	public String qnaContentCommentDelete_ok(QnaBoardCommentVO vo,Model model){
+		String data = dao.qnaContentCommentDelete_ok(vo);
 		return data;
 	}
 }
