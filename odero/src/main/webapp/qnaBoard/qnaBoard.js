@@ -105,7 +105,7 @@ $(function(){
 			url:'qnaContentCommentInsert.do',
 			data:$('#submit').serialize(),
 			success:function(data){
-					$('#submit').html("<script>location.reload();</script>");
+					$('#submit').html(data);
 			}
 		});  // end ajax
 	}); // end #btnsubmit
@@ -201,7 +201,7 @@ $(function(){
 				url:'qnaContentCommentNewInsert.do',
 				data:$('#'+who+no).serialize(),
 				success:function(data){
-						$('#'+who+no).html("<script>location.reload();</script>");
+						$('#'+who+no).html(data);
 				}
 			});  // end    ajax
 			

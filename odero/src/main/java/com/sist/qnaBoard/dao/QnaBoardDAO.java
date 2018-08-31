@@ -155,9 +155,8 @@ public class QnaBoardDAO {
 			sst.update("qnaContentCommentUpdate",vo);
 			data = "<script>alert(\"수정완료\");location.reload();</script>";
 		}
-		else {
-			data = "실패";
-		}
+		else data = "실패";
+		
 		return data;
 	}
 	

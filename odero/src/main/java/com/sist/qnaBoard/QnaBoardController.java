@@ -151,15 +151,19 @@ public class QnaBoardController {
 	
 	// content 댓글 추가
 	
+	@ResponseBody
 	@RequestMapping("qnaContentCommentInsert.do")
 	public String qnaContentCommentInsert(QnaBoardCommentVO vo) {
 		dao.qnaContentCommentInsert(vo);
-		return "redirect:qnaBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();
+		/*return "redirect:qnaBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();*/
+		return "<script>location.reload();</script>";
 	}
+	@ResponseBody
 	@RequestMapping("qnaContentCommentNewInsert.do")
 	public String qnaContentCommentNewInsert(QnaBoardCommentVO vo) {
 		dao.qnaContentCommentNweInsert(vo);
-		return "redirect:qnaBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();
+		/*return "redirect:qnaBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();*/
+		return "<script>location.reload();</script>";
 	}
 
 	
