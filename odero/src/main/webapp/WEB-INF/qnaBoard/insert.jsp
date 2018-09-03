@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,7 +56,10 @@
 				</tr>
 				<tr>
 					<td colspan="2" class="text-center">
-						<input type="button" onclick="submitContents(this);" value="글쓰기" class="btn btn-sm table-th" />
+						<c:if test="${sessionScope.m_id == null}">
+							<c:set var="login" value="0"  />
+						</c:if>
+						<input type="button" onclick="submitContents(this);" data-login="${login}" value="글쓰기" class="btn btn-sm table-th login" />
 						<input type="button" value="취소 " class="btn btn-sm table-th" onclick="javascript:history.back()">
 					</td>
 				</tr>

@@ -5,9 +5,8 @@ import java.util.Date;
 public class QnaBoardCommentVO {
 	private int no;
 	private int bno;
-	private String M_id;
+	private String m_id;
 	private String name;
-	private String pwd;
 	private String msg;
 	private Date regdate;
 	private int group_id;
@@ -31,22 +30,16 @@ public class QnaBoardCommentVO {
 		this.bno = bno;
 	}
 	public String getM_id() {
-		return M_id;
+		return m_id;
 	}
 	public void setM_id(String m_id) {
-		M_id = m_id;
+		this.m_id = m_id;
 	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getPwd() {
-		return pwd;
-	}
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
 	}
 	public String getMsg() {
 		return msg;

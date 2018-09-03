@@ -43,7 +43,7 @@
 					</tr>
 					<tr class="aa">
 						<td width="20%" class="text-center" style="background: rgb(247, 260, 272);">이름</td>
-						<td width="30%" class="text-center">${vo.name}</td>
+						<td width="30%" class="text-center">${vo.m_name}</td>
 						<td width="20%" class="text-center" style="background: rgb(247, 260, 272);">조회수</td>
 						<td width="30%" class="text-center">${vo.hit}</td>
 					</tr>
@@ -58,9 +58,11 @@
 					</tr>
 					<tr class="aa">
 						<td colspan="4" class="text-right">
-							<a href="qnaBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">답변</a>
-							<a href="qnaBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">수정</a>
-							<a href="qnaBoardDelete.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">삭제</a>
+							<c:if test="${sessionScope.m_id==vo.m_id}">
+								<a href="qnaBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">답변</a>
+								<a href="qnaBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">수정</a>
+								<a href="qnaBoardDelete.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">삭제</a>
+							</c:if>
 							<a href="qnaBoard.do" class="btn btn-sm table-th">목록</a>
 						</td>
 					</tr>

@@ -4,11 +4,10 @@ import java.util.Date;
 
 public class QnaBoardVO {
 	private int no;
-	private String M_id;
+	private String m_id;
 	private String name;
 	private String subject;
 	private String content;
-	private String pwd;
 	private Date regdate;
 	private int hit;
 	private int group_id;
@@ -22,23 +21,24 @@ public class QnaBoardVO {
 	
 	
 	
+	
 	public String getM_id() {
-		return M_id;
+		return m_id;
 	}
 	public void setM_id(String m_id) {
-		M_id = m_id;
-	}
-	public int getNo() {
-		return no;
-	}
-	public void setNo(int no) {
-		this.no = no;
+		this.m_id = m_id;
 	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public int getNo() {
+		return no;
+	}
+	public void setNo(int no) {
+		this.no = no;
 	}
 	public String getSubject() {
 		return subject;
@@ -51,12 +51,6 @@ public class QnaBoardVO {
 	}
 	public void setContent(String content) {
 		this.content = content;
-	}
-	public String getPwd() {
-		return pwd;
-	}
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
 	}
 	public Date getRegdate() {
 		return regdate;

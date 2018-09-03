@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +39,7 @@ public class QnaBoardController {
 		List<QnaBoardVO> list=dao.qnaBoardList(map);
 		
 		for(QnaBoardVO vo:list){
-			vo.setCount(dao.qnaContentCommentCount(vo.getNo()));
+			vo.setCount(dao.qnaCommentCount(vo.getNo()));
 			
 			int length = vo.getSubject().length();
 			
@@ -55,7 +57,6 @@ public class QnaBoardController {
 		model.addAttribute("totalpage",totalpage);
 		model.addAttribute("count",count);
 
-		
 		return "qnaBoard/list";
 	}
 	
@@ -66,7 +67,12 @@ public class QnaBoardController {
 	}
 
 	@RequestMapping("qnaBoardInsert_ok.do")
-	public String qnaBoardInsert_ok(QnaBoardVO vo){
+	public String qnaBoardInsert_ok(QnaBoardVO vo,HttpSession session){
+		if(session.getAttribute("m_id")==null) {
+			
+		}
+		vo.setM_id((String)session.getAttribute("m_id"));
+		vo.setName((String)session.getAttribute("m_name"));
 		dao.qnaBoardInsert(vo);
 		return "redirect:qnaBoard.do";
 	}
@@ -74,7 +80,7 @@ public class QnaBoardController {
 	@RequestMapping("qnaBoardContent.do")
 	public String qnaBoardContent(int no,int page,Model model){
 		QnaBoardVO vo = dao.qnaBoardContent(no);
-		List<QnaBoardCommentVO> list=dao.qnaContentCommentList(no);
+		List<QnaBoardCommentVO> list=dao.qnaCommentList(no);
 		
 		model.addAttribute("vo",vo);
 		model.addAttribute("list", list);
@@ -109,18 +115,14 @@ public class QnaBoardController {
 		QnaBoardVO vo=dao.qnaBoardContent(no);
 		model.addAttribute("vo", vo);
 		model.addAttribute("page",page);
-
 		return "qnaBoard/update";
 	}
 
 	@RequestMapping("qnaBoardUpdate_ok.do")
-	public String update_ok(QnaBoardVO vo,int page,Model model){
-		boolean bCheck=dao.qnaBoardUpdate_ok(vo);
-		model.addAttribute("page",page);
-		model.addAttribute("no",vo.getNo());
-		model.addAttribute("bCheck",bCheck);
-
-		return "qnaBoard/update_ok";
+	public String update_ok(QnaBoardVO vo,Model model){
+		dao.qnaBoardUpdate_ok(vo);
+		model.addAttribute("page",vo.getPage());
+		return "redirect:qnaBoardContent.do?page="+vo.getPage()+"&no="+vo.getNo();
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,16 +154,16 @@ public class QnaBoardController {
 	// content 댓글 추가
 	
 	@ResponseBody
-	@RequestMapping("qnaContentCommentInsert.do")
-	public String qnaContentCommentInsert(QnaBoardCommentVO vo) {
-		dao.qnaContentCommentInsert(vo);
+	@RequestMapping("qnaCommentInsert.do")
+	public String qnaCommentInsert(QnaBoardCommentVO vo) {
+		dao.qnaCommentInsert(vo);
 		/*return "redirect:qnaBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();*/
 		return "<script>location.reload();</script>";
 	}
 	@ResponseBody
-	@RequestMapping("qnaContentCommentNewInsert.do")
-	public String qnaContentCommentNewInsert(QnaBoardCommentVO vo) {
-		dao.qnaContentCommentNweInsert(vo);
+	@RequestMapping("qnaCommentNewInsert.do")
+	public String qnaCommentNewInsert(QnaBoardCommentVO vo) {
+		dao.qnaCommentNweInsert(vo);
 		/*return "redirect:qnaBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();*/
 		return "<script>location.reload();</script>";
 	}
@@ -173,9 +175,9 @@ public class QnaBoardController {
 
 	//	Content&댓글 업데이트
 	@ResponseBody
-	@RequestMapping("qnaContentCommentUpdate.do")
-	public String qnaContentCommentUpdate_ok(QnaBoardCommentVO vo,Model model){
-		String data = dao.qnaContentCommentUpdate(vo);
+	@RequestMapping("qnaCommentUpdate.do")
+	public String qnaCommentUpdate_ok(QnaBoardCommentVO vo,Model model){
+		String data = dao.qnaCommentUpdate(vo);
 		return data;
 	}
 	
@@ -184,9 +186,9 @@ public class QnaBoardController {
 
 	// content 댓글 삭제
 	@ResponseBody
-	@RequestMapping("qnaContentCommentDelete_ok.do")
-	public String qnaContentCommentDelete_ok(QnaBoardCommentVO vo,Model model){
-		String data = dao.qnaContentCommentDelete_ok(vo);
+	@RequestMapping("qnaCommentDelete_ok.do")
+	public String qnaCommentDelete_ok(QnaBoardCommentVO vo,Model model){
+		String data = dao.qnaCommentDelete_ok(vo);
 		return data;
 	}
 }
