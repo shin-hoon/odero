@@ -55,46 +55,32 @@ public class QnaBoardDAO {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 게시판&답글 업데이트 
-	public QnaBoardVO qnaBoardUpdate(int no){
+	public QnaBoardVO qnaBoardUpdateValue(int no){
 		return sst.selectOne("qnaBoardContent",no);
 	}
 	
 	@Transactional
-	public boolean qnaBoardUpdate_ok(QnaBoardVO vo){
-		boolean bCheck=false;
-		String pwd=sst.selectOne("qna_boardGetPwd",vo.getNo());
-
-		if(pwd.equals(vo.getPwd())) {
-			bCheck=true;
-			sst.update("qnaBoardUpdate",vo);
-		}
-
-		return bCheck;
+	public void qnaBoardUpdate(QnaBoardVO vo){
+		sst.update("qnaBoardUpdate",vo);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 삭제
 	@Transactional
-	public boolean qnaBoardDelete_ok(int no,String pwd)  {
-		boolean bCheck=false;
-		QnaBoardVO getVO = sst.selectOne("qna_pwd_root_depth",no);
+	public void qnaBoardDelete(int no)  {
+		QnaBoardVO getVO = sst.selectOne("qna_root_depth",no);
 		
-		
-		if(getVO.getPwd().equals(pwd))  {
-			bCheck=true;
-		
-			if(getVO.getDepth() == 0) {
-				sst.delete("qnaBoardDeleteComment",no);
-				sst.delete("qnaBoardDelete",no);
-			}
-			else {
-				sst.update("qna_delete_msg",no);
-				sst.delete("qnaBoardDeleteComment",no);
-			}
-			sst.delete("qna_delete_depth",getVO.getRoot());
+
+		if(getVO.getDepth() == 0) {
+			sst.delete("qnaBoardDeleteComment",no);
+			sst.delete("qnaBoardDelete",no);
 		}
-		return bCheck;
+		else {
+			sst.update("qna_delete_msg",no);
+			sst.delete("qnaBoardDeleteComment",no);
+		}
+		sst.delete("qna_delete_depth",getVO.getRoot());
 	}
 
 	
@@ -147,17 +133,8 @@ public class QnaBoardDAO {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// 게시판&답글 업데이트 
-	public String qnaCommentUpdate(QnaBoardCommentVO vo){
-		String data;
-		String pwd = sst.selectOne("qnaCommentGetPwd",vo.getNo());
-		
-		if(pwd.equals(vo.getPwd())) {
-			sst.update("qnaCommentUpdate",vo);
-			data = "<script>alert(\"수정완료\");location.reload();</script>";
-		}
-		else data = "실패";
-		
-		return data;
+	public void qnaCommentUpdate(QnaBoardCommentVO vo){
+		sst.update("qnaCommentUpdate",vo);
 	}
 	
 
@@ -165,25 +142,22 @@ public class QnaBoardDAO {
 
 	// 답글 삭제
 	@Transactional
-	public String qnaCommentDelete_ok(QnaBoardCommentVO vo)  {
-		String data;
-		QnaBoardCommentVO getVO = sst.selectOne("qnaComment_pwd_root_depth",vo.getNo());
+	public void qnaCommentDelete(QnaBoardCommentVO vo)  {
+		QnaBoardCommentVO getVO = sst.selectOne("qnaComment_root_depth",vo.getNo());
 
-
-		if(getVO.getPwd().equals(vo.getPwd()))  {
-			data = "<script>alert(\"삭제되었습니다.\");location.reload();</script>";
-
-			if(getVO.getDepth() == 0) {
-				sst.delete("qnaCommentDelete",vo.getNo());
-			}
-			else {
-				sst.update("qnaComment_delete_msg",vo.getNo());
-			}
-			
-			sst.delete("qnaComment_delete_depth",getVO.getRoot());
+		if(getVO.getDepth() == 0) {
+			sst.delete("qnaCommentDelete",vo.getNo());
 		}
-		else data = "실패";
-		
-		return data;
+		else {
+			sst.update("qnaComment_delete_msg",vo.getNo());
+		}
+
+		sst.delete("qnaComment_delete_depth",getVO.getRoot());
 	}
 }
+
+
+
+
+
+

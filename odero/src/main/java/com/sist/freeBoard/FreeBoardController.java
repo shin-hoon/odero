@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,7 +42,7 @@ public class FreeBoardController {
 		List<FreeBoardVO> list=dao.freeBoardList(map);
 		
 		for(FreeBoardVO vo:list){
-			vo.setCount(dao.contentCommentCount(vo.getNo()));
+			vo.setCount(dao.freeCommentCount(vo.getNo()));
 			
 			int length = vo.getSubject().length();
 			
@@ -61,21 +63,10 @@ public class FreeBoardController {
 		return "freeBoard/list";
 	}
 	
-	@RequestMapping("freeBoardInsert.do")
-	public String freeBoardInsert(){
-		return "freeBoard/insert";
-	}
-
-	@RequestMapping("freeBoardInsert_ok.do")
-	public String freeBoardInsert_ok(FreeBoardVO vo){
-		dao.freeBoardInsert(vo);
-		return "redirect:freeBoard.do";
-	}
-	
 	@RequestMapping("freeBoardContent.do")
 	public String freeBoardContent(int no,int page,Model model){
 		FreeBoardVO vo = dao.freeBoardContent(no);
-		List<FreeBoardCommentVO> list=dao.contentCommentList(no);
+		List<FreeBoardCommentVO> list=dao.freeCommentList(no);
 		
 		model.addAttribute("vo",vo);
 		model.addAttribute("list", list);
@@ -83,20 +74,38 @@ public class FreeBoardController {
 		
 		return "freeBoard/content";
 	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// 게시글 추가
+	@RequestMapping("freeBoardInsert.do")
+	public String freeBoardInsert(){
+		return "freeBoard/insert";
+	}
+
+	@RequestMapping("freeBoardInsert_ok.do")
+	public String freeBoardInsert_ok(FreeBoardVO vo,HttpSession session){
+		vo.setM_id((String)session.getAttribute("m_id"));
+		vo.setName((String)session.getAttribute("m_name"));
+		dao.freeBoardInsert(vo);
+		return "redirect:freeBoard.do";
+	}
 
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 추가 
 	@RequestMapping("freeBoardReply.do")
-	public String freeBoardReply(int page,int no,Model model){
-		model.addAttribute("page",page);
+	public String freeBoardReply(int no,int page,Model model){
 		model.addAttribute("no",no);
+		model.addAttribute("page",page);
 		return "freeBoard/reply";
 	}
 	
 	@RequestMapping("freeBoardReply_ok.do")
-	public String freeBoardReply_ok(FreeBoardVO vo){
+	public String freeBoardReply_ok(FreeBoardVO vo,HttpSession session){
+		vo.setM_id((String)session.getAttribute("m_id"));
+		vo.setName((String)session.getAttribute("m_name"));
 		dao.freeBoardReplyInsert(vo);
 		return "redirect:freeBoard.do?page="+vo.getPage();
 	}
@@ -107,60 +116,50 @@ public class FreeBoardController {
 	//	게시판&답글 업데이트
 	@RequestMapping("freeBoardUpdate.do")
 	public String freeBoardUpdate(int no,int page,Model model){
-		FreeBoardVO vo=dao.freeBoardContent(no);
+		FreeBoardVO vo=dao.freeBoardUpdateValue(no);
 		model.addAttribute("vo", vo);
 		model.addAttribute("page",page);
-
 		return "freeBoard/update";
 	}
 
 	@RequestMapping("freeBoardUpdate_ok.do")
 	public String update_ok(FreeBoardVO vo,int page,Model model){
-		boolean bCheck=dao.freeBoardUpdate_ok(vo);
+		dao.freeBoardUpdate(vo);
 		model.addAttribute("page",page);
-		model.addAttribute("no",vo.getNo());
-		model.addAttribute("bCheck",bCheck);
-
-		return "freeBoard/update_ok";
+		return "redirect:freeBoardContent.do?page="+vo.getPage()+"&no="+vo.getNo();
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 삭제
 	@RequestMapping("freeBoardDelete.do")
-	public String freeBoardDelete(int no,Model model)	{
-		model.addAttribute("no", no);
-		return "freeBoard/delete";
+	public void freeBoardDelete(String no,Model model)	{
+		dao.freeBoardDelete(Integer.parseInt(no));
 	}
 
-
-	@RequestMapping("freeBoardDelete_ok.do")
-	public String board_delete_ok(int no,String pwd,Model model){
-		boolean bCheck=dao.freeBoardDelete_ok(no, pwd);
-		model.addAttribute("bCheck",bCheck);
-		return "freeBoard/delete_ok";
-	}
-
-	
-	
-	
-	
 	
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// content 댓글 추가
-	
-	@RequestMapping("contentCommentInsert.do")
-	public String contentCommentInsert(FreeBoardCommentVO vo) {
-		dao.contentCommentInsert(vo);
-		return "redirect:freeBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();
+	@ResponseBody	
+	@RequestMapping("freeCommentInsert.do")
+	public String freeCommentInsert(FreeBoardCommentVO vo,HttpSession session) {
+		vo.setM_id((String)session.getAttribute("m_id"));
+		vo.setName((String)session.getAttribute("m_name"));
+		dao.freeCommentInsert(vo);
+		return "<script>location.reload();</script>";
 	}
-	@RequestMapping("contentCommentNewInsert.do")
-	public String contentCommentNewInsert(FreeBoardCommentVO vo) {
-		dao.contentCommentNweInsert(vo);
-		return "redirect:freeBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();
+	
+	// content 댓글의 댓글 추가
+	@ResponseBody
+	@RequestMapping("freeCommentNewInsert.do")
+	public String freeCommentNewInsert(FreeBoardCommentVO vo,HttpSession session) {
+		vo.setM_id((String)session.getAttribute("m_id"));
+		vo.setName((String)session.getAttribute("m_name"));
+		dao.freeCommentNweInsert(vo);
+		return "<script>location.reload();</script>";
 	}
 
 	
@@ -170,16 +169,10 @@ public class FreeBoardController {
 
 	//	Content&댓글 업데이트
 	@ResponseBody
-	@RequestMapping("contentCommentUpdate.do")
-	public String contentCommentUpdate_ok(FreeBoardCommentVO vo,Model model){
-		String data = dao.contentCommentUpdate(vo);
-		/*boolean bCheck=dao.contentReplyUpdate_ok(vo);
-		model.addAttribute("page",vo.getPage());
-		model.addAttribute("no",vo.getBno());
-		model.addAttribute("bCheck",bCheck);
-		
-		return "freeBoard/contentReplyUpdate_ok";*/
-		return data;
+	@RequestMapping("freeCommentUpdate.do")
+	public String freeCommentUpdate(FreeBoardCommentVO vo,Model model){
+		dao.freeCommentUpdate(vo);
+		return "<script>alert(\"수정 되었습니다.\");location.reload();</script>";
 	}
 	
 
@@ -187,14 +180,17 @@ public class FreeBoardController {
 
 	// content 댓글 삭제
 	@ResponseBody
-	@RequestMapping("contentCommentDelete_ok.do")
-	public String ContentCommentDelete_ok(FreeBoardCommentVO vo,Model model){
-		String data = dao.contentCommentDelete_ok(vo);
-		/*model.addAttribute("bCheck",bCheck);
-		model.addAttribute("no",vo.getBno());
-		model.addAttribute("page",vo.getPage());
-		return "freeBoard/contentReplyDelete_ok";*/
-		return data;
+	@RequestMapping("freeCommentDelete.do")
+	public String freeCommentDelete(FreeBoardCommentVO vo,Model model){
+		dao.freeCommentDelete(vo);
+		return "<script>alert(\"삭제 되었습니다.\");location.reload();</script>";
 	}
 }
+
+
+
+
+
+
+
 

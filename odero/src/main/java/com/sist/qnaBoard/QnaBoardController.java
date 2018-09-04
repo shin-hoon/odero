@@ -1,6 +1,8 @@
 package com.sist.qnaBoard;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -61,22 +63,6 @@ public class QnaBoardController {
 	}
 	
 	
-	@RequestMapping("qnaBoardInsert.do")
-	public String qnaBoardInsert(){
-		return "qnaBoard/insert";
-	}
-
-	@RequestMapping("qnaBoardInsert_ok.do")
-	public String qnaBoardInsert_ok(QnaBoardVO vo,HttpSession session){
-		if(session.getAttribute("m_id")==null) {
-			
-		}
-		vo.setM_id((String)session.getAttribute("m_id"));
-		vo.setName((String)session.getAttribute("m_name"));
-		dao.qnaBoardInsert(vo);
-		return "redirect:qnaBoard.do";
-	}
-	
 	@RequestMapping("qnaBoardContent.do")
 	public String qnaBoardContent(int no,int page,Model model){
 		QnaBoardVO vo = dao.qnaBoardContent(no);
@@ -88,20 +74,39 @@ public class QnaBoardController {
 		
 		return "qnaBoard/content";
 	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// 게시글 추가
+	@RequestMapping("qnaBoardInsert.do")
+	public String qnaBoardInsert(){
+		return "qnaBoard/insert";
+	}
+
+	@RequestMapping("qnaBoardInsert_ok.do")
+	public String qnaBoardInsert_ok(QnaBoardVO vo,HttpSession session){
+		vo.setM_id((String)session.getAttribute("m_id"));
+		vo.setName((String)session.getAttribute("m_name"));
+		dao.qnaBoardInsert(vo);
+		return "redirect:qnaBoard.do";
+	}
+	
 
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 추가 
 	@RequestMapping("qnaBoardReply.do")
-	public String qnaBoardReply(int page,int no,Model model){
-		model.addAttribute("page",page);
+	public String qnaBoardReply(int no,int page,Model model){
 		model.addAttribute("no",no);
+		model.addAttribute("page",page);
 		return "qnaBoard/reply";
 	}
 	
 	@RequestMapping("qnaBoardReply_ok.do")
-	public String qnaBoardReply_ok(QnaBoardVO vo){
+	public String qnaBoardReply_ok(QnaBoardVO vo,HttpSession session){
+		vo.setM_id((String)session.getAttribute("m_id"));
+		vo.setName((String)session.getAttribute("m_name"));
 		dao.qnaBoardReplyInsert(vo);
 		return "redirect:qnaBoard.do?page="+vo.getPage();
 	}
@@ -112,15 +117,15 @@ public class QnaBoardController {
 	//	게시판&답글 업데이트
 	@RequestMapping("qnaBoardUpdate.do")
 	public String qnaBoardUpdate(int no,int page,Model model){
-		QnaBoardVO vo=dao.qnaBoardContent(no);
+		QnaBoardVO vo=dao.qnaBoardUpdateValue(no);
 		model.addAttribute("vo", vo);
 		model.addAttribute("page",page);
 		return "qnaBoard/update";
 	}
 
 	@RequestMapping("qnaBoardUpdate_ok.do")
-	public String update_ok(QnaBoardVO vo,Model model){
-		dao.qnaBoardUpdate_ok(vo);
+	public String update(QnaBoardVO vo,Model model){
+		dao.qnaBoardUpdate(vo);
 		model.addAttribute("page",vo.getPage());
 		return "redirect:qnaBoardContent.do?page="+vo.getPage()+"&no="+vo.getNo();
 	}
@@ -129,23 +134,10 @@ public class QnaBoardController {
 	
 	// 답글 삭제
 	@RequestMapping("qnaBoardDelete.do")
-	public String qnaBoardDelete(int no,Model model)	{
-		model.addAttribute("no", no);
-		return "qnaBoard/delete";
+	public void qnaBoardDelete(int no,Model model)	{
+		dao.qnaBoardDelete(no);
 	}
 
-
-	@RequestMapping("qnaBoardDelete_ok.do")
-	public String board_delete_ok(int no,String pwd,Model model){
-		boolean bCheck=dao.qnaBoardDelete_ok(no, pwd);
-		model.addAttribute("bCheck",bCheck);
-		return "qnaBoard/delete_ok";
-	}
-
-	
-	
-	
-	
 	
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////	
@@ -155,16 +147,21 @@ public class QnaBoardController {
 	
 	@ResponseBody
 	@RequestMapping("qnaCommentInsert.do")
-	public String qnaCommentInsert(QnaBoardCommentVO vo) {
+	public String qnaCommentInsert(QnaBoardCommentVO vo,HttpSession session) {
+		vo.setM_id((String)session.getAttribute("m_id"));
+		vo.setName((String)session.getAttribute("m_name"));
 		dao.qnaCommentInsert(vo);
-		/*return "redirect:qnaBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();*/
 		return "<script>location.reload();</script>";
 	}
+	
+	// content 댓글의 댓글 추가
+	
 	@ResponseBody
 	@RequestMapping("qnaCommentNewInsert.do")
-	public String qnaCommentNewInsert(QnaBoardCommentVO vo) {
+	public String qnaCommentNewInsert(QnaBoardCommentVO vo,HttpSession session) {
+		vo.setM_id((String)session.getAttribute("m_id"));
+		vo.setName((String)session.getAttribute("m_name"));
 		dao.qnaCommentNweInsert(vo);
-		/*return "redirect:qnaBoardContent.do?no="+vo.getBno()+"&page="+vo.getPage();*/
 		return "<script>location.reload();</script>";
 	}
 
@@ -176,9 +173,9 @@ public class QnaBoardController {
 	//	Content&댓글 업데이트
 	@ResponseBody
 	@RequestMapping("qnaCommentUpdate.do")
-	public String qnaCommentUpdate_ok(QnaBoardCommentVO vo,Model model){
-		String data = dao.qnaCommentUpdate(vo);
-		return data;
+	public String qnaCommentUpdate(QnaBoardCommentVO vo,Model model){
+		dao.qnaCommentUpdate(vo);
+		return "<script>alert(\"수정 되었습니다.\");location.reload();</script>";
 	}
 	
 
@@ -186,10 +183,10 @@ public class QnaBoardController {
 
 	// content 댓글 삭제
 	@ResponseBody
-	@RequestMapping("qnaCommentDelete_ok.do")
-	public String qnaCommentDelete_ok(QnaBoardCommentVO vo,Model model){
-		String data = dao.qnaCommentDelete_ok(vo);
-		return data;
+	@RequestMapping("qnaCommentDelete.do")
+	public String qnaCommentDelete(QnaBoardCommentVO vo,Model model){
+		dao.qnaCommentDelete(vo);
+		return "<script>alert(\"삭제 되었습니다.\");location.reload();</script>";
 	}
 }
 

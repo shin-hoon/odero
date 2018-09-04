@@ -4,10 +4,10 @@ import java.util.*;
 	
 public class FreeBoardVO {
 	private int no;
+	private String m_id;
 	private String name;
 	private String subject;
 	private String content;
-	private String pwd;
 	private Date regdate;
 	private int hit;
 	private int group_id;
@@ -20,13 +20,19 @@ public class FreeBoardVO {
 	private int count;
 	
 
+	
+	public String getM_id() {
+		return m_id;
+	}
+	public void setM_id(String m_id) {
+		this.m_id = m_id;
+	}
 	public int getCount() {
 		return count;
 	}
 	public void setCount(int count) {
 		this.count = count;
 	}	
-	
 	public int getPage() {
 		return page;
 	}
@@ -62,12 +68,6 @@ public class FreeBoardVO {
 	}
 	public void setContent(String content) {
 		this.content = content;
-	}
-	public String getPwd() {
-		return pwd;
-	}
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
 	}
 	public Date getRegdate() {
 		return regdate;

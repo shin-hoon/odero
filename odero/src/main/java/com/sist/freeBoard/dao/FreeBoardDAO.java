@@ -54,48 +54,32 @@ public class FreeBoardDAO {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 게시판&답글 업데이트 
-	public FreeBoardVO freeBoardUpdate(int no){
+	public FreeBoardVO freeBoardUpdateValue(int no){
 		return mapper.freeBoardContent(no);
 	}
 	
 	@Transactional
-	public boolean freeBoardUpdate_ok(FreeBoardVO vo){
-		boolean bCheck=false;
-		String pwd=mapper.boardGetPwd(vo.getNo());
-
-		if(pwd.equals(vo.getPwd())) {
-			bCheck=true;
-			mapper.freeBoardUpdate(vo);
-		}
-
-		return bCheck;
+	public void freeBoardUpdate(FreeBoardVO vo){
+		mapper.freeBoardUpdate(vo);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 삭제
 	@Transactional
-	public boolean freeBoardDelete_ok(int no,String pwd)  {
-		boolean bCheck=false;
-		FreeBoardVO getVO = mapper.pwd_root_depth(no);
+	public void freeBoardDelete(int no)  {
+		FreeBoardVO getVO = mapper.root_depth(no);
 		
-		
-		if(getVO.getPwd().equals(pwd))  {
-			bCheck=true;
-		
-			if(getVO.getDepth() == 0) {
-				mapper.freeBoardDeleteComment(no);
-				mapper.freeBoardDelete(no);
-			}
-			else {
-				mapper.delete_msg(no);
-				mapper.freeBoardDeleteComment(no);
-			}
-			
-			mapper.delete_depth(getVO.getRoot());
-			
+		if(getVO.getDepth() == 0) {
+			mapper.freeBoardDeleteComment(no);
+			mapper.freeBoardDelete(no);
 		}
-		return bCheck;
+		else {
+			mapper.delete_msg(no);
+			mapper.freeBoardDeleteComment(no);
+		}
+
+		mapper.delete_depth(getVO.getRoot());
 	}
 
 	
@@ -109,124 +93,69 @@ public class FreeBoardDAO {
 	
 	
 	// 댓글 카운트
-	public int contentCommentCount(int no) {
-		return mapper.contentCommentCount(no);
+	public int freeCommentCount(int no) {
+		return mapper.freeCommentCount(no);
 	}
 	
 	
 	//  Content 댓글 리스트
-	public List<FreeBoardCommentVO> contentCommentList(int no){
-		return mapper.contentCommentList(no);
+	public List<FreeBoardCommentVO> freeCommentList(int no){
+		return mapper.freeCommentList(no);
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 댓글 추가
-	public void contentCommentInsert(FreeBoardCommentVO vo){
-		mapper.contentCommentInsert(vo);
+	public void freeCommentInsert(FreeBoardCommentVO vo){
+		mapper.freeCommentInsert(vo);
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 댓글의 댓글 추가
 	@Transactional
-	public void contentCommentNweInsert(FreeBoardCommentVO vo){
-		FreeBoardCommentVO getVO = mapper.contentComment_id_step_tab(vo.getNo());
+	public void freeCommentNweInsert(FreeBoardCommentVO vo){
+		FreeBoardCommentVO getVO = mapper.freeComment_id_step_tab(vo.getNo());
 
 		vo.setGroup_id(getVO.getGroup_id()); 
 		vo.setGroup_step(getVO.getGroup_step()); 
 		vo.setGroup_tab(getVO.getGroup_tab());
 		vo.setPno(vo.getNo());
 
-		mapper.contentComment_groupUpdate(vo);
-		mapper.contentCommentNewInsert(vo);
-		mapper.contentComment_depthUpdate(vo.getPno());
+		mapper.freeComment_groupUpdate(vo);
+		mapper.freeCommentNewInsert(vo);
+		mapper.freeComment_depthUpdate(vo.getPno());
 	}
 
 
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// 게시판&답글 업데이트 
-		
-/*	public boolean contentReplyUpdate_ok(ReplyVO vo){
-		boolean bCheck=false;
-		String pwd=mapper.contentReplyGetPwd(vo.getNo());
-
-		if(pwd.equals(vo.getPwd())) {
-			bCheck=true;
-			mapper.contentReplyUpdate(vo);
-		}
-
-		return bCheck;
-	}*/
-	
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	// 답글 삭제
-	/*@Transactional
-	public boolean contentReplyDelete_ok(ReplyVO vo)  {
-		boolean bCheck=false;
-		ReplyVO getVO = mapper.contentReply_pwd_root_depth(vo.getNo());
-
-
-		if(getVO.getPwd().equals(vo.getPwd()))  {
-			bCheck=true;
-
-			if(getVO.getDepth() == 0) {
-				mapper.contentReplyDelete(vo.getNo());
-			}
-			else {
-				mapper.contentReply_delete_msg(vo.getNo());
-			}
-			
-			mapper.contentReply_delete_depth(getVO.getRoot());
-		}
-			return bCheck;
+	// 게시판 댓글 업데이트
+	public void freeCommentUpdate(FreeBoardCommentVO vo){
+		mapper.freeCommentUpdate(vo);
 	}
-	*/
 	
-	public String contentCommentUpdate(FreeBoardCommentVO vo){
-		String data;
-		
-		String pwd=mapper.contentCommentGetPwd(vo.getNo());
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// 게시판 댓글 삭제
+	@Transactional
+	public void freeCommentDelete(FreeBoardCommentVO vo)  {
+		FreeBoardCommentVO getVO = mapper.freeComment_root_depth(vo.getNo());
 
-		if(pwd.equals(vo.getPwd())) {
-			mapper.contentCommentUpdate(vo);
-			data = "<script>alert(\"수정완료\");location.reload();</script>";
-					
+		if(getVO.getDepth() == 0) {
+			mapper.freeCommentDelete(vo.getNo());
 		}
 		else {
-			data = "실패";
+			mapper.freeComment_delete_msg(vo.getNo());
 		}
-		return data;
-	}
-	
-	
-	@Transactional
-	public String contentCommentDelete_ok(FreeBoardCommentVO vo)  {
-		String data;
-		
-		FreeBoardCommentVO getVO = mapper.contentComment_pwd_root_depth(vo.getNo());
 
-
-		if(getVO.getPwd().equals(vo.getPwd()))  {
-			data = "<script>alert(\"삭제되었습니다.\");location.reload();</script>";
-
-			if(getVO.getDepth() == 0) {
-				mapper.contentCommentDelete(vo.getNo());
-			}
-			else {
-				mapper.contentComment_delete_msg(vo.getNo());
-			}
-			
-			mapper.contentComment_delete_depth(getVO.getRoot());
-		}
-		else data = "실패";
-		
-		return data;
+		mapper.freeComment_delete_depth(getVO.getRoot());
 	}
 }
+
+
 
 

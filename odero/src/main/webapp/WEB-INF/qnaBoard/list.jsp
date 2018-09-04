@@ -12,11 +12,16 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<span class="text-center"><h3>공사중 <img alt="히릿" src="qnaBoard/img/board/Settings.png"/></h3></span>
+			<span class="text-center"><h3>문의 게시판<img alt="히릿" src="qnaBoard/img/board/Settings.png"/></h3></span>
 			<table class="table" width="700">
 				<tr>
 					<td class="text-right">
-						<a href="qnaBoardInsert.do?page=${curpage}" class="btn btn-sm btn-primary">새글</a>
+						<c:if test="${sessionScope.m_id == null}">
+							<a onclick="alert('로그인이 필요합니다.');" class="btn btn-sm btn-primary">새글</a>
+						</c:if>
+						<c:if test="${sessionScope.m_id != null}">
+							<a href="qnaBoardInsert.do?page=${curpage}" class="btn btn-sm btn-primary">새글</a>
+						</c:if>
 					</td>
 				</tr>
 			</table>

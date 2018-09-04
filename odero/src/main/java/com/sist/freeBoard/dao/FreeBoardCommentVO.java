@@ -4,8 +4,8 @@ import java.util.*;
 public class FreeBoardCommentVO {
 	private int no;
 	private int bno;
+	private String m_id;
 	private String name;
-	private String pwd;
 	private String msg;
 	private Date regdate;
 	private int group_id;
@@ -22,11 +22,11 @@ public class FreeBoardCommentVO {
 	public void setPage(int page) {
 		this.page = page;
 	}
-	public String getPwd() {
-		return pwd;
+	public String getM_id() {
+		return m_id;
 	}
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
+	public void setM_id(String m_id) {
+		this.m_id = m_id;
 	}
 	public int getPno() {
 		return pno;

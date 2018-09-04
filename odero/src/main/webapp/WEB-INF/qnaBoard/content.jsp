@@ -23,6 +23,23 @@
 		}
 	</style>
 	<script type="text/javascript" src="qnaBoard/qnaBoard.js" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('.qnaDelete').click(function(){
+				if(confirm("정말 삭제 하시겠습니까?")){
+					$.ajax({
+						type:'post',
+						url:'qnaBoardDelete.do',
+						data:{"no":"${vo.no}"},
+						success:function(){
+							alert("삭제 되었습니다.");
+							location.href='qnaBoard.do';
+						}
+					});
+				}
+			})
+		});
+	</script>
 </head>
 <body>
 	<div class="container" style="margin-top:30px;">
@@ -43,7 +60,7 @@
 					</tr>
 					<tr class="aa">
 						<td width="20%" class="text-center" style="background: rgb(247, 260, 272);">이름</td>
-						<td width="30%" class="text-center">${vo.m_name}</td>
+						<td width="30%" class="text-center">${vo.name}</td>
 						<td width="20%" class="text-center" style="background: rgb(247, 260, 272);">조회수</td>
 						<td width="30%" class="text-center">${vo.hit}</td>
 					</tr>
@@ -61,7 +78,7 @@
 							<c:if test="${sessionScope.m_id==vo.m_id}">
 								<a href="qnaBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">답변</a>
 								<a href="qnaBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">수정</a>
-								<a href="qnaBoardDelete.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">삭제</a>
+								<a href="qnaBoardDelete.do?no=${vo.no}&page=${page}" class="qnaDelete btn btn-sm table-th">삭제</a>
 							</c:if>
 							<a href="qnaBoard.do" class="btn btn-sm table-th">목록</a>
 						</td>
@@ -100,10 +117,12 @@
 						 </div>
 					</td>
 					<td class="td_a" style="width:15%;border:none;" align="right">
-						<c:if test="${rvo.msg != '삭제된 게시물 입니다.'}">
-							<a class="reply_update" value="${rvo.no}">수정</a>│
-							<a class="reply_delete" value="${rvo.no}">삭제</a>│
-           					<a class="reply_reply" value="${rvo.no}">댓글</a>
+						<c:if test="${sessionScope.m_id==rvo.m_id}">
+							<c:if test="${rvo.msg != '삭제된 게시물 입니다.'}">
+								<a class="reply_update" value="${rvo.no}">수정</a>│
+								<a class="reply_delete" value="${rvo.no}">삭제</a>│
+           						<a class="reply_reply" value="${rvo.no}">댓글</a>
+							</c:if>
 						</c:if>
 					</td>
 				</tr>
@@ -137,17 +156,12 @@
 									<div class="form-inline">
 										<div class="form-group">
 	      									<label for="id">Name:</label>
-      										<input type="text" name="name" style="height:15px;width:110px;" 
-      											class="form-control" id="i-name${rvo.no}" placeholder="Enter name"
+      										<input type="text" name="name" style="height:15px;width:110px;" value="${rvo.name}" 
+      											class="form-control" id="i-name${rvo.no}" disabled="disabled" placeholder="Enter name"
       										/>
 										</div>
 										<div class="form-group">
-		      								<label for="pwd">Password:</label>
-      										<input type="password" name="pwd" style="height:15px;width:110px;" 
-      											class="form-control" id="i-pwd${rvo.no}" placeholder="Enter password"
-      										/>
-											<input type="button" data-no="${rvo.no}" data-who="i-in" data-pwd="i-pwd" 
-												data-name="i-name" data-content="i-content" 
+											<input type="button" data-no="${rvo.no}" data-who="i-in" data-content="i-content" 
 												value="댓글달기" class="btn btn-sm table-th replySubmit"
 											/>
       									</div>
@@ -165,55 +179,22 @@
 				<tr id="up${rvo.no }" style="display: none" class="aa">
 					<td colspan="2" style="border-bottom:1px solid #ddd;">
 						<div style="margin-left:20px;">
-							<form id="u-up${rvo.no}" method="post" action="qnaContentCommentUpdate.do"> <!--action="qnaContentCommentUpdate.do"  -->
+							<form id="u-up${rvo.no}" method="post" action="qnaContentCommentUpdate.do"> 
 								<div class="form-inline">
 									<div class="form-group">
 	      								<label for="id">Name:</label>
       									<input type="text" name="name" value="${rvo.name}" style="height:15px;width:110px;" 
-      										class="form-control" id="u-name${rvo.no}" placeholder="Enter name"
+      										class="form-control" id="u-name${rvo.no}" disabled="disabled" placeholder="Enter name"
       									/>
 									</div>
 									<div class="form-group">
-	      								<label for="pwd">Password:</label>
-      									<input type="password" name="pwd" style="height:15px;width:110px;" 
-      										class="form-control" id="u-pwd${rvo.no}" placeholder="Enter password"
-      									/>
-										<input type="button" data-no="${rvo.no}" data-who="u-up" 
-											data-pwd="u-pwd" data-name="u-name" data-content="u-content"
+										<input type="button" data-no="${rvo.no}" data-who="u-up" data-content="u-content"
 											value="수정하기" class="btn btn-sm table-th replySubmit"
 										/>
       								</div>
       							</div>
 								<textarea name="msg" style="height:150px;" 
 									class="form-control textarea" id="u-content${rvo.no}">${rvo.msg}</textarea>
-								<input type="hidden" name="bno" value="${vo.no}">
-								<input type="hidden" name="no" value="${rvo.no}">
-								<input type="hidden" name="page" value="${page}"/>
-							</form>
-						</div>
-					</td>
-				</tr>
-				
-				<tr id="del${rvo.no}" class="aa" align="center" style="display:none;">
-					<td colspan="2" style="border-bottom:1px solid #ddd;">
-						<div  style="width:300px;text-align: center;">
-							<form id="d-del${rvo.no}" method="post" action="qnaContentCommentDelete_ok.do">
-								<div>	
-									<label for="pwd">댓글삭제</label>		
-								</div>
-								<div class="form-inline" style="border-top:ridge;border-bottom:ridge; padding:10px;">
-									<div class="form-group">
-	      								<label for="pwd">Password:</label>
-      									<input type="password" name="pwd" style="height:15px;width:110px;" 
-      										class="form-control" id="d-pwd${rvo.no}" placeholder="Enter password"
-      									/>
-      								</div>
-      							</div>
-      							<div>
-									<input type="button" data-no="${rvo.no}" data-who="d-del" data-pwd="d-pwd" 
-										value="삭제하기" class="btn btn-sm table-th replySubmit" style="margin-top:5px;"
-									/>
-								</div>
 								<input type="hidden" name="bno" value="${vo.no}">
 								<input type="hidden" name="no" value="${rvo.no}">
 								<input type="hidden" name="page" value="${page}"/>
@@ -230,16 +211,17 @@
 						<div class="form-inline">
 							<div class="form-group">
 	      						<label for="id">Name:</label>
-      							<input type="text" name="name" style="height:15px;width:110px;" 
-      								class="form-control" id="submit-name" placeholder="Enter name"
+      							<input type="text" name="name" style="height:15px;width:110px;" value="${sessionScope.m_name}"
+      								class="form-control" id="submit-name" disabled="disabled" placeholder="Enter name"
       							/>
 							</div>
 							<div class="form-group">
-	      						<label for="pwd">Password:</label>
-      							<input type="password" name="pwd" style="height:15px;width:110px;" 
-      								class="form-control" id="submit-pwd" placeholder="Enter password"
-      							/>
-								<input type="button" id="btnSubmit" value="댓글달기" class="btn btn-sm table-th"/>
+								<c:if test="${sessionScope.m_id != null}">
+									<input type="button" onclick="alert('로그인이 필요합니다.')" value="댓글달기" class="btn btn-sm table-th"/>
+								</c:if>
+								<c:if test="${sessionScope.m_id == null}">
+									<input type="button" id="btnSubmit" value="댓글달기" class="btn btn-sm table-th"/>
+								</c:if>
       						</div>
       					</div>
 							<textarea name="msg" style="height:150px;" class="form-control textarea" id="submit-content"></textarea>

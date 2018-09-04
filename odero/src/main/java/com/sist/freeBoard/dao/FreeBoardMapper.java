@@ -17,9 +17,9 @@ public interface FreeBoardMapper {
 	/*@SelectKey(statementType="CALLABLE" , resultType="")*/
 	/*@Select ("{CALL freeBoardList(#{start ,jdbcType=INTEGER,mode=IN}, #{end,jdbcType=INTEGER,mode=IN},#{key, jdbcType=CURSOR, mode=OUT, javaType=java.sql.ResultSet, resultType=NoticeVO} )} ") 
 	@Options (statementType = StatementType.CALLABLE) */
-	@Select("SELECT no,subject,name,regdate,hit,group_tab,num "
-			+"FROM (SELECT no,subject,name,regdate,hit,group_tab,rownum as num "
-			+"FROM (SELECT no,subject,name,regdate,hit,group_tab "
+	@Select("SELECT no,m_id,subject,name,regdate,hit,group_tab,num "
+			+"FROM (SELECT no,m_id,subject,name,regdate,hit,group_tab,rownum as num "
+			+"FROM (SELECT no,m_id,subject,name,regdate,hit,group_tab "
 			+"FROM freeBoard ORDER BY group_id DESC,group_step ASC)) "
 			+"WHERE num BETWEEN #{start} AND #{end}")
 	public List<FreeBoardVO> freeBoardList(Map map);
@@ -30,18 +30,21 @@ public interface FreeBoardMapper {
 	@Select("SELECT COUNT(*) FROM freeBoard")
 	public int freeBoardRowCount();
 
-	
-	@SelectKey(keyProperty="no",resultType=int.class,before=true,statement="SELECT NVL(MAX(no)+1,1) as no FROM freeBoard")
-	@Insert("INSERT INTO freeBoard(no,name,subject,content,pwd,regdate,hit,group_id) "
-			+"VALUES(#{no},#{name},#{subject},#{content},#{pwd},SYSDATE,0,(SELECT NVL(MAX(group_id)+1,1) FROM freeBoard))")
-	public void freeBoardInsert(FreeBoardVO vo);
-	
 
+	
 	@Update("UPDATE freeBoard SET hit=hit+1 WHERE no=#{no}")
 	public void freeBoardHit(int no);
 	
-	@Select("SELECT no,name,subject,content,regdate,hit FROM freeBoard WHERE no=#{no}")
+	@Select("SELECT no,m_id,name,subject,content,regdate,hit FROM freeBoard WHERE no=#{no}")
 	public FreeBoardVO freeBoardContent(int no);
+	
+	
+	
+	@SelectKey(keyProperty="no",resultType=int.class,before=true,statement="SELECT NVL(MAX(no)+1,1) as no FROM freeBoard")
+	@Insert("INSERT INTO freeBoard(no,m_id,name,subject,content,regdate,hit,group_id) "
+			+"VALUES(#{no},#{m_id},#{name},#{subject},#{content},SYSDATE,0,(SELECT NVL(MAX(group_id)+1,1) FROM freeBoard))")
+	public void freeBoardInsert(FreeBoardVO vo);
+	
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,31 +57,25 @@ public interface FreeBoardMapper {
 	public void groupUpdate(FreeBoardVO vo);
 	
 	@SelectKey(keyProperty="no",resultType=int.class,before=true,statement="SELECT NVL(MAX(no)+1,1) as no FROM freeBoard")
-	@Insert("INSERT INTO freeBoard(no,name,subject,content,pwd,regdate,hit,group_id,group_step,group_tab,root) "
-			+ "VALUES(#{no},#{name},#{subject},#{content},#{pwd},SYSDATE,0,#{group_id},#{group_step}+1,#{group_tab}+1,#{pno}) ")
+	@Insert("INSERT INTO freeBoard(no,m_id,name,subject,content,regdate,hit,group_id,group_step,group_tab,root) "
+			+ "VALUES(#{no},#{m_id},#{name},#{subject},#{content},SYSDATE,0,#{group_id},#{group_step}+1,#{group_tab}+1,#{pno}) ")
 	public void freeBoardReplyInsert(FreeBoardVO vo);
 
 	@Update("UPDATE freeBoard SET depth=depth+1 WHERE no=#{pno}")
 	public void depthUpdate(int pno);
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////	
-	
-	// 비밀번호 get
-	@Select("SELECT pwd FROM freeBoard WHERE no=#{no}")
-	public String boardGetPwd(int no);
-
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 게시판&답글 업데이트 
-	@Update("UPDATE freeBoard SET name=#{name},subject=#{subject},content=#{content} WHERE no=#{no}")
+	@Update("UPDATE freeBoard SET subject=#{subject},content=#{content} WHERE no=#{no}")
 	public void freeBoardUpdate(FreeBoardVO vo);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 삭제
 	
-	@Select("SELECT pwd,root,depth FROM freeBoard WHERE no=#{no}")
-	public FreeBoardVO pwd_root_depth(int no);
+	@Select("SELECT root,depth FROM freeBoard WHERE no=#{no}")
+	public FreeBoardVO root_depth(int no);
 	
 	@Delete("DELETE FROM freeBoard WHERE no=#{no}")
 	public void freeBoardDelete(int no);
@@ -104,54 +101,48 @@ public interface FreeBoardMapper {
 	
 	// 리플 카운트
 	@Select("SELECT COUNT(*) FROM freeBoardComment WHERE bno=#{no}")
-	public int contentCommentCount(int no);
+	public int freeCommentCount(int no);
 	
 	
 	// Content 댓글 리스트
 	// to_date(meet_start, 'YYYY-MM-DD HH24:MI') meet_start
 	//TO_CHAR(to_date(meet_start, 'YYYY-MM-DD HH24:MI'),'YY-MM-DD')
-    @Select("SELECT no,bno,name,msg,pwd,regdate,group_tab,num "
-			+"FROM (SELECT no,bno,name,msg,pwd,regdate,group_tab,rownum as num "
-			+"FROM (SELECT no,bno,name,msg,pwd,regdate,group_tab "
+    @Select("SELECT no,bno,m_id,name,msg,regdate,group_tab,num "
+			+"FROM (SELECT no,bno,m_id,name,msg,regdate,group_tab,rownum as num "
+			+"FROM (SELECT no,bno,m_id,name,msg,regdate,group_tab "
 			+"FROM freeBoardComment WHERE bno=#{bno} ORDER BY group_id ASC,group_step ASC)) ")
-	public List<FreeBoardCommentVO> contentCommentList(int bno);
+	public List<FreeBoardCommentVO> freeCommentList(int bno);
     
     
 	@SelectKey(keyProperty="no",resultType=int.class,before=true,statement="SELECT NVL(MAX(no)+1,1) as no FROM freeBoardComment")
-	@Insert("INSERT INTO freeBoardComment(no,bno,name,msg,pwd,regdate,group_id) "
-			+"VALUES(#{no},#{bno},#{name},#{msg},#{pwd},SYSDATE,(SELECT NVL(MAX(group_id)+1,1) FROM freeBoardComment))")
-	public void contentCommentInsert(FreeBoardCommentVO vo);
+	@Insert("INSERT INTO freeBoardComment(no,bno,m_id,name,msg,regdate,group_id) "
+			+"VALUES(#{no},#{bno},#{m_id},#{name},#{msg},SYSDATE,(SELECT NVL(MAX(group_id)+1,1) FROM freeBoardComment))")
+	public void freeCommentInsert(FreeBoardCommentVO vo);
     
     
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// content 리플 추가
 	@Select("SELECT group_id,group_step,group_tab FROM freeBoardComment WHERE no=#{no}")
-	public FreeBoardCommentVO contentComment_id_step_tab(int no);
+	public FreeBoardCommentVO freeComment_id_step_tab(int no);
 	
 	@Update("UPDATE freeBoardComment SET group_step=group_step+1 WHERE group_id=#{group_id} AND group_step>#{group_step}")
-	public void contentComment_groupUpdate(FreeBoardCommentVO vo);
+	public void freeComment_groupUpdate(FreeBoardCommentVO vo);
 	
 	@SelectKey(keyProperty="no",resultType=int.class,before=true,statement="SELECT NVL(MAX(no)+1,1) as no FROM freeBoardComment")
-	@Insert("INSERT INTO freeBoardComment(no,bno,name,msg,pwd,regdate,group_id,group_step,group_tab,root) "
-			+ "VALUES(#{no},#{bno},#{name},#{msg},#{pwd},SYSDATE,#{group_id},#{group_step}+1,#{group_tab}+1,#{pno}) ")
-	public void contentCommentNewInsert(FreeBoardCommentVO vo);
+	@Insert("INSERT INTO freeBoardComment(no,bno,m_id,name,msg,regdate,group_id,group_step,group_tab,root) "
+			+ "VALUES(#{no},#{bno},#{m_id},#{name},#{msg},SYSDATE,#{group_id},#{group_step}+1,#{group_tab}+1,#{pno}) ")
+	public void freeCommentNewInsert(FreeBoardCommentVO vo);
 
 	@Update("UPDATE freeBoardComment SET depth=depth+1 WHERE no=#{pno}")
-	public void contentComment_depthUpdate(int pno);
+	public void freeComment_depthUpdate(int pno);
 
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////	
-
-	// content Reply 비밀번호 get
-	@Select("SELECT pwd FROM freeBoardComment WHERE no=#{no}")
-	public String contentCommentGetPwd(int no);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// content 게시판&답글 업데이트 
-	@Update("UPDATE freeBoardComment SET name=#{name},msg=#{msg} WHERE no=#{no}")
-	public void contentCommentUpdate(FreeBoardCommentVO vo);
+	@Update("UPDATE freeBoardComment SET msg=#{msg} WHERE no=#{no}")
+	public void freeCommentUpdate(FreeBoardCommentVO vo);
 	
 	
 
@@ -159,17 +150,17 @@ public interface FreeBoardMapper {
 	
 	// content 댓글삭제
 	
-	@Select("SELECT pwd,root,depth FROM freeBoardComment WHERE no=#{no}")
-	public FreeBoardCommentVO contentComment_pwd_root_depth(int no);
+	@Select("SELECT root,depth FROM freeBoardComment WHERE no=#{no}")
+	public FreeBoardCommentVO freeComment_root_depth(int no);
 	
 	@Delete("DELETE FROM freeBoardComment WHERE no=#{no}")
-	public void contentCommentDelete(int no);
+	public void freeCommentDelete(int no);
 	
 	@Update("UPDATE freeBoardComment SET msg='삭제된 게시물 입니다.' WHERE no=#{no}")
-	public void contentComment_delete_msg(int no);
+	public void freeComment_delete_msg(int no);
 
 	@Update("UPDATE freeBoardComment SET depth=depth-1 WHERE no=#{root}")
-	public void contentComment_delete_depth(int root);
+	public void freeComment_delete_depth(int root);
 }
 
 

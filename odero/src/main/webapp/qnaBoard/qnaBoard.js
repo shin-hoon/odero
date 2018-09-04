@@ -55,45 +55,21 @@ $(function(){
 
 	
 	$('.reply_delete').click(function(){
-		var no=$(this).attr("value");
-		if(d==0){
-			$(this).text("취소");
-			$('#del'+no).show();
-			d=1;
-		}
-		else{
-			$(this).text("삭제");
-			$('#del'+no).hide();
-			d=0;
-		}
-		if(u==1){
-			$('.reply_update').text("수정");
-			$('#up'+no).hide();
-			u=0;
-		}
-		if(i==1){
-			$('.reply_reply').text("댓글");
-			$('#in'+no).hide();
-			i=0;
-		}
+		if(confirm('정말 삭제 하시겠습니까?')){
+			$.ajax({
+				type:'post',
+				url:'qnaCommentDelete.do',
+				success:function(data){
+					$('.reply_delete').html(data);
+				}
+			});  // end    ajax
+		} // end if
 	});
 	
 	
 	$('#btnSubmit').click(function(){
-		var name = $('#submit-name').val();
-		var pwd = $('#submit-pwd').val();
 		var content = $('#submit-content').val();
 		
-		if(name.trim() == ""){
-			alert("이름을 입력하세요");
-			$('#submit-name').focus();
-			return false;
-		}
-		if(pwd.trim() == ""){
-			alert("비밀번호를 입력하세요");
-			$('#submit-pwd').focus();
-			return false;
-		}
 		if(content.trim() == ""){
 			alert("내용을 작성하세요");
 			$('#submit-content').focus();
@@ -102,10 +78,10 @@ $(function(){
 
 		$.ajax({
 			type:'post',
-			url:'qnaContentCommentInsert.do',
+			url:'qnaCommentInsert.do',
 			data:$('#submit').serialize(),
 			success:function(data){
-					$('#submit').html(data);
+				$('#submit').html(data);
 			}
 		});  // end ajax
 	}); // end #btnsubmit
@@ -113,51 +89,15 @@ $(function(){
 	
 	
 	$('.replySubmit').click(function(){
-		var no = $(this).attr("data-no");
 		var who = $(this).attr("data-who");
-		var dp = $(this).attr("data-pwd");
-		var dn = $(this).attr("data-name");
+		var no = $(this).attr("data-no");
 		var dc = $(this).attr("data-content");
-		var pwd = $("#"+dp+no).val();
-		var name = $("#"+dn+no).val();
 		var content = $("#"+dc+no).val();
 		
-		if(who == "d-del"){
-			if(pwd.trim() == ""){
-				alert("비밀번호를 입력하세요");
-				$("#"+dp+no).focus();
-				return false;
-			}
+		
+		if(who == "u-up"){
 			
-			$.ajax({
-				type:'post',
-				url:'qnaContentCommentDelete_ok.do',
-				data:$('#'+who+no).serialize(),
-				success:function(data){
-					if(data.trim() =="실패"){
-						alert("비밀번호가 틀립니다.");
-						$("#"+dp+no).focus();
-					}
-					else{
-						$('#'+who+no).html(data);
-					}
-				}
-			});  // end    ajax
-			
-		} // end    if
-		else if(who == "u-up"){
-			
-			if(name.trim() == ""){
-				alert("이름을 입력하세요");
-				$("#"+dn+no).focus();
-				return false;
-			}
-			else if(pwd.trim() == ""){
-				alert("비밀번호를 입력하세요");
-				$("#"+dp+no).focus();
-				return false;
-			}
-			else if(content.trim() == ""){
+			if(content.trim() == ""){
 				alert("내용을 작성하세요");
 				$("#"+dc+no).focus();
 				return false;
@@ -165,32 +105,16 @@ $(function(){
 			
 			$.ajax({
 				type:'post',
-				url:'qnaContentCommentUpdate.do',
+				url:'qnaCommentUpdate.do',
 				data:$('#'+who+no).serialize(),
 				success:function(data){
-					if(data.trim() =="실패"){
-						alert("비밀번호가 틀립니다.");
-						$("#"+dp+no).focus();
-					}
-					else{
 						$('#'+who+no).html(data);
-					}
 				}
 			});  // end    ajax
 		} // end    else if
 		else if(who == "i-in"){
 			
-			if(name.trim() == ""){
-				alert("이름을 입력하세요");
-				$("#"+dn+no).focus();
-				return false;
-			}
-			else if(pwd.trim() == ""){
-				alert("비밀번호를 입력하세요");
-				$("#"+dp+no).focus();
-				return false;
-			}
-			else if(content.trim() == ""){
+			if(content.trim() == ""){
 				alert("내용을 작성하세요");
 				$("#"+dc+no).focus();
 				return false;
@@ -198,7 +122,7 @@ $(function(){
 			
 			$.ajax({
 				type:'post',
-				url:'qnaContentCommentNewInsert.do',
+				url:'qnaCommentNewInsert.do',
 				data:$('#'+who+no).serialize(),
 				success:function(data){
 						$('#'+who+no).html(data);
@@ -271,29 +195,17 @@ function submitContents(elClickedObj) {
 
 	// 에디터의 내용에 대한 값 검증은 이곳에서 document.getElementById("ir1").value를 이용해서 처리하면 됩니다.
 	
-		var name = $('#name').val();
 		var subject = $('#subject').val();
 		var ir1 = $('#ir1').val();
-		var pwd = $('#pwd').val();
 		
 		if(subject.trim() == ""){
 			alert("제목을 입력하세요");
 			$('#subject').focus();
 			return false;
 		}
-		if(name.trim() == ""){
-			alert("이름을 입력하세요");
-			$('#name').focus();
-			return false;
-		}
 		if(ir1.trim() == "<p><br></p>"){
 			alert("내용을 작성하세요");
 			$('#ir1').focus();
-			return false;
-		}
-		if(pwd.trim() == ""){
-			alert("비밀번호를 입력하세요");
-			$('#pwd').focus();
 			return false;
 		}
 		
