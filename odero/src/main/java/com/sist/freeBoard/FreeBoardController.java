@@ -5,17 +5,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sist.freeBoard.dao.FreeBoardCommentVO;
 import com.sist.freeBoard.dao.FreeBoardDAO;
 import com.sist.freeBoard.dao.FreeBoardVO;
-import com.sist.freeBoard.dao.FreeBoardCommentVO;
 
 
 @Controller
@@ -25,7 +28,7 @@ public class FreeBoardController {
 
 	// 일반 게시판
 	@RequestMapping("freeBoard.do")
-	public String freeBoardList(String page, Model model){
+	public String freeBoardList(String page, Model model,HttpSession session){
 		if(page==null) page = "1";
 
 		int curpage = Integer.parseInt(page);
@@ -50,7 +53,8 @@ public class FreeBoardController {
 				vo.setSubject(vo.getSubject().substring(0,15)+"···");
 		}
 		
-		
+		session.setAttribute("m_id", "admin");
+		session.setAttribute("m_name", "관리자");
 		
 		int totalpage = dao.freeBoardToltalPage();
 		int count = dao.freeBoardRowCount();
@@ -132,9 +136,11 @@ public class FreeBoardController {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 삭제
+	@ResponseBody
 	@RequestMapping("freeBoardDelete.do")
-	public void freeBoardDelete(String no,Model model)	{
+	public String freeBoardDelete(String no,String page)	{
 		dao.freeBoardDelete(Integer.parseInt(no));
+		return "";
 	}
 
 	
