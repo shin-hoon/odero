@@ -66,7 +66,6 @@ public class FreeBoardDAO {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 삭제
-	@Transactional
 	public void freeBoardDelete(int no)  {
 		FreeBoardVO getVO = mapper.root_depth(no);
 		
@@ -141,8 +140,7 @@ public class FreeBoardDAO {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 게시판 댓글 삭제
-	@Transactional
-	public void freeCommentDelete(FreeBoardCommentVO vo)  {
+	public String freeCommentDelete(FreeBoardCommentVO vo)  {
 		FreeBoardCommentVO getVO = mapper.freeComment_root_depth(vo.getNo());
 
 		if(getVO.getDepth() == 0) {
@@ -153,6 +151,8 @@ public class FreeBoardDAO {
 		}
 
 		mapper.freeComment_delete_depth(getVO.getRoot());
+		
+		return "";
 	}
 }
 

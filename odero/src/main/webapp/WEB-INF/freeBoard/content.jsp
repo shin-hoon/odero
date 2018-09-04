@@ -27,13 +27,14 @@
 		$(function(){
 			$('.freeDelete').click(function(){
 				var no = $('.freeDelete').attr('data-no');
+				var page = $('.freeDelete').attr('data-page');
 				if(confirm("정말 삭제 하시겠습니까?")){
 					$.ajax({
-						type:'post',
+						type:'POST',
 						url:'freeBoardDelete.do',
-						data:{"no":no},
-						success:function(){
-							alert("삭제 되었습니다.");
+						data:{"no":no,"page":page},
+						success:function(data){
+							alert('삭제 되었습니다.');
 							location.href='freeBoard.do';
 						}
 					});
@@ -79,7 +80,8 @@
 							<c:if test="${sessionScope.m_id==vo.m_id}">
 								<a href="freeBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">답변</a>
 								<a href="freeBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">수정</a>
-								<a href="freeBoardDelete.do?no=${vo.no}&page=${page}" data-no="${vo.no}" 
+								<a href="freeBoardDelete.do?no=${vo.no}&page=${page}" 
+									data-no="${vo.no}" data-page="${page}" 
 									class="freeDelete btn btn-sm table-th">삭제</a>
 							</c:if>
 							<a href="freeBoard.do" class="btn btn-sm table-th">목록</a>
