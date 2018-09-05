@@ -128,7 +128,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 	SELECT NVL(MAX(no)+1,1) as no FROM qnaBoardComment
 		 </selectKey>
 		 INSERT INTO qnaBoardComment(no,bno,m_id,name,msg,regdate,group_id) 
-		 VALUES(#{no},#{m_id},#{bno},#{name},#{pwd},SYSDATE,
+		 VALUES(#{no},#{bno},#{m_id},#{name},#{msg},SYSDATE,
 		 (SELECT NVL(MAX(group_id)+1,1) FROM qnaBoardComment))
 	</insert>    
     

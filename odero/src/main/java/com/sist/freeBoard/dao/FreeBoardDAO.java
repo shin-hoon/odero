@@ -140,14 +140,14 @@ public class FreeBoardDAO {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 게시판 댓글 삭제
-	public String freeCommentDelete(FreeBoardCommentVO vo)  {
-		FreeBoardCommentVO getVO = mapper.freeComment_root_depth(vo.getNo());
+	public String freeCommentDelete(int no)  {
+		FreeBoardCommentVO getVO = mapper.freeComment_root_depth(no);
 
 		if(getVO.getDepth() == 0) {
-			mapper.freeCommentDelete(vo.getNo());
+			mapper.freeCommentDelete(no);
 		}
 		else {
-			mapper.freeComment_delete_msg(vo.getNo());
+			mapper.freeComment_delete_msg(no);
 		}
 
 		mapper.freeComment_delete_depth(getVO.getRoot());

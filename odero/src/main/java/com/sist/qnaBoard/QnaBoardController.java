@@ -133,8 +133,9 @@ public class QnaBoardController {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// 답글 삭제
+	@ResponseBody
 	@RequestMapping("qnaBoardDelete.do")
-	public void qnaBoardDelete(int no,Model model)	{
+	public void qnaBoardDelete(int no)	{
 		dao.qnaBoardDelete(no);
 	}
 
@@ -184,8 +185,8 @@ public class QnaBoardController {
 	// content 댓글 삭제
 	@ResponseBody
 	@RequestMapping("qnaCommentDelete.do")
-	public String qnaCommentDelete(QnaBoardCommentVO vo,Model model){
-		dao.qnaCommentDelete(vo);
+	public String qnaCommentDelete(int no,Model model){
+		dao.qnaCommentDelete(no);
 		return "<script>alert(\"삭제 되었습니다.\");location.reload();</script>";
 	}
 }
