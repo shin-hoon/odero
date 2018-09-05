@@ -58,8 +58,13 @@
 					</tr>
 					<tr class="aa">
 						<td colspan="4" class="text-right">
-							<c:if test="${sessionScope.m_id==vo.m_id}">
+							<c:if test="${sessionScope.m_id==null}">
+								<a onclick="alert('로그인이 필요합니다.');" class="btn btn-sm table-th">답변</a>
+							</c:if>
+							<c:if test="${sessionScope.m_id!=null}">
 								<a href="freeBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">답변</a>
+							</c:if>
+							<c:if test="${sessionScope.m_id==vo.m_id}">
 								<a href="freeBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">수정</a>
 								<a data-no="${vo.no}" data-page="${page}" id="freeDelete" class="btn btn-sm table-th">삭제</a>
 							</c:if>
@@ -100,11 +105,16 @@
 						 </div>
 					</td>
 					<td class="td_a" style="width:15%;border:none;" align="right">
-						<c:if test="${sessionScope.m_id==rvo.m_id}">
-							<c:if test="${rvo.msg != '삭제된 게시물 입니다.'}">
-								<a class="reply_update" value="${rvo.no}">수정</a>│
-								<a class="reply_delete" value="${rvo.no}">삭제</a>│
-           						<a class="reply_reply" value="${rvo.no}">댓글</a>
+						<c:if test="${rvo.msg != '삭제된 게시물 입니다.'}">
+							<c:if test="${sessionScope.m_id==rvo.m_id}">
+									<a class="reply_update" value="${rvo.no}">수정</a>│
+									<a class="reply_delete" value="${rvo.no}">삭제</a>│
+							</c:if>
+							<c:if test="${sessionScope.m_id==null}">
+								<a onclick="alert('로그인이 필요합니다');" value="${rvo.no}">댓글</a>
+							</c:if>
+							<c:if test="${sessionScope.m_id!=null}">
+								<a class="reply_reply" value="${rvo.no}">댓글</a>
 							</c:if>
 						</c:if>
 					</td>
@@ -140,7 +150,7 @@
 										<div class="form-group">
 	      									<label for="id">Name:</label>
       										<input type="text" name="name" value="${rvo.name}" style="height:15px;width:110px;" 
-      											class="form-control" id="i-name${rvo.no}" disabled="disabled" placeholder="Enter name"
+      											class="form-control" id="i-name${rvo.no}" data-mname="${sessionScope.m_name}" disabled="disabled" placeholder="Enter name"
       										/>
 										</div>
 										<div class="form-group">

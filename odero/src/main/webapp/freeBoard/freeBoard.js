@@ -5,9 +5,11 @@ $(function(){
 	
 	$('.reply_reply').click(function(){
 		var no=$(this).attr("value");
+		var mname=$('#i-name'+no).attr("data-mname");
 		if(i==0){
 			$(this).text("취소");
 			$('#in'+no).show();
+			$('#i-name'+no).val(mname);
 			i=1;
 		}
 		else{
