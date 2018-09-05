@@ -16,7 +16,8 @@ public class QnaBoardDAO {
 	
 	// 일반 게시판
 	public List<QnaBoardVO> qnaBoardList(Map map){
-		return sst.selectList("qnaBoardList",map);
+		sst.selectList("qnaBoardList",map);
+		return (List<QnaBoardVO>)map.get("list");
 	}
 	
 	public int qnaBoardToltalPage(){

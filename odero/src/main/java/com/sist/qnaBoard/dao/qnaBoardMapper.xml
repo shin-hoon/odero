@@ -3,12 +3,20 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sist.qnaBoard.dao.qnaBoardMapper.xml">
-	<select id="qnaBoardList" parameterType="java.util.Map" resultType="QnaBoardVO">
+	<!-- <select id="qnaBoardList" parameterType="java.util.Map" resultType="QnaBoardVO">
 		SELECT no,m_id,subject,name,regdate,hit,group_tab,num 
 		FROM (SELECT no,m_id,subject,name,regdate,hit,group_tab,rownum as num 
 		FROM (SELECT no,m_id,subject,name,regdate,hit,group_tab
 		FROM qnaBoard ORDER BY group_id DESC,group_step ASC)) 
 		WHERE num BETWEEN #{start} AND #{end}
+	</select> -->
+	
+	
+	<resultMap id="QnaBoardVO" type="QnaBoardVO"/>
+	<select id="qnaBoardList" statementType="CALLABLE" parameterType="java.util.Map">
+    { CALL qnaBoardList (${start},${end},
+            #{list, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=QnaBoardVO}
+    ) }
 	</select>
 	
 	<select id="qnaBoardToltalPage" resultType="int">

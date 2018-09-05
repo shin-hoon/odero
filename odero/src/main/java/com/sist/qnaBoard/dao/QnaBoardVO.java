@@ -20,8 +20,6 @@ public class QnaBoardVO {
 	private int count;
 	
 	
-	
-	
 	public String getM_id() {
 		return m_id;
 	}
