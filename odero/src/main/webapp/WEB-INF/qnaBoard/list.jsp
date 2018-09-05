@@ -12,7 +12,7 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<span class="text-center"><h3>문의 게시판<img alt="히릿" src="qnaBoard/img/board/Settings.png"/></h3></span>
+			<span class="text-center"><h3>문의 게시판<!-- <img alt="히릿" src="qnaBoard/img/board/Settings.png"/> --></h3></span>
 			<table class="table" width="700">
 				<tr>
 					<td class="text-right">
