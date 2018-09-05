@@ -23,23 +23,6 @@
 		}
 	</style>
 	<script type="text/javascript" src="qnaBoard/qnaBoard.js" charset="utf-8"></script>
-	<script type="text/javascript">
-		$(function(){
-			$('.qnaDelete').click(function(){
-				if(confirm("정말 삭제 하시겠습니까?")){
-					$.ajax({
-						type:'post',
-						url:'qnaBoardDelete.do',
-						data:{"no":"${vo.no}"},
-						success:function(){
-							alert("삭제 되었습니다.");
-							location.href='qnaBoard.do';
-						}
-					});
-				}
-			})
-		});
-	</script>
 </head>
 <body>
 	<div class="container" style="margin-top:30px;">
@@ -78,7 +61,7 @@
 							<c:if test="${sessionScope.m_id==vo.m_id}">
 								<a href="qnaBoardReply.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">답변</a>
 								<a href="qnaBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">수정</a>
-								<a href="qnaBoardDelete.do?no=${vo.no}&page=${page}" class="qnaDelete btn btn-sm table-th">삭제</a>
+								<a data-no="${vo.no}" data-page="${page}" id="qnaDelete" class="btn btn-sm table-th">삭제</a>
 							</c:if>
 							<a href="qnaBoard.do" class="btn btn-sm table-th">목록</a>
 						</td>
@@ -151,7 +134,7 @@
 				
 				<tr id="in${rvo.no}" style="display: none">
 					<td colspan="2" style="border-bottom:1px solid #ddd;">
-						<form id="i-in${rvo.no}" method="post" action="qnaContentCommentNewInsert.do">
+						<form id="i-in${rvo.no}" method="post" action="qnaCommentNewInsert.do">
 							<div style="margin-left:20px">
 									<div class="form-inline">
 										<div class="form-group">
@@ -179,7 +162,7 @@
 				<tr id="up${rvo.no }" style="display: none" class="aa">
 					<td colspan="2" style="border-bottom:1px solid #ddd;">
 						<div style="margin-left:20px;">
-							<form id="u-up${rvo.no}" method="post" action="qnaContentCommentUpdate.do"> 
+							<form id="u-up${rvo.no}" method="post" action="qnaCommentUpdate.do"> 
 								<div class="form-inline">
 									<div class="form-group">
 	      								<label for="id">Name:</label>
@@ -207,7 +190,7 @@
 			
 			<tr class="aa">
 				<td colspan="2">
-					<form id="submit" method=post action="qnaContentCommentInsert.do">
+					<form id="submit" method=post action="qnaCommentInsert.do">
 						<div class="form-inline">
 							<div class="form-group">
 	      						<label for="id">Name:</label>
@@ -216,10 +199,10 @@
       							/>
 							</div>
 							<div class="form-group">
-								<c:if test="${sessionScope.m_id != null}">
+								<c:if test="${sessionScope.m_id == null}">
 									<input type="button" onclick="alert('로그인이 필요합니다.')" value="댓글달기" class="btn btn-sm table-th"/>
 								</c:if>
-								<c:if test="${sessionScope.m_id == null}">
+								<c:if test="${sessionScope.m_id != null}">
 									<input type="button" id="btnSubmit" value="댓글달기" class="btn btn-sm table-th"/>
 								</c:if>
       						</div>

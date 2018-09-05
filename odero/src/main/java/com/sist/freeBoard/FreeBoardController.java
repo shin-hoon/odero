@@ -138,9 +138,8 @@ public class FreeBoardController {
 	// 답글 삭제
 	@ResponseBody
 	@RequestMapping("freeBoardDelete.do")
-	public String freeBoardDelete(String no,String page)	{
-		dao.freeBoardDelete(Integer.parseInt(no));
-		return "";
+	public void freeBoardDelete(int no)	{
+		dao.freeBoardDelete(no);
 	}
 
 	
@@ -187,8 +186,8 @@ public class FreeBoardController {
 	// content 댓글 삭제
 	@ResponseBody
 	@RequestMapping("freeCommentDelete.do")
-	public String freeCommentDelete(FreeBoardCommentVO vo,Model model){
-		dao.freeCommentDelete(vo);
+	public String freeCommentDelete(int no){
+		dao.freeCommentDelete(no);
 		return "<script>alert(\"삭제 되었습니다.\");location.reload();</script>";
 	}
 }

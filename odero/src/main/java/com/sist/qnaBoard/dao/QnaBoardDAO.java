@@ -142,14 +142,14 @@ public class QnaBoardDAO {
 
 	// 답글 삭제
 	@Transactional
-	public void qnaCommentDelete(QnaBoardCommentVO vo)  {
-		QnaBoardCommentVO getVO = sst.selectOne("qnaComment_root_depth",vo.getNo());
+	public void qnaCommentDelete(int no)  {
+		QnaBoardCommentVO getVO = sst.selectOne("qnaComment_root_depth",no);
 
 		if(getVO.getDepth() == 0) {
-			sst.delete("qnaCommentDelete",vo.getNo());
+			sst.delete("qnaCommentDelete",no);
 		}
 		else {
-			sst.update("qnaComment_delete_msg",vo.getNo());
+			sst.update("qnaComment_delete_msg",no);
 		}
 
 		sst.delete("qnaComment_delete_depth",getVO.getRoot());
