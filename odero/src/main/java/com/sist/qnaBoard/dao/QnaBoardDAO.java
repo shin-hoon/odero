@@ -1,5 +1,6 @@
 package com.sist.qnaBoard.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,11 +14,10 @@ public class QnaBoardDAO {
 	@Autowired
 	private SqlSessionTemplate sst;
 	
-	
 	// 일반 게시판
 	public List<QnaBoardVO> qnaBoardList(Map map){
 		sst.selectList("qnaBoardList",map);
-		return (List<QnaBoardVO>)map.get("list");
+		return (List<QnaBoardVO>)map.get("qnaBoardList");
 	}
 	
 	public int qnaBoardToltalPage(){
@@ -31,8 +31,11 @@ public class QnaBoardDAO {
 	}
 
 	public QnaBoardVO qnaBoardContent(int no)	{
-		sst.update("qnaBoardHit",no);
-		return sst.selectOne("qnaBoardContent", no);
+		QnaBoardVO vo = new QnaBoardVO();
+		/*sst.update("qnaBoardHit",no);*/
+		vo.setNo(no);
+		sst.selectOne("qnaBoardContent", vo);
+		return vo;
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////

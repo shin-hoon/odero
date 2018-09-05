@@ -3,6 +3,8 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sist.qnaBoard.dao.qnaBoardMapper.xml">
+<resultMap id="QnaBoardVO" type="QnaBoardVO"/>
+<resultMap id="QnaBoardCommentVO" type="QnaBoardCommentVO"/>
 	<!-- <select id="qnaBoardList" parameterType="java.util.Map" resultType="QnaBoardVO">
 		SELECT no,m_id,subject,name,regdate,hit,group_tab,num 
 		FROM (SELECT no,m_id,subject,name,regdate,hit,group_tab,rownum as num 
@@ -12,11 +14,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select> -->
 	
 	
-	<resultMap id="QnaBoardVO" type="QnaBoardVO"/>
+	
 	<select id="qnaBoardList" statementType="CALLABLE" parameterType="java.util.Map">
-    { CALL qnaBoardList (${start},${end},
-            #{list, mode=OUT, jdbcType=CURSOR, javaType=java.sql.ResultSet, resultMap=QnaBoardVO}
-    ) }
+    { CALL qnaBoardList(
+              ${start},
+              ${end},
+              #{qnaBoardList, mode=OUT, jdbcType=CURSOR, 
+                javaType=java.sql.ResultSet, resultMap=QnaBoardVO}
+           )
+    }
 	</select>
 	
 	<select id="qnaBoardToltalPage" resultType="int">
@@ -29,24 +35,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	
-	<update id="qnaBoardHit" parameterType="int">
+	<!-- <update id="qnaBoardHit" parameterType="int">
 		UPDATE qnaBoard SET hit=hit+1 WHERE no=#{no}
 	</update>
-
-	<select id="qnaBoardContent" resultType="QnaBoardVO" parameterType="int">
-		SELECT no,m_id,name,subject,content,regdate,hit FROM qnaBoard WHERE no=#{no}
+ -->
+	<select id="qnaBoardContent" statementType="CALLABLE" parameterType="QnaBoardVO">
+	{ CALL qnaBoardContent(
+	          #{no, mode=INOUT,jdbcType=INTEGER,javaType=INTEGER},
+	          #{m_id, mode=OUT,jdbcType=VARCHAR,javaType=String},
+	          #{name, mode=OUT,jdbcType=VARCHAR,javaType=String},
+	          #{subject, mode=OUT,jdbcType=VARCHAR,javaType=String},
+	          #{content, mode=OUT,jdbcType=CLOB,javaType=String},
+	          #{regdate, mode=OUT,jdbcType=DATE,javaType=java.util.Date},
+	          #{hit, mode=OUT,jdbcType=INTEGER,javaType=INTEGER}
+	       )
+	}
 	</select>
-
-
-
+	
 	<insert id="qnaBoardInsert" parameterType="QnaBoardVO">
-		<selectKey keyProperty="no" resultType="int" order="BEFORE">
-			SELECT NVL(MAX(no)+1,1) as no FROM qnaBoard
-		</selectKey>
-		INSERT INTO qnaBoard(no,m_id,name,subject,content,regdate,hit,group_id) 
-		VALUES(#{no},#{m_id},#{name},#{subject},#{content},
-		SYSDATE,0,(SELECT NVL(MAX(group_id)+1,1) 
-		FROM qnaBoard))
+	{ CALL qnaBoardInsert(
+	          #{no},
+	          #{m_id},
+	          #{name},
+	          #{subject},
+	          #{content}
+	       )
+	}
 	</insert>
 
 <!-- 	
