@@ -17,8 +17,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="qnaBoardList" statementType="CALLABLE" parameterType="java.util.Map">
     { CALL qnaBoardList(
-              ${start},
-              ${end},
+              #{start},
+              #{end},
               #{qnaBoardList, mode=OUT, jdbcType=CURSOR, 
                 javaType=java.sql.ResultSet, resultMap=QnaBoardVO}
            )
