@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     }
 	</select>
 	
-	<select id="qnaBoardToltalPage" resultType="int">
+<!-- 	<select id="qnaBoardToltalPage" resultType="int">
 		SELECT CEIL(COUNT(*)/10) FROM qnaBoard
 	</select>
 	
@@ -33,11 +33,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT COUNT(*) FROM qnaBoard
 	</select>
 	
-	<!-- 리플 카운트 -->
+	리플 카운트
 	<select id="qnaCommentCount" parameterType="int" resultType="int">
 		SELECT COUNT(*) FROM qnaBoardComment WHERE bno=#{no}
 	</select> 
-
+ -->
 
 	<select id="qnaBoardContent" statementType="CALLABLE" parameterType="QnaBoardVO">
 	{ CALL qnaBoardContent(
