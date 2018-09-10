@@ -37,7 +37,7 @@
 					<tr class="aa">
 						<td class="text-center" width="10%">
 							${count}
-							<c:set var="count" value="${count=count-1}" />
+							<c:set var="count" value="${count=count-1}"/>
 						</td>
 						<td class="text-left" width="45%">
 							<c:set var="tab" value="0"/>

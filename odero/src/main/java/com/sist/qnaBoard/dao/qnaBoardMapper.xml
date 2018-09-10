@@ -5,15 +5,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.sist.qnaBoard.dao.qnaBoardMapper.xml">
 <resultMap id="QnaBoardVO" type="QnaBoardVO"/>
 <resultMap id="QnaBoardCommentVO" type="QnaBoardCommentVO"/>
-	<!-- <select id="qnaBoardList" parameterType="java.util.Map" resultType="QnaBoardVO">
-		SELECT no,m_id,subject,name,regdate,hit,group_tab,num 
-		FROM (SELECT no,m_id,subject,name,regdate,hit,group_tab,rownum as num 
-		FROM (SELECT no,m_id,subject,name,regdate,hit,group_tab
-		FROM qnaBoard ORDER BY group_id DESC,group_step ASC)) 
-		WHERE num BETWEEN #{start} AND #{end}
-	</select> -->
-	
-	
 	
 	<select id="qnaBoardList" statementType="CALLABLE" parameterType="java.util.Map">
     { CALL qnaBoardList(
@@ -21,6 +12,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
               #{end},
               #{qnaBoardList, mode=OUT, jdbcType=CURSOR, 
                 javaType=java.sql.ResultSet, resultMap=QnaBoardVO}
+           )
+    }
+	</select>
+	<!--qnaBoardCount  -->
+	<select id="qnaBoardCount">
+	 { CALL qnaBoardCount(
+              #{who},
+              #{no},
+              #{count, mode=OUT,jdbcType=INTEGER,javaType=INTEGER}
            )
     }
 	</select>
@@ -32,13 +32,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="qnaBoardRowCount" resultType="int">
 		SELECT COUNT(*) FROM qnaBoard
 	</select>
-
-
 	
-	<!-- <update id="qnaBoardHit" parameterType="int">
-		UPDATE qnaBoard SET hit=hit+1 WHERE no=#{no}
-	</update>
- -->
+	<!-- 리플 카운트 -->
+	<select id="qnaCommentCount" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM qnaBoardComment WHERE bno=#{no}
+	</select> 
+
+
 	<select id="qnaBoardContent" statementType="CALLABLE" parameterType="QnaBoardVO">
 	{ CALL qnaBoardContent(
 	          #{no, mode=INOUT,jdbcType=INTEGER,javaType=INTEGER},
@@ -47,20 +47,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	          #{subject, mode=OUT,jdbcType=VARCHAR,javaType=String},
 	          #{content, mode=OUT,jdbcType=CLOB,javaType=String},
 	          #{regdate, mode=OUT,jdbcType=DATE,javaType=java.util.Date},
-	          #{hit, mode=OUT,jdbcType=INTEGER,javaType=INTEGER}
+	          #{hit, mode=OUT,jdbcType=INTEGER,javaType=INTEGER},
+	          #{count}
 	       )
 	}
 	</select>
 	
-	<insert id="qnaBoardInsert" parameterType="QnaBoardVO">
-	{ CALL qnaBoardInsert(
-	          #{no},
-	          #{m_id},
-	          #{name},
-	          #{subject},
-	          #{content}
-	       )
-	}
+	<insert id="qnaBoardInsert" statementType="CALLABLE" parameterType="QnaBoardVO">
+	{ CALL qnaBoardInsert(#{no}, #{m_id}, #{name}, #{subject}, #{content}) }
 	</insert>
 
 <!-- 	
@@ -96,46 +90,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
  -->	
 	<!-- // 게시판&답글 업데이트 -->
-	<update id="qnaBoardUpdate" parameterType="QnaBoardVO">
-		UPDATE qnaBoard SET subject=#{subject},content=#{content} WHERE no=#{no}
+	<update id="qnaBoardUpdate" statementType="CALLABLE" parameterType="QnaBoardVO">
+	 { CALL qnaBoardUpdate(
+              #{no},
+              #{subject},
+              #{content}
+           )
+    }
 	</update>
 <!-- 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
  -->	
 	<!-- // 답글 삭제 -->
-
-	<select id="qna_root_depth" resultType="QnaBoardVO" parameterType="int">
-		SELECT root,depth FROM qnaBoard WHERE no=#{no}
-	</select>	
-	
-	<delete id="qnaBoardDelete" parameterType="int">
-		DELETE FROM qnaBoard WHERE no=#{no}
+	<delete id="qnaBoardDelete" statementType="CALLABLE" parameterType="int">
+	{ CALL qnaBoardDelete(#{no}) }
 	</delete>
-	
-	<delete id="qnaBoardDeleteComment" parameterType="int">
-		DELETE FROM qnaBoardComment WHERE bno=#{no}
-	</delete>
-
-	<update id="qna_delete_msg" parameterType="int">
-		UPDATE qnaBoard SET subject='삭제된 게시물 입니다.',content='삭제된 게시물 입니다.' WHERE no=#{no}
-	</update>	
-
-	<update id="qna_delete_depth" parameterType="int">
-		UPDATE qnaBoard SET depth=depth-1 WHERE no=#{root}
-	</update>
-
-
 	
 	
 	
 <!--/////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 -->
-	<!-- 리플 카운트 -->
-	<select id="qnaCommentCount" parameterType="int" resultType="int">
-		SELECT COUNT(*) FROM qnaBoardComment WHERE bno=#{no}
-	</select> 
-	
 	
 	<!-- // Content 댓글 리스트 -->
 	<select id="qnaCommentList" resultType="QnaBoardCommentVO" parameterType="int">

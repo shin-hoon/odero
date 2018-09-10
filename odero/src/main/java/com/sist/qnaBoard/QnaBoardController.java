@@ -53,7 +53,8 @@ public class QnaBoardController {
 		
 		int totalpage = dao.qnaBoardToltalPage();
 		int count = dao.qnaBoardRowCount();
-		count = count-((curpage*10)-10);
+		
+		
 		model.addAttribute("list",list);
 		model.addAttribute("curpage",curpage);
 		model.addAttribute("totalpage",totalpage);
