@@ -40,20 +40,20 @@ public class QnaBoardController {
 		
 		List<QnaBoardVO> list=dao.qnaBoardList(map);
 		
-		/*for(QnaBoardVO vo:list){
+		for(QnaBoardVO vo:list){
 			vo.setCount(dao.qnaCommentCount(vo.getNo()));
 			
 			int length = vo.getSubject().length();
 			
 			if(length >=20)
 				vo.setSubject(vo.getSubject().substring(0,15)+"···");
-		}*/
+		}
 		
 		
 		
 		int totalpage = dao.qnaBoardToltalPage();
 		int count = dao.qnaBoardRowCount();
-		
+		count = count-((curpage*10)-10);
 		
 		model.addAttribute("list",list);
 		model.addAttribute("curpage",curpage);
