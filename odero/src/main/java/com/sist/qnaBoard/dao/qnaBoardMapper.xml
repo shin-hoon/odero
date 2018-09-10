@@ -16,28 +16,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     }
 	</select>
 	<!--qnaBoardCount  -->
-	<select id="qnaBoardCount">
-	 { CALL qnaBoardCount(
-              #{who},
-              #{no},
-              #{count, mode=OUT,jdbcType=INTEGER,javaType=INTEGER}
+	<select id="qnaBoardCount" statementType="CALLABLE" parameterType="java.util.Map">
+	{ CALL qnaBoardCount(
+             #{who},
+             #{no},
+             #{count, mode=OUT,jdbcType=INTEGER,javaType=INTEGER}
            )
     }
 	</select>
-	
-<!-- 	<select id="qnaBoardToltalPage" resultType="int">
-		SELECT CEIL(COUNT(*)/10) FROM qnaBoard
-	</select>
-	
-	<select id="qnaBoardRowCount" resultType="int">
-		SELECT COUNT(*) FROM qnaBoard
-	</select>
-	
-	리플 카운트
-	<select id="qnaCommentCount" parameterType="int" resultType="int">
-		SELECT COUNT(*) FROM qnaBoardComment WHERE bno=#{no}
-	</select> 
- -->
 
 	<select id="qnaBoardContent" statementType="CALLABLE" parameterType="QnaBoardVO">
 	{ CALL qnaBoardContent(
@@ -91,12 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  -->	
 	<!-- // 게시판&답글 업데이트 -->
 	<update id="qnaBoardUpdate" statementType="CALLABLE" parameterType="QnaBoardVO">
-	 { CALL qnaBoardUpdate(
-              #{no},
-              #{subject},
-              #{content}
-           )
-    }
+	 { CALL qnaBoardUpdate(#{no}, #{subject}, #{content}) }
 	</update>
 <!-- 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////

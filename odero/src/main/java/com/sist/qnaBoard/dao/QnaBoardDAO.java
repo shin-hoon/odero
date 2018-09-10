@@ -1,5 +1,6 @@
 package com.sist.qnaBoard.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,41 +13,37 @@ import org.springframework.transaction.annotation.Transactional;
 public class QnaBoardDAO {
 	@Autowired
 	private SqlSessionTemplate sst;
-	private Map countMap;
 	
 	// 일반 게시판
 	public List<QnaBoardVO> qnaBoardList(Map map){
 		sst.selectList("qnaBoardList",map);
 		return (List<QnaBoardVO>)map.get("qnaBoardList");
 	}
-	
 	public int qnaBoardToltalPage(){
+		Map countMap = new HashMap();
 		countMap.put("who","total");
-		
+		countMap.put("no","");
 		sst.selectOne("qnaBoardCount",countMap);
-		String count = (String)countMap.get("count");
 		
-		return Integer.parseInt(count);
+		return Integer.parseInt(countMap.get("count").toString());
 	}
 	
 	public int qnaBoardRowCount(){
+		Map countMap = new HashMap();
 		countMap.put("who", "row");
-		
+		countMap.put("no","");
 		sst.selectOne("qnaBoardCount",countMap);
-		String count = (String)countMap.get("count");
 		
-		return Integer.parseInt(count);
+		return Integer.parseInt(countMap.get("count").toString());
 	}
 	
 	// 댓글 카운트
 	public int qnaCommentCount(int no) {
+		Map countMap = new HashMap();
 		countMap.put("who", "comment");
 		countMap.put("no", no);
-		
 		sst.selectOne("qnaBoardCount",countMap);
-		String count = (String)countMap.get("count");
-		System.out.println(count+"sdsdsdsd");
-		return Integer.parseInt(count);
+		return Integer.parseInt(countMap.get("count").toString());
 	}
 		
 	public void qnaBoardInsert(QnaBoardVO vo){
