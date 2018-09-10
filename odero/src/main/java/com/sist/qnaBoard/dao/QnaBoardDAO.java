@@ -1,6 +1,5 @@
 package com.sist.qnaBoard.dao;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class QnaBoardDAO {
 	@Autowired
 	private SqlSessionTemplate sst;
+	private Map countMap;
 	
 	// 일반 게시판
 	public List<QnaBoardVO> qnaBoardList(Map map){
@@ -21,18 +21,40 @@ public class QnaBoardDAO {
 	}
 	
 	public int qnaBoardToltalPage(){
-		return sst.selectOne("qnaBoardToltalPage");
+		countMap.put("who","total");
+		
+		sst.selectOne("qnaBoardCount",countMap);
+		String count = (String)countMap.get("count");
+		
+		return Integer.parseInt(count);
 	}
+	
 	public int qnaBoardRowCount(){
-		return sst.selectOne("qnaBoardRowCount");
+		countMap.put("who", "row");
+		
+		sst.selectOne("qnaBoardCount",countMap);
+		String count = (String)countMap.get("count");
+		
+		return Integer.parseInt(count);
 	}
+	
+	// 댓글 카운트
+	public int qnaCommentCount(int no) {
+		countMap.put("who", "comment");
+		countMap.put("no", no);
+		
+		sst.selectOne("qnaBoardCount",countMap);
+		String count = (String)countMap.get("count");
+		
+		return Integer.parseInt(count);
+	}
+		
 	public void qnaBoardInsert(QnaBoardVO vo){
 		sst.insert("qnaBoardInsert",vo);
 	}
 
 	public QnaBoardVO qnaBoardContent(int no)	{
 		QnaBoardVO vo = new QnaBoardVO();
-		/*sst.update("qnaBoardHit",no);*/
 		vo.setNo(no);
 		sst.selectOne("qnaBoardContent", vo);
 		return vo;
@@ -60,7 +82,11 @@ public class QnaBoardDAO {
 	
 	// 게시판&답글 업데이트 
 	public QnaBoardVO qnaBoardUpdateValue(int no){
-		return sst.selectOne("qnaBoardContent",no);
+		QnaBoardVO vo = new QnaBoardVO();
+		vo.setNo(no);
+		vo.setCount(1);
+		sst.selectOne("qnaBoardContent",vo);
+		return vo;
 	}
 	
 	@Transactional
@@ -73,7 +99,8 @@ public class QnaBoardDAO {
 	// 답글 삭제
 	@Transactional
 	public void qnaBoardDelete(int no)  {
-		QnaBoardVO getVO = sst.selectOne("qna_root_depth",no);
+		sst.delete("qnaBoardDelete",no);
+		/*QnaBoardVO getVO = sst.selectOne("qna_root_depth",no);
 		
 
 		if(getVO.getDepth() == 0) {
@@ -84,7 +111,7 @@ public class QnaBoardDAO {
 			sst.update("qna_delete_msg",no);
 			sst.delete("qnaBoardDeleteComment",no);
 		}
-		sst.delete("qna_delete_depth",getVO.getRoot());
+		sst.delete("qna_delete_depth",getVO.getRoot());*/
 	}
 
 	
@@ -95,12 +122,6 @@ public class QnaBoardDAO {
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	
-	// 댓글 카운트
-	public int qnaCommentCount(int no) {
-		return sst.selectOne("qnaCommentCount",no);
-	}
 	
 	
 	//  Content 댓글 리스트
