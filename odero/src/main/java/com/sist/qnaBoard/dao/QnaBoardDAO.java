@@ -45,7 +45,7 @@ public class QnaBoardDAO {
 		
 		sst.selectOne("qnaBoardCount",countMap);
 		String count = (String)countMap.get("count");
-		
+		System.out.println(count+"sdsdsdsd");
 		return Integer.parseInt(count);
 	}
 		
@@ -100,24 +100,8 @@ public class QnaBoardDAO {
 	@Transactional
 	public void qnaBoardDelete(int no)  {
 		sst.delete("qnaBoardDelete",no);
-		/*QnaBoardVO getVO = sst.selectOne("qna_root_depth",no);
-		
-
-		if(getVO.getDepth() == 0) {
-			sst.delete("qnaBoardDeleteComment",no);
-			sst.delete("qnaBoardDelete",no);
-		}
-		else {
-			sst.update("qna_delete_msg",no);
-			sst.delete("qnaBoardDeleteComment",no);
-		}
-		sst.delete("qna_delete_depth",getVO.getRoot());*/
 	}
 
-	
-	
-	
-	
 	
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
