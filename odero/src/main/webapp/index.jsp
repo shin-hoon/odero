@@ -10,6 +10,7 @@
 	</script>
 </head>
 <body>
-
+viewList.jsp어느정도 완료
+DB에서 뷰로 뿌려주는거 만들고 dao 전체 수정
 </body>
 </html>

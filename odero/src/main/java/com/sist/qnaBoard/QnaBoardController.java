@@ -190,5 +190,48 @@ public class QnaBoardController {
 		dao.qnaCommentDelete(no);
 		return "<script>alert(\"삭제 되었습니다.\");location.reload();</script>";
 	}
-}
 
+
+
+
+
+	@RequestMapping("qnaBoardView.do")
+	public String qnaBoardViewList(String page,Model model) {
+		if(page==null) page = "1";
+
+		int curpage = Integer.parseInt(page);
+		int rowSize = 10;
+		int start = (rowSize*curpage)-(rowSize-1);
+		int end = rowSize*curpage;
+
+		Map map = new HashMap();
+
+		map.put("start", start);
+		map.put("end", end);
+
+
+		List<QnaBoardVO> list=dao.qnaBoardList(map);
+
+		for(QnaBoardVO vo:list){
+			vo.setCount(dao.qnaCommentCount(vo.getNo()));
+
+			int length = vo.getSubject().length();
+
+			if(length >=20)
+				vo.setSubject(vo.getSubject().substring(0,15)+"···");
+		}
+
+
+
+		int totalpage = dao.qnaBoardToltalPage();
+		int count = dao.qnaBoardRowCount();
+		count = count-((curpage*10)-10);
+
+		model.addAttribute("list",list);
+		model.addAttribute("curpage",curpage);
+		model.addAttribute("totalpage",totalpage);
+		model.addAttribute("count",count);
+
+		return "qnaBoard/viewList";
+	}
+}
