@@ -63,16 +63,7 @@ public class QnaBoardDAO {
 	// 답글 추가
 	@Transactional
 	public void qnaBoardReplyInsert(QnaBoardVO vo){
-		QnaBoardVO getVO = sst.selectOne("qna_id_step_tab",vo.getNo());
-		
-		vo.setGroup_id(getVO.getGroup_id()); 
-		vo.setGroup_step(getVO.getGroup_step()); 
-		vo.setGroup_tab(getVO.getGroup_tab());
-		vo.setPno(vo.getNo());
-		
-		sst.update("qna_groupUpdate",vo);
 		sst.insert("qnaBoardReplyInsert",vo);
-		sst.update("qna_depthUpdate",vo.getPno());
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +98,10 @@ public class QnaBoardDAO {
 	
 	//  Content 댓글 리스트
 	public List<QnaBoardCommentVO> qnaCommentList(int no){
-		return sst.selectList("qnaCommentList",no);
+		Map map = new HashMap();
+		map.put("bno", no);
+		sst.selectList("qnaCommentList",map);
+		return (List<QnaBoardCommentVO>)map.get("qnaCommentList");
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,20 +115,9 @@ public class QnaBoardDAO {
 	
 	// 댓글의 댓글 추가
 	@Transactional
-	public void qnaCommentNweInsert(QnaBoardCommentVO vo){
-		QnaBoardCommentVO getVO = sst.selectOne("qnaComment_id_step_tab",vo.getNo());
-
-		vo.setGroup_id(getVO.getGroup_id()); 
-		vo.setGroup_step(getVO.getGroup_step()); 
-		vo.setGroup_tab(getVO.getGroup_tab());
-		vo.setPno(vo.getNo());
-
-		sst.update("qnaComment_groupUpdate",vo);
+	public void qnaCommentNewInsert(QnaBoardCommentVO vo){
 		sst.insert("qnaCommentNewInsert",vo);
-		sst.update("qnaComment_depthUpdate",vo.getPno());
 	}
-
-
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -142,23 +125,13 @@ public class QnaBoardDAO {
 	public void qnaCommentUpdate(QnaBoardCommentVO vo){
 		sst.update("qnaCommentUpdate",vo);
 	}
-	
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// 답글 삭제
 	@Transactional
 	public void qnaCommentDelete(int no)  {
-		QnaBoardCommentVO getVO = sst.selectOne("qnaComment_root_depth",no);
-
-		if(getVO.getDepth() == 0) {
 			sst.delete("qnaCommentDelete",no);
-		}
-		else {
-			sst.update("qnaComment_delete_msg",no);
-		}
-
-		sst.delete("qnaComment_delete_depth",getVO.getRoot());
 	}
 }
 

@@ -163,7 +163,7 @@ public class QnaBoardController {
 	public String qnaCommentNewInsert(QnaBoardCommentVO vo,HttpSession session) {
 		vo.setM_id((String)session.getAttribute("m_id"));
 		vo.setName((String)session.getAttribute("m_name"));
-		dao.qnaCommentNweInsert(vo);
+		dao.qnaCommentNewInsert(vo);
 		return "<script>location.reload();</script>";
 	}
 

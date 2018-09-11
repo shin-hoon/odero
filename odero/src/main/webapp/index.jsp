@@ -10,6 +10,6 @@
 	</script>
 </head>
 <body>
-count 할 차례
+
 </body>
 </html>
