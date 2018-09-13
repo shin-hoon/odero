@@ -105,8 +105,6 @@
             <li><a href="qnaBoard.do?page=${curpage<=totalpage-10?curpage+10:curpage}">▶▶</a></li>
 		</ul>
 	</div>
-	<div class="container" style="height:300px;"></div>
-
 
 
 

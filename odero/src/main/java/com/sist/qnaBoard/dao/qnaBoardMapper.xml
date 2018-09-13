@@ -50,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  
 	<!-- // 답글 추가 -->
 	<insert id="qnaBoardReplyInsert" statementType="CALLABLE" parameterType="QnaBoardVO">
-	{ CALL qnaBoardReplyInsert(#{no}, #{m_id}, #{name}, #{subject}, #{content}) }
+	{ CALL qnaBoardReplyInsert(#{no}, #{m_id}, #{name}, #{subject}, #{content}, #{page}) }
 	</insert>
 		
 <!-- 
@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  -->	
 	<!-- // 게시판&답글 업데이트 -->
 	<update id="qnaBoardUpdate" statementType="CALLABLE" parameterType="QnaBoardVO">
-	 { CALL qnaBoardUpdate(#{no}, #{subject}, #{content}) }
+	 { CALL qnaBoardUpdate(#{no}, #{subject}, #{content}, #{page}) }
 	</update>
 <!-- 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
     
     <insert id="qnaCommentInsert" statementType="CALLABLE" parameterType="QnaBoardCommentVO">
-	{ CALL qnaCommentInsert(#{bno}, #{m_id}, #{name}, #{msg}) }
+	{ CALL qnaCommentInsert(#{bno}, #{m_id}, #{name}, #{msg}, #{page}) }
 	</insert>
 	
  <!--    
@@ -94,7 +94,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- // content 리플 추가 -->
 	
 	<insert id="qnaCommentNewInsert" statementType="CALLABLE" parameterType="QnaBoardCommentVO">
-	{ CALL qnaCommentNewInsert(#{no},#{bno}, #{m_id}, #{name}, #{msg}) }
+	{ CALL qnaCommentNewInsert(#{no},#{bno}, #{m_id}, #{name}, #{msg}, #{page}) }
 	</insert>
 
 
@@ -103,7 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  -->
 	<!-- // content 게시판&답글 업데이트  -->
 	<update id="qnaCommentUpdate" statementType="CALLABLE"  parameterType="QnaBoardCommentVO">
-	{ CALL qnaCommentUpdate(#{no}, #{msg}) }
+	{ CALL qnaCommentUpdate(#{no}, #{msg}) , #{page}}
 	</update>
 	
 	
@@ -115,5 +115,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	{ CALL qnaCommentDelete(#{no}) }
 	</delete>
 	
+<!-- 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+ -->	
+	<select id="qnaBoardViewList" statementType="CALLABLE" parameterType="java.util.Map">
+    { CALL qnaBoardViewList(
+              #{m_id},
+              #{qnaBoardViewList, mode=OUT, jdbcType=CURSOR, 
+                javaType=java.sql.ResultSet, resultMap=QnaBoardVO}
+           )
+    }
+	</select>
+	
 	 
+	<select id="qnaBoardCommentViewList" statementType="CALLABLE" parameterType="java.util.Map">
+    { CALL qnaBoardCommentViewList(
+              #{m_id},
+              #{qnaBoardCommentViewList, mode=OUT, jdbcType=CURSOR, 
+                javaType=java.sql.ResultSet, resultMap=QnaBoardCommentVO}
+           )
+    }
+	</select>
+	
+	
+	
 </mapper>
