@@ -196,21 +196,15 @@ public class QnaBoardController {
 
 
 	@RequestMapping("qnaBoardView.do")
-	public String qnaBoardViewList(String page,Model model) {
-		if(page==null) page = "1";
-
-		int curpage = Integer.parseInt(page);
-		int rowSize = 10;
-		int start = (rowSize*curpage)-(rowSize-1);
-		int end = rowSize*curpage;
-
+	public String qnaBoardViewList(HttpSession session,Model model) {
+		
 		Map map = new HashMap();
 
-		map.put("start", start);
-		map.put("end", end);
+		String m_id = session.getAttribute("m_id").toString();
+		map.put("m_id", m_id);
 
 
-		List<QnaBoardVO> list=dao.qnaBoardList(map);
+		List<QnaBoardVO> list=dao.qnaBoardViewList(map);
 
 		for(QnaBoardVO vo:list){
 			vo.setCount(dao.qnaCommentCount(vo.getNo()));
@@ -223,15 +217,16 @@ public class QnaBoardController {
 
 
 
-		int totalpage = dao.qnaBoardToltalPage();
-		int count = dao.qnaBoardRowCount();
-		count = count-((curpage*10)-10);
 
+		List<QnaBoardCommentVO> commentList=dao.qnaBoardCommentViewList(map);
+		
+		
+		
+		
+		
+		
 		model.addAttribute("list",list);
-		model.addAttribute("curpage",curpage);
-		model.addAttribute("totalpage",totalpage);
-		model.addAttribute("count",count);
-
+		model.addAttribute("commentList",commentList);
 		return "qnaBoard/viewList";
 	}
 }

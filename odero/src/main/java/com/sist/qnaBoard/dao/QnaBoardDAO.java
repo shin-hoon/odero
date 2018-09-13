@@ -133,6 +133,20 @@ public class QnaBoardDAO {
 	public void qnaCommentDelete(int no)  {
 			sst.delete("qnaCommentDelete",no);
 	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	public List<QnaBoardVO> qnaBoardViewList(Map map){
+		sst.selectList("qnaBoardViewList",map);
+		return (List<QnaBoardVO>)map.get("qnaBoardViewList");
+	}
+	
+	public List<QnaBoardCommentVO> qnaBoardCommentViewList(Map map){
+		sst.selectList("qnaBoardCommentViewList",map);
+		return (List<QnaBoardCommentVO>)map.get("qnaBoardCommentViewList");
+	}
+	
+	
 }
 
 
