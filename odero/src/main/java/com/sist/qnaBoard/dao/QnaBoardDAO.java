@@ -23,6 +23,19 @@ public class QnaBoardDAO {
 		Map countMap = new HashMap();
 		countMap.put("who","total");
 		countMap.put("no","");
+		countMap.put("m_id", "");
+		countMap.put("page","");
+		sst.selectOne("qnaBoardCount",countMap);
+		
+		return Integer.parseInt(countMap.get("count").toString());
+	}
+	
+	public int qnaBoardPage(int no,int page){
+		Map countMap = new HashMap();
+		countMap.put("who","page");
+		countMap.put("no",no);
+		countMap.put("m_id", "");
+		countMap.put("page",page);
 		sst.selectOne("qnaBoardCount",countMap);
 		
 		return Integer.parseInt(countMap.get("count").toString());
@@ -32,6 +45,8 @@ public class QnaBoardDAO {
 		Map countMap = new HashMap();
 		countMap.put("who", "row");
 		countMap.put("no","");
+		countMap.put("m_id", "");
+		countMap.put("page","");
 		sst.selectOne("qnaBoardCount",countMap);
 		
 		return Integer.parseInt(countMap.get("count").toString());
@@ -42,6 +57,18 @@ public class QnaBoardDAO {
 		Map countMap = new HashMap();
 		countMap.put("who", "comment");
 		countMap.put("no", no);
+		countMap.put("m_id", "");
+		countMap.put("page","");
+		sst.selectOne("qnaBoardCount",countMap);
+		return Integer.parseInt(countMap.get("count").toString());
+	}
+	
+	public int qnaCommentTotal(String m_id) {
+		Map countMap = new HashMap();
+		countMap.put("who", "comment");
+		countMap.put("no", "");
+		countMap.put("m_id", m_id);
+		countMap.put("page","");
 		sst.selectOne("qnaBoardCount",countMap);
 		return Integer.parseInt(countMap.get("count").toString());
 	}
@@ -145,6 +172,8 @@ public class QnaBoardDAO {
 		sst.selectList("qnaBoardCommentViewList",map);
 		return (List<QnaBoardCommentVO>)map.get("qnaBoardCommentViewList");
 	}
+	
+	
 	
 	
 }
