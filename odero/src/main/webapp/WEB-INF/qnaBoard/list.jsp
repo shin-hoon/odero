@@ -20,7 +20,7 @@
 							<a onclick="alert('로그인이 필요합니다.');" class="btn btn-sm btn-primary">새글</a>
 						</c:if>
 						<c:if test="${sessionScope.m_id != null}">
-							<a href="qnaBoardView.do" class="btn btn-sm btn-primary">내가쓴글 확인</a>
+							<a href="qnaBoardView.do?who=board" class="btn btn-sm btn-primary">내가쓴글 확인</a>
 							<a href="qnaBoardInsert.do?page=${curpage}" class="btn btn-sm btn-primary">새글</a>
 						</c:if>
 					</td>

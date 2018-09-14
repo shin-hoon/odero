@@ -8,7 +8,7 @@
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
 	<link rel="stylesheet" href="qnaBoard/qnaBoard.css" type="text/css">
-	<script type="text/javascript">
+	<!-- <script type="text/javascript">
 
 	$(function(){
 		$('#board').click(function(){
@@ -33,7 +33,7 @@
 	});
 
 
-	</script>
+	</script> -->
 </head>
 <body>
 	<div class="container" style="margin-top: 50px;">
@@ -42,9 +42,9 @@
 				<tr style="border-bottom: solid;">
 					<td class="text-left" style="border-top:none;">
 						<c:if test="${sessionScope.m_id != null}">
-							<a class="btn btn-sm btn-primary" id="board">등록한 게시글</a>
-							<a class="btn btn-sm btn-primary" id="boardReply">댓글 단 게시글</a>
-							<a class="btn btn-sm btn-primary" id="comment">등록한 댓글</a>
+							<a class="btn btn-sm btn-primary" href="qnaBoardView.do?who=board" id="board">등록한 게시글</a>
+							<a class="btn btn-sm btn-primary" href="qnaBoardView.do?who=boardReply" id="boardReply">댓글 단 게시글</a>
+							<a class="btn btn-sm btn-primary" href="qnaBoardView.do?who=comment" id="comment">등록한 댓글</a>
 						</c:if>
 					</td>
 					<td class="text-right" style="border-top:none;">
@@ -55,6 +55,7 @@
 				</tr>
 			</table>
 			
+			<c:if test="${who == 'board' }">
 			<table class="table table-hover" width="700" style="table-layout: fixed;" id="board_t">
 				<tr class="table-th">
 					<th class="text-center" width="10%">번호</th>
@@ -84,9 +85,11 @@
 				</c:if>
 				</c:forEach>
 			</table>
+			</c:if>
 			
 			
-			<table class="table table-hover" width="700" style="table-layout: fixed;display:none;" id="boardReply_t">
+			<c:if test="${who == 'boardReply' }">
+			<table class="table table-hover" width="700" style="table-layout: fixed;" id="boardReply_t">
 				<tr class="table-th">
 					<th class="text-center" width="10%">번호</th>
 					<th class="text-center" width="45%">제목</th>
@@ -117,9 +120,11 @@
 				</c:if>
 				</c:forEach>
 			</table>
+			</c:if>
 			
 			
-			<table class="table table-hover" width="700" style="table-layout: fixed;display:none;" id="comment_t">
+			<c:if test="${who == 'comment' }">
+			<table class="table table-hover" width="700" style="table-layout: fixed;" id="comment_t">
 				<tr class="table-th">
 					<th class="text-center" width="80%">댓글</th>
 					<th class="text-center" width="20%">작성일</th>
@@ -139,7 +144,36 @@
 				</c:if>
 				</c:forEach>
 			</table>
+			</c:if>
 		</div>
+	</div>
+	
+	
+	<div class="container text-center">
+		<ul class="pagination">
+       		<li><a href="qnaBoardView.do?who=${who}&page=${curpage<11?curpage:curpage-10}">◀◀</a></li>
+       		<li><a href="qnaBoardView.do?who=${who}&page=${curpage<2?curpage:curpage-1}">◀</a></li>
+       				
+       		<fmt:parseNumber var="num1" value="${curpage/10}" integerOnly="true"/>
+       		<c:set var="num1" value="${num1<=0?1:num1*10}"/>  
+       		<c:forEach var="i"  begin="${num1}" end="${num1==1?num1+8:num1+9}">
+       			<c:choose>
+       				<c:when test="${i > totalpage }"></c:when>
+       				<c:when test="${i==curpage}">
+	    				<li class="active">
+	    					<a href="qnaBoardView.do?who=${who}&page=${i}">	${i} </a>
+	    				</li>
+       				</c:when>
+       				<c:when test="${i <= totalpage}">
+       					<li>
+       						<a href="qnaBoardView.do?who=${who}&page=${i}"> ${i} </a>
+       					</li>
+       				</c:when>
+       			</c:choose>
+       		</c:forEach>
+       		<li><a href="qnaBoardView.do?who=${who}&page=${curpage<totalpage?curpage+1:curpage}">▶</a></li>
+            <li><a href="qnaBoardView.do?who=${who}&page=${curpage<=totalpage-10?curpage+10:curpage}">▶▶</a></li>
+		</ul>
 	</div>
 	
 	

@@ -10,6 +10,7 @@
 	</script>
 </head>
 <body>
-page 넘어가는거 확인
+댓글달린 게시물 
+view 테이블 바꾸기
 </body>
 </html>

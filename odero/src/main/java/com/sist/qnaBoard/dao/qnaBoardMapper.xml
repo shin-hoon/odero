@@ -20,6 +20,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	{ CALL qnaBoardCount(
              #{who},
              #{no},
+             #{m_id},
+             #{page},
              #{count, mode=OUT,jdbcType=INTEGER,javaType=INTEGER}
            )
     }
@@ -121,6 +123,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  -->	
 	<select id="qnaBoardViewList" statementType="CALLABLE" parameterType="java.util.Map">
     { CALL qnaBoardViewList(
+              #{start},
+              #{end},
               #{m_id},
               #{qnaBoardViewList, mode=OUT, jdbcType=CURSOR, 
                 javaType=java.sql.ResultSet, resultMap=QnaBoardVO}
@@ -131,6 +135,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 
 	<select id="qnaBoardCommentViewList" statementType="CALLABLE" parameterType="java.util.Map">
     { CALL qnaBoardCommentViewList(
+              #{start},
+              #{end},
               #{m_id},
               #{qnaBoardCommentViewList, mode=OUT, jdbcType=CURSOR, 
                 javaType=java.sql.ResultSet, resultMap=QnaBoardCommentVO}
