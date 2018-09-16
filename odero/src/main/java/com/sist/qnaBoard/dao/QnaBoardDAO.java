@@ -65,7 +65,17 @@ public class QnaBoardDAO {
 	
 	public int qnaCommentTotal(String m_id) {
 		Map countMap = new HashMap();
-		countMap.put("who", "comment");
+		countMap.put("who", "commentTotal");
+		countMap.put("no", "");
+		countMap.put("m_id", m_id);
+		countMap.put("page","");
+		sst.selectOne("qnaBoardCount",countMap);
+		return Integer.parseInt(countMap.get("count").toString());
+	}
+	
+	public int qnaViewTotal(String m_id) {
+		Map countMap = new HashMap();
+		countMap.put("who", "qnaViewTotal");
 		countMap.put("no", "");
 		countMap.put("m_id", m_id);
 		countMap.put("page","");

@@ -8,32 +8,6 @@
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
 	<link rel="stylesheet" href="qnaBoard/qnaBoard.css" type="text/css">
-	<!-- <script type="text/javascript">
-
-	$(function(){
-		$('#board').click(function(){
-			$('#board_t').show();
-			$('#boardReply_t').hide();
-			$('#comment_t').hide();
-		});
-		
-		$('#boardReply').click(function(){
-			$('#board_t').hide();
-			$('#boardReply_t').show();
-			$('#comment_t').hide();
-		});
-		
-		$('#comment').click(function(){
-			$('#board_t').hide();
-			$('#boardReply_t').hide();
-			$('#comment_t').show();
-		});
-		
-	
-	});
-
-
-	</script> -->
 </head>
 <body>
 	<div class="container" style="margin-top: 50px;">
@@ -63,7 +37,7 @@
 					<th class="text-center" width="20%">작성일</th>
 					<th class="text-center" width="10%">조회수</th>
 				</tr>
-				<c:forEach var="vo" items="${list}">
+				<c:forEach var="vo" items="${boardList}">
 				<c:if test="${sessionScope.m_id==vo.m_id}">
 					<c:if test="${vo.subject != '삭제된 게시물 입니다.'}">
 					<tr class="aa">
@@ -97,8 +71,8 @@
 					<th class="text-center" width="20%">작성일</th>
 					<th class="text-center" width="10%">조회수</th>
 				</tr>
-				<c:forEach var="vo" items="${list}">
-				<c:if test="${sessionScope.m_id==vo.m_id}">
+				<c:forEach var="vo" items="${boardReplyList}">
+				<c:if test="${sessionScope.m_id != null}">
 					<c:if test="${vo.subject != '삭제된 게시물 입니다.'}">
 					<tr class="aa">
 						<td class="text-center" width="10%">
