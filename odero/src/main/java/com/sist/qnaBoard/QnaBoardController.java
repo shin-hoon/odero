@@ -88,14 +88,14 @@ public class QnaBoardController {
 	
 	
 	@RequestMapping("qnaBoardContent.do")
-	public String qnaBoardContent(int no,int page,Model model){
+	public String qnaBoardContent(String who,int no,int page,Model model){
 		QnaBoardVO vo = dao.qnaBoardContent(no);
 		List<QnaBoardCommentVO> list=dao.qnaCommentList(no);
 		
 		model.addAttribute("vo",vo);
 		model.addAttribute("list", list);
 		model.addAttribute("page",page);
-		
+		model.addAttribute("who",who);
 		return "qnaBoard/content";
 	}
 	
@@ -223,7 +223,7 @@ public class QnaBoardController {
 	public String qnaBoardViewList(String page,String who,HttpSession session,Model model) {
 		
 		if(page==null) page = "1";
-
+		
 		int curpage = Integer.parseInt(page);
 		int rowSize = 10;
 		int start = (rowSize*curpage)-(rowSize-1);
@@ -314,7 +314,6 @@ public class QnaBoardController {
 
 		model.addAttribute("totalpage", totalpage);
 		model.addAttribute("curpage",curpage);
-		
 		
 		return "qnaBoard/viewList";
 	}

@@ -10,6 +10,7 @@
 	</script>
 </head>
 <body>
-view댓글목록 원문보기 추가할까말까
+
+
 </body>
 </html>

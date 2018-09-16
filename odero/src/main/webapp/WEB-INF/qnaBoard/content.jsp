@@ -68,7 +68,12 @@
 								<a href="qnaBoardUpdate.do?no=${vo.no}&page=${page}" class="btn btn-sm table-th">수정</a>
 								<a data-no="${vo.no}" data-page="${page}" id="qnaDelete" class="btn btn-sm table-th">삭제</a>
 							</c:if>
-							<a href="qnaBoard.do?page=${page}" class="btn btn-sm table-th">목록</a>
+							<c:if test="${who == null }">
+								<a href="qnaBoard.do?page=${page}" class="btn btn-sm table-th">목록</a>
+							</c:if>
+							<c:if test="${who != null }">
+								<a href="qnaBoardView.do?who=${who}&page=${page}" class="btn btn-sm table-th">목록</a>
+							</c:if>
 						</td>
 					</tr>
 				</table>
