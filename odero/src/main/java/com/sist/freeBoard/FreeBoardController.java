@@ -53,9 +53,6 @@ public class FreeBoardController {
 				vo.setSubject(vo.getSubject().substring(0,15)+"···");
 		}
 		
-		session.setAttribute("m_id", "admin");
-		session.setAttribute("m_name", "관리자");
-		
 		int totalpage = dao.freeBoardToltalPage();
 		int count = dao.freeBoardRowCount();
 		count = count-((curpage*10)-10);

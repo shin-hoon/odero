@@ -16,9 +16,18 @@
 				<tr style="border-bottom: solid;">
 					<td class="text-left" style="border-top:none;">
 						<c:if test="${sessionScope.m_id != null}">
-							<a class="btn btn-sm btn-primary" href="qnaBoardView.do?who=board" id="board">등록한 게시글</a>
-							<a class="btn btn-sm btn-primary" href="qnaBoardView.do?who=boardReply" id="boardReply">댓글 단 게시글</a>
-							<a class="btn btn-sm btn-primary" href="qnaBoardView.do?who=comment" id="comment">등록한 댓글</a>
+						<c:if test="${who=='board'}" >
+							<c:set var="c_board" value="style=\"background-color:#122b40\"" />
+						</c:if>
+						<c:if test="${who=='boardReply'}" >
+							<c:set var="c_boardReply" value="style=\"background-color:#122b40\"" />
+						</c:if>
+						<c:if test="${who=='comment' }" >
+							<c:set var="c_comment" value="style=\"background-color:#122b40\"" />
+						</c:if>
+							<a class="btn btn-sm btn-primary" ${c_board} href="qnaBoardView.do?who=board" id="board">등록한 게시글</a>
+							<a class="btn btn-sm btn-primary" ${c_boardReply} href="qnaBoardView.do?who=boardReply" id="boardReply">댓글 단 게시글</a>
+							<a class="btn btn-sm btn-primary" ${c_comment} href="qnaBoardView.do?who=comment" id="comment">등록한 댓글</a>
 						</c:if>
 					</td>
 					<td class="text-right" style="border-top:none;">
@@ -45,7 +54,7 @@
 							${vo.no}
 						</td>
 						<td class="text-left" width="60%">
-							<a href="qnaBoardContent.do?no=${vo.no}&page=${vo.page}">${vo.subject}</a>
+							<a href="qnaBoardContent.do?who=board&no=${vo.no}&page=${vo.page}">${vo.subject}</a>
 								<c:if test="${vo.count!=0}">
 									[${vo.count}]
 								</c:if>
@@ -79,7 +88,7 @@
 							${vo.no}
 						</td>
 						<td class="text-left" width="45%">
-							<a href="qnaBoardContent.do?no=${vo.no}&page=${vo.page}">${vo.subject}</a>
+							<a href="qnaBoardContent.do?who=boardReply&no=${vo.no}&page=${vo.page}">${vo.subject}</a>
 								<c:if test="${vo.count!=0}">
 									[${vo.count}]
 								</c:if>
@@ -100,17 +109,21 @@
 			<c:if test="${who == 'comment' }">
 			<table class="table table-hover" width="700" style="table-layout: fixed;" id="comment_t">
 				<tr class="table-th">
-					<th class="text-center" width="80%">댓글</th>
+					<th class="text-center" width="65%">댓글</th>
+					<th class="text-center" width="15%"></th>
 					<th class="text-center" width="20%">작성일</th>
 				</tr>
 				<c:forEach var="vo" items="${commentList}">
 				<c:if test="${sessionScope.m_id==vo.m_id}">
 					<c:if test="${vo.msg != '삭제된 게시물 입니다.'}">
 					<tr class="aa">
-						<td class="text-left" width="80%" style="text-overflow : ellipsis;overflow : hidden;white-space:nowrap;">
-							<a href="qnaBoardContent.do?no=${vo.bno}&page=${vo.page}">${vo.msg}</a>
+						<td class="text-left" width="70%" style="text-overflow : ellipsis;overflow : hidden;white-space:nowrap;">
+							<a href="qnaBoardContent.do?who=comment&no=${vo.bno}&page=${vo.page}">${vo.msg}</a>
 						</td>
-						<td class="text-center" width="20%">
+						<td class="text-center" width="15%">
+							<a href="qnaBoardContent.do?who=comment&no=${vo.bno}&page=${vo.page}">원문보기▶</a>
+						</td>
+						<td class="text-center" width="15%">
 							<fmt:formatDate	value="${vo.regdate}" pattern="yyyy-MM-dd"/>
 						</td>
 					</tr>
