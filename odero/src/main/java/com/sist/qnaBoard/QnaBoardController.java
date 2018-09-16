@@ -2,6 +2,7 @@ package com.sist.qnaBoard;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +76,7 @@ public class QnaBoardController {
 		
 		int count = dao.qnaBoardRowCount();
 		count = count-((curpage*10)-10);
+		
 		
 		model.addAttribute("list",list);
 		model.addAttribute("curpage",curpage);
@@ -226,51 +228,91 @@ public class QnaBoardController {
 		int rowSize = 10;
 		int start = (rowSize*curpage)-(rowSize-1);
 		int end = rowSize*curpage;
+		int totalpage =0;
 
 		Map map = new HashMap();
 
-		map.put("start", start);
-		map.put("end", end);
 		
 		String m_id = session.getAttribute("m_id").toString();
 		map.put("m_id", m_id);
 
 		
 		if(who.equals("board")) {
-			List<QnaBoardVO> list=dao.qnaBoardViewList(map);
+			totalpage = dao.qnaViewTotal(m_id);
 			
-			for(QnaBoardVO vo:list){
-				vo.setCount(dao.qnaCommentCount(vo.getNo()));
+			List<QnaBoardVO> list=dao.qnaBoardViewList(map);
+			List<QnaBoardVO> boardList = new ArrayList<QnaBoardVO>(); 
+			
+			int i=0;
+			for(QnaBoardVO vo : list) {
+				if( (i >= start-1) && (i <= end-1) ) {
+					vo.setCount(dao.qnaCommentCount(vo.getNo()));
 				
-				int length = vo.getSubject().length();
+					int length = vo.getSubject().length();
 				
-				if(length >=20)
-					vo.setSubject(vo.getSubject().substring(0,15)+"···");
+					if(length >=20)
+						vo.setSubject(vo.getSubject().substring(0,15)+"···");
+				
+					boardList.add(vo);
+				}
+				i++;
 			}
-			int totalpage = dao.qnaBoardToltalPage();
-			model.addAttribute("totalpage",totalpage);
-			model.addAttribute("list",list);
+			
+			model.addAttribute("boardList",boardList);
 			model.addAttribute("who","board");
 		}
 		else if(who.equals("boardReply")) {
+			map.put("m_id", " ");
+			
+			List<QnaBoardVO> list=dao.qnaBoardViewList(map);
+			
+			map.put("m_id", m_id);
+			
 			List<QnaBoardCommentVO> commentList=dao.qnaBoardCommentViewList(map);
 			List<QnaBoardVO> boardReplyList = new ArrayList<QnaBoardVO>(); 
 			
-			for(QnaBoardCommentVO vo : commentList) {
-				QnaBoardVO qbvo = new QnaBoardVO();
-				qbvo.setNo(vo.getBno());
-				boardReplyList.add(qbvo); // 작업중
+			for(QnaBoardVO qbVO : list) {
+				for(QnaBoardCommentVO qbcVO : commentList) {
+					if(qbVO.getNo() == qbcVO.getBno()) {
+						qbVO.setCount(dao.qnaCommentCount(qbVO.getNo()));
+						boardReplyList.add(qbVO);
+						break;
+					}
+				}
 			}
+			totalpage = (int)Math.ceil(boardReplyList.size()/10.0);
+			
+			
+			for(int i=boardReplyList.size()-1;i>=0;i--) {
+				if( !(i >= start-1 && i <= end-1) ) {
+					boardReplyList.remove(i);
+				}
+			}
+			
+			
+			model.addAttribute("boardReplyList",boardReplyList);
+			model.addAttribute("who","boardReply");
+			
+			
 		}
 		else if(who.equals("comment")) {
-			List<QnaBoardCommentVO> commentList=dao.qnaBoardCommentViewList(map);
-			int totalpage = dao.qnaCommentTotal(m_id);
-			model.addAttribute("totalpage",totalpage);
+			totalpage = dao.qnaCommentTotal(m_id);
+			List<QnaBoardCommentVO> list=dao.qnaBoardCommentViewList(map);
+			List<QnaBoardCommentVO> commentList = new ArrayList<QnaBoardCommentVO>();
+			
+			int i=0;
+			for(QnaBoardCommentVO qbcVO : list) {
+				if( (i >= start-1) && (i <= end-1) ) {
+					commentList.add(qbcVO);
+				}
+				i++;
+			}
+			
 			model.addAttribute("commentList",commentList);
 			model.addAttribute("who","comment");
 		}
 
-		
+		model.addAttribute("totalpage", totalpage);
 		model.addAttribute("curpage",curpage);
 		
 		

@@ -10,7 +10,6 @@
 	</script>
 </head>
 <body>
-댓글달린 게시물 
-view 테이블 바꾸기
+view댓글목록 원문보기 추가할까말까
 </body>
 </html>
