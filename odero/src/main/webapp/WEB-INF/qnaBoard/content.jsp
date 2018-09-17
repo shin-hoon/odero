@@ -72,7 +72,7 @@
 								<a href="qnaBoard.do?page=${page}" class="btn btn-sm table-th">목록</a>
 							</c:if>
 							<c:if test="${who != null }">
-								<a href="qnaBoardView.do?who=${who}&page=${page}" class="btn btn-sm table-th">목록</a>
+								<a href="qnaBoardView.do?who=${who}&page=${viewPage}" class="btn btn-sm table-th">목록</a>
 							</c:if>
 						</td>
 					</tr>
