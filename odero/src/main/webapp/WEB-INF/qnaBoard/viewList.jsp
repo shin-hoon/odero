@@ -54,7 +54,7 @@
 							${vo.no}
 						</td>
 						<td class="text-left" width="60%">
-							<a href="qnaBoardContent.do?who=board&no=${vo.no}&page=${vo.page}">${vo.subject}</a>
+							<a href="qnaBoardContent.do?who=board&viewPage=${curpage}&no=${vo.no}&page=${vo.page}">${vo.subject}</a>
 								<c:if test="${vo.count!=0}">
 									[${vo.count}]
 								</c:if>
@@ -88,7 +88,7 @@
 							${vo.no}
 						</td>
 						<td class="text-left" width="45%">
-							<a href="qnaBoardContent.do?who=boardReply&no=${vo.no}&page=${vo.page}">${vo.subject}</a>
+							<a href="qnaBoardContent.do?who=boardReply&viewPage=${curpage}&no=${vo.no}&page=${vo.page}">${vo.subject}</a>
 								<c:if test="${vo.count!=0}">
 									[${vo.count}]
 								</c:if>
@@ -118,10 +118,10 @@
 					<c:if test="${vo.msg != '삭제된 게시물 입니다.'}">
 					<tr class="aa">
 						<td class="text-left" width="70%" style="text-overflow : ellipsis;overflow : hidden;white-space:nowrap;">
-							<a href="qnaBoardContent.do?who=comment&no=${vo.bno}&page=${vo.page}">${vo.msg}</a>
+							<a href="qnaBoardContent.do?who=comment&viewPage=${curpage}&no=${vo.bno}&page=${vo.page}">${vo.msg}</a>
 						</td>
 						<td class="text-center" width="15%">
-							<a href="qnaBoardContent.do?who=comment&no=${vo.bno}&page=${vo.page}">원문보기▶</a>
+							<a href="qnaBoardContent.do?who=comment&viewPage=${curpage}&no=${vo.bno}&page=${vo.page}">원문보기▶</a>
 						</td>
 						<td class="text-center" width="15%">
 							<fmt:formatDate	value="${vo.regdate}" pattern="yyyy-MM-dd"/>

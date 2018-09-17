@@ -88,7 +88,7 @@ public class QnaBoardController {
 	
 	
 	@RequestMapping("qnaBoardContent.do")
-	public String qnaBoardContent(String who,int no,int page,Model model){
+	public String qnaBoardContent(String who,int viewPage,int no,int page,Model model){
 		QnaBoardVO vo = dao.qnaBoardContent(no);
 		List<QnaBoardCommentVO> list=dao.qnaCommentList(no);
 		
@@ -96,6 +96,7 @@ public class QnaBoardController {
 		model.addAttribute("list", list);
 		model.addAttribute("page",page);
 		model.addAttribute("who",who);
+		model.addAttribute("viewPage",viewPage);
 		return "qnaBoard/content";
 	}
 	
