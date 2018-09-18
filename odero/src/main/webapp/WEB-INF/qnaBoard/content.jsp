@@ -28,11 +28,6 @@
 	<div class="container" style="margin-top:30px;">
 		<div class="row">
 				<table class="table" style="width:780px;table-layout: fixed;">
-					<tr style="background: rgb(222, 235, 247);">
-						<th class="aa text-center" width="100%" colspan="4">
-							 <P>${vo.subject}</P> 
-						</th>
-					</tr>
 					<tr class="aa">
 						<td width="20%" class="text-center" style="background: rgb(247, 260, 272);">번호</td>
 						<td width="30%" class="text-center">${vo.no}</td>

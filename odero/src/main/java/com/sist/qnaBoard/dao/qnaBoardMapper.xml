@@ -105,7 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  -->
 	<!-- // content 게시판&답글 업데이트  -->
 	<update id="qnaCommentUpdate" statementType="CALLABLE"  parameterType="QnaBoardCommentVO">
-	{ CALL qnaCommentUpdate(#{no}, #{msg}) , #{page}}
+	{ CALL qnaCommentUpdate(#{no}, #{msg} , #{page}) }
 	</update>
 	
 	
